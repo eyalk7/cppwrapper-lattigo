@@ -14,4 +14,7 @@
 #include "latticpp/ckks/marshaler.h"
 #include "latticpp/ckks/params.h"
 #include "latticpp/ckks/precision.h"
+#include "latticpp/dckks/keygen.h"
 #include "latticpp/marshal/gohandle.h"
+#include "latticpp/ring/ring.h"
+#include "latticpp/utils/utils.h"

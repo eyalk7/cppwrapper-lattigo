@@ -1,4 +1,7 @@
+make
 bin
 build
 lib
 **/*.sum
+build.sh
+settings.json

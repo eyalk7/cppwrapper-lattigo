@@ -12,16 +12,17 @@ import "C"
 
 import (
 	"errors"
-	"github.com/ldsec/lattigo/v2/ckks"
-	"github.com/ldsec/lattigo/v2/rlwe"
 	"lattigo-cpp/marshal"
 	"unsafe"
+
+	"github.com/ldsec/lattigo/v2/ckks"
+	"github.com/ldsec/lattigo/v2/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle6 = uint64
 
-func getStoredParameters(paramHandle Handle6) *ckks.Parameters {
+func GetStoredParameters(paramHandle Handle6) *ckks.Parameters {
 	ref := marshal.CrossLangObjMap.Get(paramHandle)
 	return (*ckks.Parameters)(ref.Ptr)
 }
@@ -134,83 +135,104 @@ func lattigo_newParametersFromLogModuli(logN uint64, logQi *C.constUChar, numQi 
 //export lattigo_numSlots
 func lattigo_numSlots(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.Slots())
 }
 
 //export lattigo_logN
 func lattigo_logN(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.LogN())
 }
 
-//export lattigo_logQP
-func lattigo_logQP(paramHandle Handle6) uint64 {
+//export lattigo_ringQ
+func lattigo_ringQ(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingQ()))
+}
+
+//export lattigo_ringP
+func lattigo_ringP(paramHandle Handle6) Handle6 {
+	var params *ckks.Parameters
+	params = GetStoredParameters(paramHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingP()))
+}
+
+//export lattigo_ringQP
+func lattigo_ringQP(paramHandle Handle6) Handle6 {
+	var params *ckks.Parameters
+	params = GetStoredParameters(paramHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingQP()))
+}
+
+//export lattigo_logQP
+func lattigo_logQP(paramHandle Handle6) Handle6 {
+	var params *ckks.Parameters
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.LogQP())
 }
 
 //export lattigo_maxLevel
 func lattigo_maxLevel(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.MaxLevel())
 }
 
 //export lattigo_paramsScale
 func lattigo_paramsScale(paramHandle Handle6) float64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return params.Scale()
 }
 
 //export lattigo_sigma
 func lattigo_sigma(paramHandle Handle6) float64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return params.Sigma()
 }
 
 //export lattigo_getQi
 func lattigo_getQi(paramHandle Handle6, i uint64) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return params.Q()[i]
 }
 
 //export lattigo_getPi
 func lattigo_getPi(paramHandle Handle6, i uint64) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return params.P()[i]
 }
 
 //export lattigo_qiCount
 func lattigo_qiCount(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.QCount())
 }
 
 //export lattigo_piCount
 func lattigo_piCount(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.PCount())
 }
 
 //export lattigo_logQLvl
 func lattigo_logQLvl(paramHandle Handle6, i uint64) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.LogQLvl(int(i)))
 }
 
 //export lattigo_logSlots
 func lattigo_logSlots(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 	return uint64(params.LogSlots())
 }

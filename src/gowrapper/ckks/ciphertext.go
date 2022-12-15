@@ -6,9 +6,10 @@ package ckks
 import "C"
 
 import (
-	"github.com/ldsec/lattigo/v2/ckks"
 	"lattigo-cpp/marshal"
 	"unsafe"
+
+	"github.com/ldsec/lattigo/v2/ckks"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -46,7 +47,7 @@ func lattigo_copyNew(ctHandle Handle8) Handle8 {
 //export lattigo_newCiphertext
 func lattigo_newCiphertext(paramsHandle Handle8, degree uint64, level uint64, scale float64) Handle8 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramsHandle)
+	params = GetStoredParameters(paramsHandle)
 
 	var newCt *ckks.Ciphertext
 	newCt = ckks.NewCiphertext(*params, int(degree), int(level), scale)

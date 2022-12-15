@@ -6,9 +6,10 @@ package ckks
 import "C"
 
 import (
-	"github.com/ldsec/lattigo/v2/ckks"
 	"lattigo-cpp/marshal"
 	"unsafe"
+
+	"github.com/ldsec/lattigo/v2/ckks"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -22,7 +23,7 @@ func getStoredBootstrapper(btpHandle Handle10) *ckks.Bootstrapper {
 //export lattigo_newBootstrapper
 func lattigo_newBootstrapper(paramHandle Handle10, btpParamHandle Handle10, btpKeyHandle Handle10) Handle10 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params = GetStoredParameters(paramHandle)
 
 	var btpParams *ckks.BootstrappingParameters
 	btpParams = getStoredBootstrappingParameters(btpParamHandle)

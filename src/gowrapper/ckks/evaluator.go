@@ -10,12 +10,13 @@ import "C"
 
 import (
 	"errors"
-	"github.com/ldsec/lattigo/v2/ckks"
-	"github.com/ldsec/lattigo/v2/rlwe"
 	"lattigo-cpp/marshal"
 	"math"
 	"strconv"
 	"unsafe"
+
+	"github.com/ldsec/lattigo/v2/ckks"
+	"github.com/ldsec/lattigo/v2/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -29,7 +30,7 @@ func getStoredEvaluator(evalHandle Handle4) *ckks.Evaluator {
 //export lattigo_newEvaluator
 func lattigo_newEvaluator(paramsHandle Handle4, evalkeyHandle Handle4) Handle4 {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramsHandle)
+	params = GetStoredParameters(paramsHandle)
 
 	var evalKeys *rlwe.EvaluationKey
 	evalKeys = getStoredEvaluationKey(evalkeyHandle)
@@ -125,7 +126,7 @@ func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, threshold float64, 
 //export lattigo_rescaleMany
 func lattigo_rescaleMany(evalHandle Handle4, paramsHandle Handle4, ctInHandle Handle4, numRescales uint64, ctOutHandle Handle4) {
 	var params *ckks.Parameters
-	params = getStoredParameters(paramsHandle)
+	params = GetStoredParameters(paramsHandle)
 
 	var ctIn *ckks.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
@@ -162,6 +163,7 @@ func lattigo_mulRelinNew(evalHandle Handle4, op0Handle Handle4, op1Handle Handle
 }
 
 // multiply two ciphertexts and relinearize the result
+//
 //export lattigo_mulRelin
 func lattigo_mulRelin(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
@@ -180,6 +182,7 @@ func lattigo_mulRelin(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, 
 }
 
 // multiply two ciphertexts without relinearization
+//
 //export lattigo_mul
 func lattigo_mul(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
@@ -198,6 +201,7 @@ func lattigo_mul(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, ctOut
 }
 
 // multiply a ciphertext by a plaintext
+//
 //export lattigo_mulPlain
 func lattigo_mulPlain(evalHandle Handle4, ctInHandle Handle4, ptHandle Handle4, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator

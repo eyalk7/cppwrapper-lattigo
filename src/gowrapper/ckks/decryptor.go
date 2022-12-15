@@ -6,9 +6,10 @@ package ckks
 import "C"
 
 import (
-	"github.com/ldsec/lattigo/v2/ckks"
 	"lattigo-cpp/marshal"
 	"unsafe"
+
+	"github.com/ldsec/lattigo/v2/ckks"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -21,7 +22,7 @@ func getStoredDecryptor(decryptorHandle Handle1) *ckks.Decryptor {
 
 //export lattigo_newDecryptor
 func lattigo_newDecryptor(paramHandle Handle1, skHandle Handle1) Handle1 {
-	params := getStoredParameters(paramHandle)
+	params := GetStoredParameters(paramHandle)
 	sk := getStoredSecretKey(skHandle)
 	var decryptor ckks.Decryptor
 	decryptor = ckks.NewDecryptor(*params, sk)
