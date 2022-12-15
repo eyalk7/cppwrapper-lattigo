@@ -53,6 +53,7 @@ Parameters genenerateParamsForTest() {
 void generateTestContextForTest(TestContext &res, const Parameters &params) {
   res.params = params;
   res.ringQ = ringQ(params);
+  res.ringQP = ringQP(params);
 }
 
 int main() {
