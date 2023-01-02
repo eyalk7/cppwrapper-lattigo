@@ -7,11 +7,13 @@
 #include "cgo/encoder.h"
 #include <vector>
 
-namespace latticpp {
+namespace latticpp
+{
 
     Encoder newEncoder(const Parameters &params);
 
+    // TODO: consider changing this to accept complex numbers
     Plaintext encodeNTTAtLvlNew(const Parameters &params, const Encoder &encoder, const std::vector<double> &values, uint64_t level, double scale);
 
     std::vector<double> decode(const Encoder &encoder, const Plaintext &pt, uint64_t logSlots);
-}  // namespace latticpp
+} // namespace latticpp

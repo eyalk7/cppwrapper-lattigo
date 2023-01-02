@@ -48,7 +48,7 @@ func lattigo_marshalBinaryCiphertext(ctHandle Handle9, callback C.streamWriter, 
 //export lattigo_marshalBinaryParameters
 func lattigo_marshalBinaryParameters(paramsHandle Handle9, callback C.streamWriter, stream *C.void) {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramsHandle)
+	params = getStoredParameters(paramsHandle)
 
 	data, err := params.MarshalBinary()
 	if err != nil {
@@ -280,7 +280,7 @@ func lattigo_getDataLenCiphertext(ctHandle Handle9, withMetaData bool) uint64 {
 //export lattigo_getDataLenParameters
 func lattigo_getDataLenParameters(paramsHandle Handle9, withMetaData bool) uint64 {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramsHandle)
+	params = getStoredParameters(paramsHandle)
 	// see https://github.com/ldsec/lattigo/issues/115
 	// return params.GetDataLen(withMetaData)
 	paramBytes, err := params.MarshalBinary()

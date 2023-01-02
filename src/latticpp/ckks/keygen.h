@@ -3,31 +3,65 @@
 
 #pragma once
 
-#include "latticpp/marshal/gohandle.h"
 #include "cgo/keygen.h"
+#include "latticpp/marshal/gohandle.h"
 #include <vector>
 
 namespace latticpp {
 
-    struct KeyPairHandle {
-        SecretKey sk;
-        PublicKey pk;
-    };
+struct KeyPairHandle {
+  SecretKey sk;
+  PublicKey pk;
+};
 
-    KeyGenerator newKeyGenerator(const Parameters &params);
+KeyGenerator newKeyGenerator(const Parameters &params);
 
-    KeyPairHandle genKeyPair(const KeyGenerator &keygen);
+SecretKey newSecretKey(const Parameters &params);
 
-    KeyPairHandle genKeyPairSparse(const KeyGenerator &keygen, uint64_t hw);
+PublicKey newPublicKey(const Parameters &params);
 
-    RelinearizationKey genRelinKey(const KeyGenerator &keygen, const SecretKey &sk);
+RelinearizationKey newRelinearizationKey(const Parameters &params);
 
-    RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen, const SecretKey &sk, std::vector<int> shifts);
+RotationKeys newRotationKeys(const Parameters &params,
+                             std::vector<uint64_t> galoisElements);
 
-    EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
+SecretKey genSecretKey(const KeyGenerator &keygen);
 
-    BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
+PublicKey genPublicKey(const KeyGenerator &keygen, const SecretKey &sk);
 
-    BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
+KeyPairHandle genKeyPair(const KeyGenerator &keygen);
 
-}  // namespace latticpp
+KeyPairHandle genKeyPairSparse(const KeyGenerator &keygen, uint64_t hw);
+
+RelinearizationKey genRelinKey(const KeyGenerator &keygen, const SecretKey &sk);
+
+RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen,
+                                         const SecretKey &sk,
+                                         std::vector<int> shifts);
+
+EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey,
+                                const RotationKeys &rotKeys);
+
+EvaluationKey makeEmptyEvaluationKey();
+
+void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey,
+                                 const RelinearizationKey &relinKey);
+
+void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
+                                const RotationKeys &rotKeys);
+
+BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen,
+                                     const Parameters &params,
+                                     const BootstrappingParameters &bootParams,
+                                     const SecretKey &sk,
+                                     const RelinearizationKey &relinKey,
+                                     const RotationKeys &rotKeys);
+
+BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey,
+                                      const RotationKeys &rotKeys);
+
+Poly getValue(const SecretKey &sk);
+
+SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
+
+} // namespace latticpp

@@ -3,13 +3,16 @@
 
 #include "encryptor.h"
 
-namespace latticpp {
+namespace latticpp
+{
 
-    Encryptor newEncryptorFromPk(const Parameters &params, const PublicKey &pk) {
+    Encryptor newEncryptorFromPk(const Parameters &params, const PublicKey &pk)
+    {
         return Encryptor(lattigo_newEncryptorFromPk(params.getRawHandle(), pk.getRawHandle()));
     }
 
-    Ciphertext encryptNew(const Encryptor &encryptor, const Plaintext &pt) {
+    Ciphertext encryptNew(const Encryptor &encryptor, const Plaintext &pt)
+    {
         return Ciphertext(lattigo_encryptNew(encryptor.getRawHandle(), pt.getRawHandle()));
     }
-}  // namespace latticpp
+} // namespace latticpp

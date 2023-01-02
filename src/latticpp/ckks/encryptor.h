@@ -6,9 +6,10 @@
 #include "latticpp/marshal/gohandle.h"
 #include "cgo/encryptor.h"
 
-namespace latticpp {
+namespace latticpp
+{
 
     Encryptor newEncryptorFromPk(const Parameters &params, const PublicKey &pk);
 
     Ciphertext encryptNew(const Encryptor &encryptor, const Plaintext &pt);
-}  // namespace latticpp
+} // namespace latticpp

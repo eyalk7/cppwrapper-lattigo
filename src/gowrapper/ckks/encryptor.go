@@ -22,7 +22,7 @@ func getStoredEncrypter(encryptorHandle Handle3) *ckks.Encryptor {
 
 //export lattigo_newEncryptorFromPk
 func lattigo_newEncryptorFromPk(paramHandle Handle3, pkHandle Handle3) Handle3 {
-	params := GetStoredParameters(paramHandle)
+	params := getStoredParameters(paramHandle)
 	pk := getStoredPublicKey(pkHandle)
 	var encryptor ckks.Encryptor
 	encryptor = ckks.NewEncryptor(*params, pk)

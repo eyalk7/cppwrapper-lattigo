@@ -27,7 +27,7 @@ func getStoredEncoder(encoderHandle Handle2) *ckks.Encoder {
 //export lattigo_newEncoder
 func lattigo_newEncoder(paramHandle Handle2) Handle2 {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramHandle)
+	params = getStoredParameters(paramHandle)
 
 	var encoder ckks.Encoder
 	encoder = ckks.NewEncoder(*params)
@@ -54,7 +54,7 @@ func CDoubleVecToGoComplex(realValues *C.constDouble, length uint64) []complex12
 //export lattigo_encodeNTTAtLvlNew
 func lattigo_encodeNTTAtLvlNew(paramHandle Handle2, encoderHandle Handle2, realValues *C.constDouble, logLen uint64, level uint64, scale float64) Handle2 {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramHandle)
+	params = getStoredParameters(paramHandle)
 
 	var encoder *ckks.Encoder
 	encoder = getStoredEncoder(encoderHandle)

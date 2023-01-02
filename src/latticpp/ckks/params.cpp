@@ -72,6 +72,10 @@ double sigma(const Parameters &params) {
   return lattigo_sigma(params.getRawHandle());
 }
 
+int beta(const Parameters &params) {
+  return lattigo_beta(params.getRawHandle());
+}
+
 uint64_t qi(const Parameters &params, uint64_t i) {
   return lattigo_getQi(params.getRawHandle(), i);
 }
@@ -94,5 +98,15 @@ uint64_t logQLvl(const Parameters &params, uint64_t lvl) {
 
 uint64_t logSlots(const Parameters &params) {
   return lattigo_logSlots(params.getRawHandle());
+}
+
+uint64_t galoisElementForRowRotation(const Parameters &params) {
+  return lattigo_galoisElementForRowRotation(params.getRawHandle());
+}
+
+vector<uint64_t> galoisElementsForRowInnerSum(const Parameters &params) {
+  vector<uint64_t> res(logN(params) + 1);
+  lattigo_galoisElementsForRowInnerSum(params.getRawHandle(), res.data());
+  return res;
 }
 } // namespace latticpp

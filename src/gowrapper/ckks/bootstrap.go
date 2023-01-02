@@ -23,7 +23,7 @@ func getStoredBootstrapper(btpHandle Handle10) *ckks.Bootstrapper {
 //export lattigo_newBootstrapper
 func lattigo_newBootstrapper(paramHandle Handle10, btpParamHandle Handle10, btpKeyHandle Handle10) Handle10 {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramHandle)
+	params = getStoredParameters(paramHandle)
 
 	var btpParams *ckks.BootstrappingParameters
 	btpParams = getStoredBootstrappingParameters(btpParamHandle)

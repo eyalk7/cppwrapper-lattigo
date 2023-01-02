@@ -30,7 +30,7 @@ func getStoredEvaluator(evalHandle Handle4) *ckks.Evaluator {
 //export lattigo_newEvaluator
 func lattigo_newEvaluator(paramsHandle Handle4, evalkeyHandle Handle4) Handle4 {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramsHandle)
+	params = getStoredParameters(paramsHandle)
 
 	var evalKeys *rlwe.EvaluationKey
 	evalKeys = getStoredEvaluationKey(evalkeyHandle)
@@ -38,6 +38,14 @@ func lattigo_newEvaluator(paramsHandle Handle4, evalkeyHandle Handle4) Handle4 {
 	var evaluator ckks.Evaluator
 	evaluator = ckks.NewEvaluator(*params, *evalKeys)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&evaluator))
+}
+
+//export lattigo_evaluatorWithKey
+func lattigo_evaluatorWithKey(evalHandle, evalkeyHandle Handle4) Handle4 {
+	eval := getStoredEvaluator(evalHandle)
+	evalKey := getStoredEvaluationKey(evalkeyHandle)
+	evalWithKey := (*eval).WithKey(*evalKey)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&evalWithKey))
 }
 
 //export lattigo_rotate
@@ -126,7 +134,7 @@ func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, threshold float64, 
 //export lattigo_rescaleMany
 func lattigo_rescaleMany(evalHandle Handle4, paramsHandle Handle4, ctInHandle Handle4, numRescales uint64, ctOutHandle Handle4) {
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramsHandle)
+	params = getStoredParameters(paramsHandle)
 
 	var ctIn *ckks.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
@@ -338,4 +346,12 @@ func lattigo_relinearize(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Han
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Relinearize(ctIn, ctOut)
+}
+
+//export lattigo_conjugate
+func lattigo_conjugate(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Handle4) {
+	eval := getStoredEvaluator(evalHandle)
+	ctIn := getStoredCiphertext(ctInHandle)
+	ctOut := getStoredCiphertext(ctOutHandle)
+	(*eval).Conjugate(ctIn, ctOut)
 }

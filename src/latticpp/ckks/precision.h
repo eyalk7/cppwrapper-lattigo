@@ -8,7 +8,9 @@
 #include <vector>
 #include <string>
 
-namespace latticpp {
+namespace latticpp
+{
 
+    // TODO: consider changing this to return the struct, and not a string
     std::string precisionStats(const Parameters &params, const Encoder &encoder, const std::vector<double> &expectedValues, const std::vector<double> &actualValues);
-}  // namespace latticpp
+} // namespace latticpp

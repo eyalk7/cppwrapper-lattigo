@@ -22,7 +22,7 @@ func getStoredDecryptor(decryptorHandle Handle1) *ckks.Decryptor {
 
 //export lattigo_newDecryptor
 func lattigo_newDecryptor(paramHandle Handle1, skHandle Handle1) Handle1 {
-	params := GetStoredParameters(paramHandle)
+	params := getStoredParameters(paramHandle)
 	sk := getStoredSecretKey(skHandle)
 	var decryptor ckks.Decryptor
 	decryptor = ckks.NewDecryptor(*params, sk)

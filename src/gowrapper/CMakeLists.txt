@@ -25,7 +25,7 @@ add_custom_command(
     ${CGO_HEADER_DST}/marshaler.h
     ${CGO_HEADER_DST}/params.h
     ${CGO_HEADER_DST}/precision.h
-    ${CGO_HEADER_DST}/dkeygen.h
+    ${CGO_HEADER_DST}/dckks.h
     ${CGO_HEADER_DST}/ring.h
     ${CGO_HEADER_DST}/utils.h
     ${CGO_HEADER_DST}/storage.h
@@ -46,7 +46,7 @@ add_custom_command(
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ckks/marshaler.go
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ckks/params.go
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ckks/precision.go
-  COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/dckks/keygen.go
+  COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ckks/dckks.go
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ring/ring.go
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/utils/utils.go
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/marshal/storage.go
@@ -62,7 +62,7 @@ add_custom_command(
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/marshaler.h ckks/marshaler.go
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/params.h ckks/params.go
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/precision.h ckks/precision.go
-  COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/dkeygen.h dckks/keygen.go
+  COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/dckks.h ckks/dckks.go
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/ring.h ring/ring.go
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/utils.h utils/utils.go
   COMMAND go tool cgo -exportheader ${CGO_HEADER_DST}/storage.h marshal/storage.go
@@ -81,7 +81,7 @@ add_custom_command(
     ckks/marshaler.go
     ckks/params.go
     ckks/precision.go
-    dckks/keygen.go
+    ckks/dckks.go
     ring/ring.go
     utils/utils.go
     marshal/storage.go
@@ -100,7 +100,7 @@ add_library(latticpp_gowrapper STATIC
     ${CGO_HEADER_DST}/marshaler.h
     ${CGO_HEADER_DST}/params.h
     ${CGO_HEADER_DST}/precision.h
-    ${CGO_HEADER_DST}/dkeygen.h
+    ${CGO_HEADER_DST}/dckks.h
     ${CGO_HEADER_DST}/ring.h
     ${CGO_HEADER_DST}/utils.h
     ${CGO_HEADER_DST}/storage.h)

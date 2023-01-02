@@ -27,7 +27,7 @@ type Handle12 = uint64
 func lattigo_precisionStats(paramHandle Handle12, encoderHandle Handle12, expectedValues *C.constDouble, actualValues *C.constDouble, length uint64) *C.char {
 
 	var params *ckks.Parameters
-	params = GetStoredParameters(paramHandle)
+	params = getStoredParameters(paramHandle)
 
 	var encoder *ckks.Encoder
 	encoder = getStoredEncoder(encoderHandle)

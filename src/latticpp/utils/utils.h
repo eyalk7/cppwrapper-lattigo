@@ -11,4 +11,6 @@ namespace latticpp {
 
 PRNG newPRNG();
 
+PRNG newKeyedPRNG(std::vector<char> key);
+
 } // namespace latticpp
