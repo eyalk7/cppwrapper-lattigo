@@ -388,7 +388,8 @@ void testRotKeyGenConjugate(const TestContext &testContext) {
   Evaluator evaluator = evaluatorWithKey(testContext.evaluator, evalKey);
   conjugate(evaluator, ciphertext, ciphertext);
 
-  // TODO: finish this
+  // TODO: finish this after adding support for complex numbers (currently the
+  // wrapper supports encoding only real numbers)
 }
 
 void testRotKeyGenCols(const TestContext &testContext) {
@@ -443,9 +444,13 @@ void testRotKeyGenCols(const TestContext &testContext) {
   setRotKeysForEvaluationKey(evalKey, rotKeySet);
   Evaluator evaluator = evaluatorWithKey(testContext.evaluator, evalKey);
 
-  for (int k = 0; k < 1 << logSlots(params); k <<= 1) {
+  for (int k = 1; k < 1 << logSlots(params); k <<= 1) {
     rotate(evaluator, ciphertext, k, receiver);
-    // TODO: continue here
+
+    vector<double> expected(values);
+    std::rotate(expected.begin(), expected.begin() + k, expected.end());
+
+    verifyTestVectors(testContext, decryptorSk0, expected, receiver);
   }
 }
 
@@ -459,7 +464,7 @@ int main() {
   testPublicKeyGen(testContext);
   testRelinKeyGen(testContext);
   testKeyswitching(testContext);
-  testRotKeyGenConjugate(testContext);
+  // testRotKeyGenConjugate(testContext);
   testRotKeyGenCols(testContext);
 
   return 0;
