@@ -28,12 +28,12 @@ func getStoredEvaluator(evalHandle Handle4) *ckks.Evaluator {
 }
 
 //export lattigo_newEvaluator
-func lattigo_newEvaluator(paramsHandle Handle4, evalkeyHandle Handle4) Handle4 {
+func lattigo_newEvaluator(paramsHandle Handle4, evalKeyHandle Handle4) Handle4 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramsHandle)
 
 	var evalKeys *rlwe.EvaluationKey
-	evalKeys = getStoredEvaluationKey(evalkeyHandle)
+	evalKeys = getStoredEvaluationKey(evalKeyHandle)
 
 	var evaluator ckks.Evaluator
 	evaluator = ckks.NewEvaluator(*params, *evalKeys)
@@ -41,9 +41,9 @@ func lattigo_newEvaluator(paramsHandle Handle4, evalkeyHandle Handle4) Handle4 {
 }
 
 //export lattigo_evaluatorWithKey
-func lattigo_evaluatorWithKey(evalHandle, evalkeyHandle Handle4) Handle4 {
+func lattigo_evaluatorWithKey(evalHandle, evalKeyHandle Handle4) Handle4 {
 	eval := getStoredEvaluator(evalHandle)
-	evalKey := getStoredEvaluationKey(evalkeyHandle)
+	evalKey := getStoredEvaluationKey(evalKeyHandle)
 	evalWithKey := (*eval).WithKey(*evalKey)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&evalWithKey))
 }

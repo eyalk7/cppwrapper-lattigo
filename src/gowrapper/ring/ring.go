@@ -2,10 +2,6 @@
 
 package ring
 
-// cgo will automatically generate a struct for functions which return multiple values,
-// but the auto-generated struct with generated names loses its semantic value. We opt
-// to define our own struct here.
-
 /*
 #include <stdint.h>
 */
@@ -38,15 +34,19 @@ func getStoredUniformSampler(samplerHandle Handle14) *ring.UniformSampler {
 }
 
 //export lattigo_newRing
-func lattigo_newRing(n int, moduli *C.uint64_t, muduliLen uint64) Handle14 {
-	moduliTmp := make([]uint64, muduliLen)
+func lattigo_newRing(n int, moduli *C.uint64_t, moduliLen uint64) Handle14 {
+	moduliTmp := make([]uint64, moduliLen)
 	size := unsafe.Sizeof(uint64(0))
 	basePtrIn := uintptr(unsafe.Pointer(&moduli))
 	for i := range moduliTmp {
 		moduliTmp[i] = *(*uint64)(unsafe.Pointer(basePtrIn + size*uintptr(i)))
 	}
 
-	r, _ := ring.NewRing(n, moduliTmp)
+	r, err := ring.NewRing(n, moduliTmp)
+
+	if err != nil {
+		panic(err)
+	}
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(r))
 }
 

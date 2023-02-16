@@ -2,10 +2,6 @@
 
 package utils
 
-// cgo will automatically generate a struct for functions which return multiple values,
-// but the auto-generated struct with generated names loses its semantic value. We opt
-// to define our own struct here.
-
 import "C"
 
 import (
@@ -31,7 +27,6 @@ func lattigo_newPRNG() Handle15 {
 	if err != nil {
 		panic(err)
 	}
-
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(prng))
 }
 
@@ -49,6 +44,5 @@ func lattigo_newKeyedPRNG(key *C.char, keyLen uint64) Handle15 {
 	if err != nil {
 		panic(err)
 	}
-
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(prng))
 }

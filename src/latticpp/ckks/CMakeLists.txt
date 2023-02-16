@@ -23,7 +23,7 @@ install(
         ${CMAKE_CURRENT_LIST_DIR}/bootstrap_params.h
         ${CMAKE_CURRENT_LIST_DIR}/ciphertext.h
         ${CMAKE_CURRENT_LIST_DIR}/decryptor.h
-        ${CMAKE_CURRENT_LIST_DIR}/dckkks.h
+        ${CMAKE_CURRENT_LIST_DIR}/dckks.h
         ${CMAKE_CURRENT_LIST_DIR}/encoder.h
         ${CMAKE_CURRENT_LIST_DIR}/encryptor.h
         ${CMAKE_CURRENT_LIST_DIR}/evaluator.h

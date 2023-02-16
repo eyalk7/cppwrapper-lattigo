@@ -168,7 +168,7 @@ func lattigo_ringQP(paramHandle Handle6) Handle6 {
 }
 
 //export lattigo_logQP
-func lattigo_logQP(paramHandle Handle6) Handle6 {
+func lattigo_logQP(paramHandle Handle6) uint64 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
 	return uint64(params.LogQP())
