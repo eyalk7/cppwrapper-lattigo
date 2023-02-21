@@ -141,15 +141,13 @@ func lattigo_numSlots(paramHandle Handle6) uint64 {
 
 //export lattigo_logN
 func lattigo_logN(paramHandle Handle6) uint64 {
-	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params := getStoredParameters(paramHandle)
 	return uint64(params.LogN())
 }
 
 //export lattigo_ringQ
 func lattigo_ringQ(paramHandle Handle6) uint64 {
-	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params := getStoredParameters(paramHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingQ()))
 }
 
@@ -162,8 +160,7 @@ func lattigo_ringP(paramHandle Handle6) Handle6 {
 
 //export lattigo_ringQP
 func lattigo_ringQP(paramHandle Handle6) Handle6 {
-	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+	params := getStoredParameters(paramHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingQP()))
 }
 

@@ -200,25 +200,18 @@ func lattigo_makeEvaluationKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Han
 
 //export lattigo_makeEmptyEvaluationKey
 func lattigo_makeEmptyEvaluationKey() Handle5 {
-	var evalKey rlwe.EvaluationKey
-	evalKey = rlwe.EvaluationKey{}
-
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&evalKey))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&rlwe.EvaluationKey{}))
 }
 
 //export lattigo_setRelinKeyForEvaluationKey
 func lattigo_setRelinKeyForEvaluationKey(evalKeyHandle Handle5, relinKeyHandle Handle5) {
-	var evalKey *rlwe.EvaluationKey
-	evalKey = getStoredEvaluationKey(evalKeyHandle)
-
+	evalKey := getStoredEvaluationKey(evalKeyHandle)
 	evalKey.Rlk = getStoredRelinKey(relinKeyHandle)
 }
 
 //export lattigo_setRotKeysForEvaluationKey
 func lattigo_setRotKeysForEvaluationKey(evalKeyHandle Handle5, rotKeysHandle Handle5) {
-	var evalKey *rlwe.EvaluationKey
-	evalKey = getStoredEvaluationKey(evalKeyHandle)
-
+	evalKey := getStoredEvaluationKey(evalKeyHandle)
 	evalKey.Rtks = getStoredRotationKeys(rotKeysHandle)
 }
 
