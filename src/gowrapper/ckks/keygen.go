@@ -17,12 +17,11 @@ struct Lattigo_KeyPairHandle {
 import "C"
 
 import (
-	"errors"
 	"lattigo-cpp/marshal"
 	"unsafe"
 
-	"github.com/ldsec/lattigo/v2/ckks"
-	"github.com/ldsec/lattigo/v2/rlwe"
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -63,10 +62,10 @@ func getStoredSwitchingKey(switchingKeyHandle Handle5) *rlwe.SwitchingKey {
 	return (*rlwe.SwitchingKey)(ref.Ptr)
 }
 
-func getStoredBootstrappingKey(bootKeyHandle Handle5) *ckks.BootstrappingKey {
-	ref := marshal.CrossLangObjMap.Get(bootKeyHandle)
-	return (*ckks.BootstrappingKey)(ref.Ptr)
-}
+// func getStoredBootstrappingKey(bootKeyHandle Handle5) *ckks.BootstrappingKey {
+// 	ref := marshal.CrossLangObjMap.Get(bootKeyHandle)
+// 	return (*ckks.BootstrappingKey)(ref.Ptr)
+// }
 
 //export lattigo_newKeyGenerator
 func lattigo_newKeyGenerator(paramHandle Handle5) Handle5 {
@@ -79,19 +78,19 @@ func lattigo_newKeyGenerator(paramHandle Handle5) Handle5 {
 //export lattigo_newSecretKey
 func lattigo_newSecretKey(paramHandle Handle5) Handle5 {
 	paramPtr := getStoredParameters(paramHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ckks.NewSecretKey(*paramPtr)))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rlwe.NewSecretKey((*paramPtr).Parameters)))
 }
 
 //export lattigo_newPublicKey
 func lattigo_newPublicKey(paramHandle Handle5) Handle5 {
 	paramPtr := getStoredParameters(paramHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ckks.NewPublicKey(*paramPtr)))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rlwe.NewPublicKey((*paramPtr).Parameters)))
 }
 
 //export lattigo_newRelinearizationKey
 func lattigo_newRelinearizationKey(paramHandle Handle5) Handle5 {
 	paramPtr := getStoredParameters(paramHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ckks.NewRelinearizationKey(*paramPtr)))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rlwe.NewRelinearizationKey((*paramPtr).Parameters, 1)))
 }
 
 //export lattigo_newRotationKeys
@@ -105,13 +104,26 @@ func lattigo_newRotationKeys(paramHandle Handle5, galoisElements *C.uint64_t, ga
 		galoisElementsTmp[i] = *(*uint64)(unsafe.Pointer(basePtrIn + size*uintptr(i)))
 	}
 
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ckks.NewRotationKeySet(*paramPtr, galoisElementsTmp)))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rlwe.NewRotationKeySet((*paramPtr).Parameters, galoisElementsTmp)))
 }
 
 //export lattigo_genSecretKey
 func lattigo_genSecretKey(keygenHandle Handle5) Handle5 {
 	keygen := getStoredKeyGenerator(keygenHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer((*keygen).GenSecretKey()))
+}
+
+//export lattigo_copyNewSecretKey
+func lattigo_copyNewSecretKey(skHandle Handle5) Handle5 {
+	sk := getStoredSecretKey(skHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(sk.CopyNew()))
+}
+
+//export lattigo_getPolyQP
+func lattigo_getPolyQP(skHandle Handle5) Handle5 {
+	sk := getStoredSecretKey(skHandle)
+	polyQP := sk.Value
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&polyQP))
 }
 
 //export lattigo_genPublicKey
@@ -140,7 +152,9 @@ func lattigo_genKeyPairSparse(keygenHandle Handle5, hw uint64) C.struct_Lattigo_
 	keygen = getStoredKeyGenerator(keygenHandle)
 	var sk *rlwe.SecretKey
 	var pk *rlwe.PublicKey
-	sk, pk = (*keygen).GenKeyPairSparse(int(hw))
+	sk = (*keygen).GenSecretKeyWithHammingWeight(int(hw))
+	pk = (*keygen).GenPublicKey(sk)
+	// sk, pk = (*keygen).GenKeyPairSparse(int(hw))
 	var kpHandle C.struct_Lattigo_KeyPairHandle
 	kpHandle.sk = C.uint64_t(marshal.CrossLangObjMap.Add(unsafe.Pointer(sk)))
 	kpHandle.pk = C.uint64_t(marshal.CrossLangObjMap.Add(unsafe.Pointer(pk)))
@@ -218,86 +232,86 @@ func lattigo_setRotKeysForEvaluationKey(evalKeyHandle Handle5, rotKeysHandle Han
 // Generates any missing Galois keys
 //
 //export lattigo_genBootstrappingKey
-func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpParamsHandle Handle5, skHandle Handle5, relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
-	var keygen *rlwe.KeyGenerator
-	keygen = getStoredKeyGenerator(keygenHandle)
+// func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpParamsHandle Handle5, skHandle Handle5, relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
+// 	var keygen *rlwe.KeyGenerator
+// 	keygen = getStoredKeyGenerator(keygenHandle)
 
-	var params *ckks.Parameters
-	params = getStoredParameters(paramHandle)
+// 	var params *ckks.Parameters
+// 	params = getStoredParameters(paramHandle)
 
-	var btpParams *ckks.BootstrappingParameters
-	btpParams = getStoredBootstrappingParameters(btpParamsHandle)
+// 	var btpParams *ckks.BootstrappingParameters
+// 	btpParams = getStoredBootstrappingParameters(btpParamsHandle)
 
-	var sk *rlwe.SecretKey
-	sk = getStoredSecretKey(skHandle)
+// 	var sk *rlwe.SecretKey
+// 	sk = getStoredSecretKey(skHandle)
 
-	// get existing keys
-	var relinKey *rlwe.RelinearizationKey
-	relinKey = getStoredRelinKey(relinKeyHandle)
+// 	// get existing keys
+// 	var relinKey *rlwe.RelinearizationKey
+// 	relinKey = getStoredRelinKey(relinKeyHandle)
 
-	var rotKeys *rlwe.RotationKeySet
-	rotKeys = getStoredRotationKeys(rotKeyHandle)
+// 	var rotKeys *rlwe.RotationKeySet
+// 	rotKeys = getStoredRotationKeys(rotKeyHandle)
 
-	// generate the set of keys needed for bootstrapping
-	btpRots := btpParams.RotationsForBootstrapping(params.LogSlots())
+// 	// generate the set of keys needed for bootstrapping
+// 	btpRots := btpParams.RotationsForBootstrapping(params.LogSlots())
 
-	// galois elements corresponding to the bootstrapping rotation indices
-	var galEls []uint64
-	for _, k := range btpRots {
-		// generate the Galois index for this rotation
-		var galoisIdx uint64
-		galoisIdx = params.GaloisElementForColumnRotationBy(k)
+// 	// galois elements corresponding to the bootstrapping rotation indices
+// 	var galEls []uint64
+// 	for _, k := range btpRots {
+// 		// generate the Galois index for this rotation
+// 		var galoisIdx uint64
+// 		galoisIdx = params.GaloisElementForColumnRotationBy(k)
 
-		// test if this galoisIdx is already in the set of rotation keys.
-		// if NOT, add it to galEls so that it will be generated
-		if _, ok := rotKeys.Keys[galoisIdx]; !ok {
-			galEls = append(galEls, galoisIdx)
-		}
-	}
-	// include a conjugation key
-	var conjIdx uint64
-	conjIdx = params.GaloisElementForRowRotation()
-	if _, ok := rotKeys.Keys[conjIdx]; !ok {
-		galEls = append(galEls, conjIdx)
-	}
+// 		// test if this galoisIdx is already in the set of rotation keys.
+// 		// if NOT, add it to galEls so that it will be generated
+// 		if _, ok := rotKeys.Keys[galoisIdx]; !ok {
+// 			galEls = append(galEls, galoisIdx)
+// 		}
+// 	}
+// 	// include a conjugation key
+// 	var conjIdx uint64
+// 	conjIdx = params.GaloisElementForRowRotation()
+// 	if _, ok := rotKeys.Keys[conjIdx]; !ok {
+// 		galEls = append(galEls, conjIdx)
+// 	}
 
-	// galEls contains the Galois indices needed for bootstrapping, but which are not already in the set of rotation keys.
-	// Generate a new set of rotation keys for the missing indices, then merge the two maps.
-	var btpRotKeys *rlwe.RotationKeySet
-	btpRotKeys = (*keygen).GenRotationKeys(galEls, sk)
+// 	// galEls contains the Galois indices needed for bootstrapping, but which are not already in the set of rotation keys.
+// 	// Generate a new set of rotation keys for the missing indices, then merge the two maps.
+// 	var btpRotKeys *rlwe.RotationKeySet
+// 	btpRotKeys = (*keygen).GenRotationKeys(galEls, sk)
 
-	for k, v := range btpRotKeys.Keys {
-		if _, ok := rotKeys.Keys[k]; ok {
-			panic(errors.New("Internal error: Generated a bootstrapping key that is already in the map"))
-		}
-		rotKeys.Keys[k] = v
-	}
+// 	for k, v := range btpRotKeys.Keys {
+// 		if _, ok := rotKeys.Keys[k]; ok {
+// 			panic(errors.New("Internal error: Generated a bootstrapping key that is already in the map"))
+// 		}
+// 		rotKeys.Keys[k] = v
+// 	}
 
-	var btpKey ckks.BootstrappingKey
-	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
+// 	var btpKey ckks.BootstrappingKey
+// 	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
 
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
-}
+// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
+// }
 
 //export lattigo_makeBootstrappingKey
-func lattigo_makeBootstrappingKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
-	// get existing keys
-	var relinKey *rlwe.RelinearizationKey
-	relinKey = getStoredRelinKey(relinKeyHandle)
+// func lattigo_makeBootstrappingKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
+// 	// get existing keys
+// 	var relinKey *rlwe.RelinearizationKey
+// 	relinKey = getStoredRelinKey(relinKeyHandle)
 
-	var rotKeys *rlwe.RotationKeySet
-	rotKeys = getStoredRotationKeys(rotKeyHandle)
+// 	var rotKeys *rlwe.RotationKeySet
+// 	rotKeys = getStoredRotationKeys(rotKeyHandle)
 
-	var btpKey ckks.BootstrappingKey
-	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
+// 	var btpKey ckks.BootstrappingKey
+// 	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
 
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
-}
+// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
+// }
 
 //export lattigo_getSecretKeyValue
 func lattigo_getSecretKeyValue(skHandle Handle5) Handle5 {
 	sk := getStoredSecretKey(skHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(sk.Value))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&sk.Value))
 }
 
 //export lattigo_getSwitchingKey

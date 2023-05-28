@@ -9,29 +9,30 @@ import (
 	"lattigo-cpp/marshal"
 	"unsafe"
 
-	"github.com/ldsec/lattigo/v2/ckks"
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle8 = uint64
 
-func getStoredCiphertext(ctHandle Handle8) *ckks.Ciphertext {
+func getStoredCiphertext(ctHandle Handle8) *rlwe.Ciphertext {
 	ref := marshal.CrossLangObjMap.Get(ctHandle)
-	return (*ckks.Ciphertext)(ref.Ptr)
+	return (*rlwe.Ciphertext)(ref.Ptr)
 }
 
 //export lattigo_level
 func lattigo_level(ctHandle Handle8) uint64 {
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctHandle)
 	return uint64(ctIn.Level())
 }
 
 //export lattigo_ciphertextScale
 func lattigo_ciphertextScale(ctHandle Handle8) float64 {
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctHandle)
-	return ctIn.ScalingFactor()
+	return ctIn.Scale.Float64()
 }
 
 //export lattigo_ciphertextDegree
@@ -42,10 +43,10 @@ func lattigo_ciphertextDegree(ctHandle Handle8) uint64 {
 
 //export lattigo_copyNew
 func lattigo_copyNew(ctHandle Handle8) Handle8 {
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctHandle)
 
-	var ctClone *ckks.Ciphertext
+	var ctClone *rlwe.Ciphertext
 	ctClone = ctIn.CopyNew()
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ctClone))
 }
@@ -55,7 +56,7 @@ func lattigo_newCiphertext(paramsHandle Handle8, degree uint64, level uint64, sc
 	var params *ckks.Parameters
 	params = getStoredParameters(paramsHandle)
 
-	var newCt *ckks.Ciphertext
-	newCt = ckks.NewCiphertext(*params, int(degree), int(level), scale)
+	var newCt *rlwe.Ciphertext
+	newCt = ckks.NewCiphertext(*params, int(degree), int(level))
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(newCt))
 }

@@ -8,13 +8,13 @@ import "C"
 import (
 	"lattigo-cpp/marshal"
 
-	"github.com/ldsec/lattigo/v2/ckks"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle7 = uint64
 
-func getStoredPlaintext(ptHandle Handle7) *ckks.Plaintext {
+func getStoredPlaintext(ptHandle Handle7) *rlwe.Plaintext {
 	ref := marshal.CrossLangObjMap.Get(ptHandle)
-	return (*ckks.Plaintext)(ref.Ptr)
+	return (*rlwe.Plaintext)(ref.Ptr)
 }

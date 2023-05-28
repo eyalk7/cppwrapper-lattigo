@@ -9,18 +9,16 @@ package ckks
 import "C"
 
 import (
-	"errors"
 	"lattigo-cpp/marshal"
-	"math"
-	"strconv"
 	"unsafe"
 
-	"github.com/ldsec/lattigo/v2/ckks"
-	"github.com/ldsec/lattigo/v2/rlwe"
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle4 = uint64
+type Handle18 = uint64
 
 func getStoredEvaluator(evalHandle Handle4) *ckks.Evaluator {
 	ref := marshal.CrossLangObjMap.Get(evalHandle)
@@ -53,10 +51,10 @@ func lattigo_rotate(evalHandle Handle4, ctInHandle Handle4, k uint64, ctOutHandl
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Rotate(ctIn, int(k), ctOut)
@@ -67,7 +65,7 @@ func lattigo_rotateHoisted(evalHandle Handle4, ctInHandle Handle4, ks *C.uint64_
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
 	rotations := make([]int, ksLen)
@@ -77,8 +75,8 @@ func lattigo_rotateHoisted(evalHandle Handle4, ctInHandle Handle4, ks *C.uint64_
 		rotations[i] = *(*int)(unsafe.Pointer(basePtrIn + size*uintptr(i)))
 	}
 
-	var rotatedCts map[int]*ckks.Ciphertext
-	rotatedCts = (*eval).RotateHoisted(ctIn, rotations)
+	var rotatedCts map[int]*rlwe.Ciphertext
+	(*eval).RotateHoisted(ctIn, rotations, rotatedCts)
 
 	basePtrOut := uintptr(unsafe.Pointer(outHandles))
 	for i := range rotations {
@@ -91,10 +89,10 @@ func lattigo_multByConst(evalHandle Handle4, ctInHandle Handle4, constant float6
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).MultByConst(ctIn, constant, ctOut)
@@ -105,66 +103,66 @@ func lattigo_addConst(evalHandle Handle4, ctInHandle Handle4, constant float64, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).AddConst(ctIn, constant, ctOut)
 }
 
 //export lattigo_rescale
-func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, threshold float64, ctOutHandle Handle4) {
+func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle18, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
-	err := (*eval).Rescale(ctIn, threshold, ctOut)
+	var scale *rlwe.Scale
+	scale = getStoredScale(scaleHandle)
+	err := (*eval).Rescale(ctIn, *scale, ctOut)
 	if err != nil {
 		panic(err)
 	}
 }
 
-//export lattigo_rescaleMany
-func lattigo_rescaleMany(evalHandle Handle4, paramsHandle Handle4, ctInHandle Handle4, numRescales uint64, ctOutHandle Handle4) {
-	var params *ckks.Parameters
-	params = getStoredParameters(paramsHandle)
+// //export lattigo_rescaleMany
+// func lattigo_rescaleMany(evalHandle Handle4, paramsHandle Handle4, ctInHandle Handle4, numRescales uint64, ctOutHandle Handle4) {
+// 	var params *ckks.Parameters
+// 	params = getStoredParameters(paramsHandle)
 
-	var ctIn *ckks.Ciphertext
-	ctIn = getStoredCiphertext(ctInHandle)
+// 	var ctIn *rlwe.Ciphertext
+// 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var targetScale float64
-	targetScale = ctIn.Scale
+// 	targetScale := ctIn.MetaData.Scale.Value
 
-	for i := 0; i < int(numRescales); i++ {
-		targetScale /= (float64(params.RingQ().Modulus[ctIn.Level()-i]))
-	}
+// 	for i := 0; i < int(numRescales); i++ {
+// 		targetScale /= (float64(params.RingQ().Modulus[ctIn.Level()-i]))
+// 	}
 
-	if targetScale <= 0 {
-		panic(errors.New("Target scale is too small: " + strconv.FormatFloat(targetScale, 'E', -1, 64) + "\t" + strconv.FormatFloat(ctIn.Scale, 'E', -1, 64) + "\t" + strconv.FormatFloat(math.Log2(ctIn.Scale), 'E', -1, 64) + "\t" + strconv.FormatUint(numRescales, 10)))
-	}
-
-	lattigo_rescale(evalHandle, ctInHandle, targetScale, ctOutHandle)
-}
+// 	if targetScale <= 0 {
+// 		panic(errors.New("Target scale is too small: " + strconv.FormatFloat(targetScale, 'E', -1, 64) + "\t" + strconv.FormatFloat(ctIn.Scale, 'E', -1, 64) + "\t" + strconv.FormatFloat(math.Log2(ctIn.Scale), 'E', -1, 64) + "\t" + strconv.FormatUint(numRescales, 10)))
+// 	}
+// 	lattigo_rescale(evalHandle, ctInHandle, NewScale(targetScale), ctOutHandle)
+// }
 
 //export lattigo_mulRelinNew
 func lattigo_mulRelinNew(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4) Handle4 {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(op0Handle)
 
-	var ct1 *ckks.Ciphertext
+	var ct1 *rlwe.Ciphertext
 	ct1 = getStoredCiphertext(op1Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = (*eval).MulRelinNew(ct0, ct1)
 
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ctOut))
@@ -177,13 +175,13 @@ func lattigo_mulRelin(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(op0Handle)
 
-	var ct1 *ckks.Ciphertext
+	var ct1 *rlwe.Ciphertext
 	ct1 = getStoredCiphertext(op1Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).MulRelin(ct0, ct1, ctOut)
@@ -196,13 +194,13 @@ func lattigo_mul(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, ctOut
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(op0Handle)
 
-	var ct1 *ckks.Ciphertext
+	var ct1 *rlwe.Ciphertext
 	ct1 = getStoredCiphertext(op1Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Mul(ct0, ct1, ctOut)
@@ -215,13 +213,13 @@ func lattigo_mulPlain(evalHandle Handle4, ctInHandle Handle4, ptHandle Handle4, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var pt *ckks.Plaintext
+	var pt *rlwe.Plaintext
 	pt = getStoredPlaintext(ptHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Mul(ctIn, pt, ctOut)
@@ -232,13 +230,13 @@ func lattigo_add(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, outHa
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(op0Handle)
 
-	var ct1 *ckks.Ciphertext
+	var ct1 *rlwe.Ciphertext
 	ct1 = getStoredCiphertext(op1Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(outHandle)
 
 	(*eval).Add(ct0, ct1, ctOut)
@@ -249,13 +247,13 @@ func lattigo_addPlain(evalHandle Handle4, ctInHandle Handle4, ptHandle Handle4, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var pt *ckks.Plaintext
+	var pt *rlwe.Plaintext
 	pt = getStoredPlaintext(ptHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Add(ctIn, pt, ctOut)
@@ -266,10 +264,10 @@ func lattigo_neg(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Neg(ctIn, ctOut)
@@ -280,13 +278,13 @@ func lattigo_sub(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4, outHa
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(op0Handle)
 
-	var ct1 *ckks.Ciphertext
+	var ct1 *rlwe.Ciphertext
 	ct1 = getStoredCiphertext(op1Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(outHandle)
 
 	(*eval).Sub(ct0, ct1, ctOut)
@@ -297,13 +295,13 @@ func lattigo_subPlain(evalHandle Handle4, ctInHandle Handle4, ptHandle Handle4, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var pt *ckks.Plaintext
+	var pt *rlwe.Plaintext
 	pt = getStoredPlaintext(ptHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Sub(ctIn, pt, ctOut)
@@ -314,7 +312,7 @@ func lattigo_dropLevel(evalHandle Handle4, ctHandle Handle4, levels uint64) {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct *ckks.Ciphertext
+	var ct *rlwe.Ciphertext
 	ct = getStoredCiphertext(ctHandle)
 
 	(*eval).DropLevel(ct, int(levels))
@@ -325,10 +323,10 @@ func lattigo_multByGaussianIntegerAndAdd(evalHandle Handle4, ct0Handle Handle4, 
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ct0 *ckks.Ciphertext
+	var ct0 *rlwe.Ciphertext
 	ct0 = getStoredCiphertext(ct0Handle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).MultByGaussianIntegerAndAdd(ct0, cReal, cImag, ctOut)
@@ -339,10 +337,10 @@ func lattigo_relinearize(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Han
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
-	var ctIn *ckks.Ciphertext
+	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctInHandle)
 
-	var ctOut *ckks.Ciphertext
+	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
 	(*eval).Relinearize(ctIn, ctOut)

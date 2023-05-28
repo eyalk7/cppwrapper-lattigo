@@ -7,11 +7,14 @@ using namespace std;
 
 namespace latticpp {
 
-    Bootstrapper newBootstrapper(const Parameters &params, const BootstrappingParameters &bootParams, const BootstrappingKey &bootKey) {
-        return Bootstrapper(lattigo_newBootstrapper(params.getRawHandle(), bootParams.getRawHandle(), bootKey.getRawHandle()));
-    }
+// Bootstrapper newBootstrapper(const Parameters &params, const
+// BootstrappingParameters &bootParams, const BootstrappingKey &bootKey) {
+//     return Bootstrapper(lattigo_newBootstrapper(params.getRawHandle(),
+//     bootParams.getRawHandle(), bootKey.getRawHandle()));
+// }
 
-    Ciphertext bootstrap(const Bootstrapper &btp, const Ciphertext &ct) {
-        return Ciphertext(lattigo_bootstrap(btp.getRawHandle(), ct.getRawHandle()));
-    }
-}  // namespace latticpp
+// Ciphertext bootstrap(const Bootstrapper &btp, const Ciphertext &ct) {
+//     return Ciphertext(lattigo_bootstrap(btp.getRawHandle(),
+//     ct.getRawHandle()));
+// }
+} // namespace latticpp

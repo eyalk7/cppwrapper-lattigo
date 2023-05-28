@@ -31,8 +31,8 @@ add_custom_command(
     ${CGO_HEADER_DST}/storage.h
   COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/. .
 
-  COMMAND go mod download github.com/ldsec/lattigo/v2
-  COMMAND go get github.com/ldsec/lattigo/v2/utils@v2.2.0
+  COMMAND go mod download github.com/tuneinsight/lattigo/v4
+  COMMAND go get github.com/tuneinsight/lattigo/v4/utils@v4.1.0
 
   COMMAND go vet
   COMMAND go fmt ${CMAKE_CURRENT_SOURCE_DIR}/ckks/bootstrap.go
@@ -70,8 +70,8 @@ add_custom_command(
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
     latticppMain.go
-    ckks/bootstrap.go
-    ckks/bootstrap_params.go
+    #ckks/bootstrap.go
+    #ckks/bootstrap_params.go
     ckks/ciphertext.go
     ckks/decryptor.go
     ckks/encoder.go
@@ -89,8 +89,8 @@ add_custom_command(
 )
 
 add_library(latticpp_gowrapper STATIC
-    ${CGO_HEADER_DST}/bootstrap.h
-    ${CGO_HEADER_DST}/bootstrap_params.h
+    # ${CGO_HEADER_DST}/bootstrap.h
+    # ${CGO_HEADER_DST}/bootstrap_params.h
     ${CGO_HEADER_DST}/ciphertext.h
     ${CGO_HEADER_DST}/decryptor.h
     ${CGO_HEADER_DST}/encoder.h

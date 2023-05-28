@@ -13,7 +13,8 @@ import (
 	"math"
 	"unsafe"
 
-	"github.com/ldsec/lattigo/v2/ckks"
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
@@ -60,9 +61,9 @@ func lattigo_encodeNTTAtLvlNew(paramHandle Handle2, encoderHandle Handle2, realV
 	encoder = getStoredEncoder(encoderHandle)
 
 	complexValues := CDoubleVecToGoComplex(realValues, uint64(math.Pow(2, float64(logLen))))
-	var plaintext *ckks.Plaintext
-	plaintext = ckks.NewPlaintext(*params, int(level), scale)
-	(*encoder).EncodeNTT(plaintext, complexValues, int(logLen))
+	var plaintext *rlwe.Plaintext
+	plaintext = ckks.NewPlaintext(*params, int(level))
+	(*encoder).Encode(complexValues, plaintext, int(logLen))
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(plaintext))
 }
 
@@ -71,7 +72,7 @@ func lattigo_decode(encoderHandle Handle2, ptHandle Handle2, logSlots uint64, ou
 	var enc *ckks.Encoder
 	enc = getStoredEncoder(encoderHandle)
 
-	var pt *ckks.Plaintext
+	var pt *rlwe.Plaintext
 	pt = getStoredPlaintext(ptHandle)
 
 	var res []complex128

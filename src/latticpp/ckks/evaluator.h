@@ -3,50 +3,67 @@
 
 #pragma once
 
-#include "latticpp/marshal/gohandle.h"
 #include "cgo/evaluator.h"
+#include "latticpp/marshal/gohandle.h"
 #include <vector>
 
 namespace latticpp {
 
-    Evaluator newEvaluator(const Parameters &params, const EvaluationKey &evakey);
+Evaluator newEvaluator(const Parameters &params, const EvaluationKey &evakey);
 
-    Evaluator evaluatorWithKey(const Evaluator &eval,
-                               const EvaluationKey &evalKey);
+Evaluator evaluatorWithKey(const Evaluator &eval, const EvaluationKey &evalKey);
 
-    void rotate(const Evaluator &eval, const Ciphertext &ctIn, uint64_t k, Ciphertext &ctOut);
+void rotate(const Evaluator &eval, const Ciphertext &ctIn, uint64_t k,
+            Ciphertext &ctOut);
 
-    std::vector<Ciphertext> rotateHoisted(const Evaluator &eval, const Ciphertext &ctIn, std::vector<uint64_t> ks);
+std::vector<Ciphertext> rotateHoisted(const Evaluator &eval,
+                                      const Ciphertext &ctIn,
+                                      std::vector<uint64_t> ks);
 
-    void multByConst(const Evaluator &eval, const Ciphertext &ctIn, double constant, Ciphertext &ctOut);
+void multByConst(const Evaluator &eval, const Ciphertext &ctIn, double constant,
+                 Ciphertext &ctOut);
 
-    void addConst(const Evaluator &eval, const Ciphertext &ctIn, double constant, Ciphertext &ctOut);
+void addConst(const Evaluator &eval, const Ciphertext &ctIn, double constant,
+              Ciphertext &ctOut);
 
-    void rescale(const Evaluator &eval, const Ciphertext &ctIn, double threshold, Ciphertext &ctOut);
+void rescale(const Evaluator &eval, const Ciphertext &ctIn, double threshold,
+             Ciphertext &ctOut);
 
-    void rescaleMany(const Evaluator &eval, const Parameters &params, const Ciphertext &ctIn, uint64_t numRescales, Ciphertext &ctOut);
+// void rescaleMany(const Evaluator &eval, const Parameters &params, const
+// Ciphertext &ctIn, uint64_t numRescales, Ciphertext &ctOut);
 
-    Ciphertext mulRelinNew(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1);
+Ciphertext mulRelinNew(const Evaluator &eval, const Ciphertext &ct0,
+                       const Ciphertext &ct1);
 
-    void mulRelin(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1, Ciphertext &ctOut);
+void mulRelin(const Evaluator &eval, const Ciphertext &ct0,
+              const Ciphertext &ct1, Ciphertext &ctOut);
 
-    void mul(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1, Ciphertext &ctOut);
+void mul(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1,
+         Ciphertext &ctOut);
 
-    void mulPlain(const Evaluator &eval, const Ciphertext &ctIn, const Plaintext &pt, Ciphertext &ctOut);
+void mulPlain(const Evaluator &eval, const Ciphertext &ctIn,
+              const Plaintext &pt, Ciphertext &ctOut);
 
-    void add(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1, Ciphertext &ctOut);
+void add(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1,
+         Ciphertext &ctOut);
 
-    void addPlain(const Evaluator &eval, const Ciphertext &ctIn, const Plaintext &pt, Ciphertext &ctOut);
+void addPlain(const Evaluator &eval, const Ciphertext &ctIn,
+              const Plaintext &pt, Ciphertext &ctOut);
 
-    void neg(const Evaluator &eval, const Ciphertext &ctIn, Ciphertext &ctOut);
+void neg(const Evaluator &eval, const Ciphertext &ctIn, Ciphertext &ctOut);
 
-    void sub(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1, Ciphertext &ctOut);
+void sub(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1,
+         Ciphertext &ctOut);
 
-    void subPlain(const Evaluator &eval, const Ciphertext &ctIn, const Plaintext &pt, Ciphertext &ctOut);
+void subPlain(const Evaluator &eval, const Ciphertext &ctIn,
+              const Plaintext &pt, Ciphertext &ctOut);
 
-    void multByGaussianIntegerAndAdd(const Evaluator &eval, const Ciphertext &ctIn, uint64_t cReal, uint64_t cImag, Ciphertext &ctOut);
+void multByGaussianIntegerAndAdd(const Evaluator &eval, const Ciphertext &ctIn,
+                                 uint64_t cReal, uint64_t cImag,
+                                 Ciphertext &ctOut);
 
-    void dropLevel(const Evaluator &eval, Ciphertext &ct, uint64_t levels);
+void dropLevel(const Evaluator &eval, Ciphertext &ct, uint64_t levels);
 
-    void relinearize(const Evaluator &eval, const Ciphertext &ctIn, Ciphertext &ctOut);
-}  // namespace latticpp
+void relinearize(const Evaluator &eval, const Ciphertext &ctIn,
+                 Ciphertext &ctOut);
+} // namespace latticpp

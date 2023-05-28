@@ -15,12 +15,14 @@ import (
 	"lattigo-cpp/marshal"
 	"unsafe"
 
-	"github.com/ldsec/lattigo/v2/ckks"
-	"github.com/ldsec/lattigo/v2/rlwe"
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/ring"
+	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle6 = uint64
+type Handle17 = uint64
 
 func getStoredParameters(paramHandle Handle6) *ckks.Parameters {
 	ref := marshal.CrossLangObjMap.Get(paramHandle)
@@ -84,13 +86,15 @@ func lattigo_newParameters(logN uint64, qi *C.constULong, numQi uint8, pi *C.con
 
 	var rlweParams rlwe.Parameters
 	var err error
-	rlweParams, err = rlwe.NewParameters(int(logN), Qi, Pi, rlwe.DefaultSigma)
+	// TODO: expose constant parameters through this function API.
+	scale := rlwe.NewScale(float64(uint64(1) << uint64(logScale)))
+	rlweParams, err = rlwe.NewParameters(int(logN), Qi, Pi, 0, 192, rlwe.DefaultSigma, ring.Standard, scale, ckks.DefaultNTTFlag)
 	if err != nil {
 		panic(err)
 	}
 
 	var params ckks.Parameters
-	params, err = ckks.NewParameters(rlweParams, int(logN-1), float64(uint64(1)<<uint64(logScale)))
+	params, err = ckks.NewParameters(rlweParams, int(logN-1))
 	if err != nil {
 		panic(err)
 	}
@@ -115,12 +119,12 @@ func lattigo_newParametersFromLogModuli(logN uint64, logQi *C.constUChar, numQi 
 
 	var paramsLit ckks.ParametersLiteral
 	paramsLit = ckks.ParametersLiteral{
-		LogN:     int(logN),
-		LogQ:     LogQi,
-		LogP:     LogPi,
-		Sigma:    rlwe.DefaultSigma,
-		LogSlots: int(logN) - 1,
-		Scale:    float64(uint64(1) << uint64(logScale)),
+		LogN:         int(logN),
+		LogQ:         LogQi,
+		LogP:         LogPi,
+		Sigma:        rlwe.DefaultSigma,
+		LogSlots:     int(logN) - 1,
+		DefaultScale: float64(uint64(1) << uint64(logScale)),
 	}
 
 	var params ckks.Parameters
@@ -180,10 +184,11 @@ func lattigo_maxLevel(paramHandle Handle6) uint64 {
 }
 
 //export lattigo_paramsScale
-func lattigo_paramsScale(paramHandle Handle6) float64 {
+func lattigo_paramsScale(paramHandle Handle6) Handle17 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
-	return params.Scale()
+	scale := params.DefaultScale()
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&scale))
 }
 
 //export lattigo_sigma
@@ -194,10 +199,10 @@ func lattigo_sigma(paramHandle Handle6) float64 {
 }
 
 //export lattigo_beta
-func lattigo_beta(paramHandle Handle6) uint64 {
-	params := getStoredParameters(paramHandle)
-	return uint64(params.Beta())
-}
+// func lattigo_beta(paramHandle Handle6) uint64 {
+// 	params := getStoredParameters(paramHandle)
+// 	return uint64(params.Beta())
+// }
 
 //export lattigo_getQi
 func lattigo_getQi(paramHandle Handle6, i uint64) uint64 {
