@@ -30,6 +30,7 @@ enum class GoType {
   Plaintext,
   Ciphertext,
   RotationKeys,
+  RotationKey,
   SwitchingKey,
   CKGProtocol,
   CKGShare,
@@ -186,6 +187,7 @@ using PublicKey = GoHandle<GoType::PublicKey>;
 using Plaintext = GoHandle<GoType::Plaintext>;
 using Ciphertext = GoHandle<GoType::Ciphertext>;
 using RotationKeys = GoHandle<GoType::RotationKeys>;
+using RotationKey = GoHandle<GoType::RotationKey>;
 using SwitchingKey = GoHandle<GoType::SwitchingKey>;
 using CKGProtocol = GoHandle<GoType::CKGProtocol>;
 using CKGShare = GoHandle<GoType::CKGShare>;

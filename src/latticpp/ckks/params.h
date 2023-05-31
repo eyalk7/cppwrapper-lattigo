@@ -55,6 +55,8 @@ uint64_t numSlots(const Parameters &params);
 
 uint64_t logN(const Parameters &params);
 
+uint64_t noiseBound(const Parameters &params);
+
 Ring ringQ(const Parameters &params);
 
 Ring ringP(const Parameters &params);

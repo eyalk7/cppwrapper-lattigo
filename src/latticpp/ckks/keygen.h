@@ -16,6 +16,20 @@ struct KeyPairHandle {
 
 KeyGenerator newKeyGenerator(const Parameters &params);
 
+RotationKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
+                           int rotationStep);
+
+RotationKey copyNewRotationKey(const RotationKey &rotKey);
+
+uint64_t numOfDecomp(const RotationKey &rtk);
+
+uint64_t galoisElementForColumnRotationBy(const Parameters &params,
+                                          uint64_t rotationStep);
+
+uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
+                              SecretKey sk, const Parameters &params,
+                              uint64_t log2Bound);
+
 SecretKey newSecretKey(const Parameters &params);
 
 SecretKey copyNewSecretKey(const SecretKey &sk);

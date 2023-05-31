@@ -198,6 +198,46 @@ func lattigo_genRotationKeysForRotations(keygenHandle Handle5, skHandle Handle5,
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotKeys))
 }
 
+//export lattigo_getRotationKey
+func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep int) Handle5 {
+	param := getStoredParameters(paramHandle)
+	rotKeys := getStoredRotationKeys(rotKeysHandle)
+	rotationKey := rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotationStep)]
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotationKey))
+
+}
+
+//export lattigo_copyNewRotationKey
+func lattigo_copyNewRotationKey(rotKeyHandle Handle5) Handle5 {
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotKey.CopyNew()))
+}
+
+//export lattigo_numOfDecomp
+func lattigo_numOfDecomp(rotKeyHandle Handle5) uint64 {
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
+	return uint64(len(rotKey.Value))
+}
+
+//export lattigo_galoisElementForColumnRotationBy
+func lattigo_galoisElementForColumnRotationBy(paramHandle Handle5, rotationStep uint64) uint64 {
+	param := getStoredParameters(paramHandle)
+	return uint64(param.GaloisElementForColumnRotationBy(int(rotationStep)))
+}
+
+//export lattigo_rotationKeyIsCorrect
+func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle Handle5, paramHandle Handle5, log2Bound uint64) uint64 {
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
+	sk := getStoredSecretKey(skHandle)
+	param := getStoredParameters(paramHandle)
+	isCorrect := rlwe.RotationKeyIsCorrect(rotKey.CopyNew(), galEl, sk.CopyNew(), param.Parameters, int(log2Bound))
+	if isCorrect {
+		return uint64(1)
+	} else {
+		return uint64(0)
+	}
+}
+
 //export lattigo_makeEvaluationKey
 func lattigo_makeEvaluationKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
 	var relinKey *rlwe.RelinearizationKey

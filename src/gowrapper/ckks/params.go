@@ -156,6 +156,12 @@ func lattigo_ringQ(paramHandle Handle6) Handle6 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params.RingQ()))
 }
 
+//export lattigo_noiseBound
+func lattigo_noiseBound(paramHandle Handle6) uint64 {
+	params := getStoredParameters(paramHandle)
+	return uint64(params.NoiseBound())
+}
+
 //export lattigo_ringP
 func lattigo_ringP(paramHandle Handle6) Handle6 {
 	var params *ckks.Parameters

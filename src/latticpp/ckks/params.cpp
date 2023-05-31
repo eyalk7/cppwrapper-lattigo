@@ -44,6 +44,10 @@ uint64_t logN(const Parameters &params) {
   return lattigo_logN(params.getRawHandle());
 }
 
+uint64_t noiseBound(const Parameters &params) {
+  return lattigo_noiseBound(params.getRawHandle());
+}
+
 Ring ringQ(const Parameters &params) {
   return Ring(lattigo_ringQ(params.getRawHandle()));
 }

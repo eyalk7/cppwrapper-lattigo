@@ -11,6 +11,33 @@ KeyGenerator newKeyGenerator(const Parameters &params) {
   return KeyGenerator(lattigo_newKeyGenerator(params.getRawHandle()));
 }
 
+RotationKey getRotationKey(const Parameters &params,
+                           const RotationKeys &rotationKeys, int rotationStep) {
+  return RotationKey(lattigo_getRotationKey(
+      params.getRawHandle(), rotationKeys.getRawHandle(), rotationStep));
+}
+
+RotationKey copyNewRotationKey(const RotationKey &rotKey) {
+  return RotationKey(lattigo_copyNewRotationKey(rotKey.getRawHandle()));
+}
+
+uint64_t numOfDecomp(const RotationKey &rtk) {
+  return lattigo_numOfDecomp(rtk.getRawHandle());
+}
+
+uint64_t galoisElementForColumnRotationBy(const Parameters &params,
+                                          uint64_t rotationStep) {
+  return lattigo_galoisElementForColumnRotationBy(params.getRawHandle(),
+                                                  rotationStep);
+}
+
+uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
+                              SecretKey sk, const Parameters &params,
+                              uint64_t log2Bound) {
+  return lattigo_rotationKeyIsCorrect(rtk.getRawHandle(), galEl,
+                                      sk.getRawHandle(), params.getRawHandle(),
+                                      log2Bound);
+}
 SecretKey newSecretKey(const Parameters &params) {
   return SecretKey(lattigo_newSecretKey(params.getRawHandle()));
 }
