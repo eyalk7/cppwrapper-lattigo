@@ -21,6 +21,16 @@ func getStoredCiphertext(ctHandle Handle8) *rlwe.Ciphertext {
 	return (*rlwe.Ciphertext)(ref.Ptr)
 }
 
+func getStoredCiphertextQP(ctHandle Handle8) *rlwe.CiphertextQP {
+	ref := marshal.CrossLangObjMap.Get(ctHandle)
+	return (*rlwe.CiphertextQP)(ref.Ptr)
+}
+
+func getStoredMetaData(metaDataHandle Handle8) *rlwe.MetaData {
+	ref := marshal.CrossLangObjMap.Get(metaDataHandle)
+	return (*rlwe.MetaData)(ref.Ptr)
+}
+
 //export lattigo_level
 func lattigo_level(ctHandle Handle8) uint64 {
 	var ctIn *rlwe.Ciphertext
@@ -52,11 +62,33 @@ func lattigo_copyNew(ctHandle Handle8) Handle8 {
 }
 
 //export lattigo_newCiphertext
-func lattigo_newCiphertext(paramsHandle Handle8, degree uint64, level uint64, scale float64) Handle8 {
+func lattigo_newCiphertext(paramsHandle Handle8, degree uint64, level uint64) Handle8 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramsHandle)
 
 	var newCt *rlwe.Ciphertext
 	newCt = ckks.NewCiphertext(*params, int(degree), int(level))
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(newCt))
+}
+
+//export lattigo_setCiphertextMetaData
+func lattigo_setCiphertextMetaData(ctxHandle, metaDataHandle Handle8) {
+	ctx := getStoredCiphertext(ctxHandle)
+	metaData := getStoredMetaData(metaDataHandle)
+	(*ctx).MetaData = *metaData
+}
+
+//export lattigo_getCiphertextQPMetaData
+func lattigo_getCiphertextQPMetaData(ctxHandle Handle8) Handle8 {
+	ctx := getStoredCiphertextQP(ctxHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctx.MetaData))
+}
+
+//export lattigo_poly
+func lattigo_poly(ctxHandle Handle8, i uint64) Handle8 {
+	ctx := getStoredCiphertext(ctxHandle)
+	if int(i) > ctx.Degree() {
+		panic("index exceed ciphertext degree")
+	}
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ctx.Value[i]))
 }

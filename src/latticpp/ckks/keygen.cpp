@@ -46,8 +46,12 @@ SecretKey copyNewSecretKey(const SecretKey &sk) {
   return SecretKey(lattigo_copyNewSecretKey(sk.getRawHandle()));
 }
 
-PolyQP getPolyQP(const SecretKey &sk) {
-  return PolyQP(lattigo_getPolyQP(sk.getRawHandle()));
+PolyQP polyQP(const SecretKey &sk) {
+  return PolyQP(lattigo_polyQPSecretKey(sk.getRawHandle()));
+}
+
+PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i) {
+  return PolyQP(lattigo_polyQPCiphertextQP(ctx.getRawHandle(), i));
 }
 
 PublicKey newPublicKey(const Parameters &params) {
@@ -104,6 +108,10 @@ RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen,
       shifts.size()));
 }
 
+CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j) {
+  return CiphertextQP(lattigo_ciphertextQP(rtk.getRawHandle(), i, j));
+}
+
 EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey,
                                 const RotationKeys &rotKeys) {
   return EvaluationKey(lattigo_makeEvaluationKey(relinKey.getRawHandle(),
@@ -151,4 +159,5 @@ SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement) {
   return SwitchingKey(
       lattigo_getSwitchingKey(rotKeys.getRawHandle(), galoisElement));
 }
+
 } // namespace latticpp

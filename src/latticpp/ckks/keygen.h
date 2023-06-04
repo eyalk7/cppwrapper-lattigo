@@ -30,11 +30,14 @@ uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
                               SecretKey sk, const Parameters &params,
                               uint64_t log2Bound);
 
+CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
+
 SecretKey newSecretKey(const Parameters &params);
 
 SecretKey copyNewSecretKey(const SecretKey &sk);
 
-PolyQP getPolyQP(const SecretKey &sk);
+PolyQP polyQP(const SecretKey &sk);
+PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i);
 
 PublicKey newPublicKey(const Parameters &params);
 
@@ -77,5 +80,7 @@ void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
 // const RotationKeys &rotKeys);
 
 SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
+
+SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
 
 } // namespace latticpp

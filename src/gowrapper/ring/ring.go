@@ -156,23 +156,32 @@ func lattigo_mFormLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOut
 	ringQP.MFormLvl(levelQ, levelP, *pIn, *pOut)
 }
 
-//export lattigo_getQ
-func lattigo_getQ(polyQPHandle Handle14) Handle14 {
+//export lattigo_invMFormLvlRing
+func lattigo_invMFormLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle Handle14) {
+	ring := getStoredRing(ringHandle)
+	pIn := getStoredPoly(pInHandle)
+	pOut := getStoredPoly(pOutHandle)
+	ring.InvMFormLvl(level, pIn, pOut)
+}
+
+//export lattigo_mFormLvlRing
+func lattigo_mFormLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle Handle14) {
+	ring := getStoredRing(ringHandle)
+	pIn := getStoredPoly(pInHandle)
+	pOut := getStoredPoly(pOutHandle)
+	ring.MFormLvl(level, pIn, pOut)
+}
+
+//export lattigo_polyQ
+func lattigo_polyQ(polyQPHandle Handle14) Handle14 {
 	polyQP := getStoredPolyQP(polyQPHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(polyQP.Q))
 }
 
-//export lattigo_getP
-func lattigo_getP(polyQPHandle Handle14) Handle14 {
+//export lattigo_polyP
+func lattigo_polyP(polyQPHandle Handle14) Handle14 {
 	polyQP := getStoredPolyQP(polyQPHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(polyQP.P))
-}
-
-//export lattigo_copyPoly
-func lattigo_copyPoly(targetPolyHandle, sourcePolyHandle Handle14) {
-	sourcePoly := getStoredPoly(sourcePolyHandle)
-	targetPoly := getStoredPoly(targetPolyHandle)
-	targetPoly.Copy(sourcePoly)
 }
 
 //export lattigo_copyLvl
@@ -182,11 +191,17 @@ func lattigo_copyLvl(level uint64, sourcePolyHandle, targetPolyHandle Handle14) 
 	ring.CopyLvl(int(level), sourcePoly, targetPoly)
 }
 
-//export lattigo_copyPolyRnsLevel
-func lattigo_copyPolyRnsLevel(sourcePolyHandle Handle14, sourceIndex uint64, targetPolyHandle Handle14, targetIndex uint64) {
+//export lattigo_copyPolySingleLevel
+func lattigo_copyPolySingleLevel(sourcePolyHandle Handle14, sourceIndex uint64, targetPolyHandle Handle14, targetIndex uint64) {
 	src := getStoredPoly(sourcePolyHandle)
 	tar := getStoredPoly(targetPolyHandle)
 	srcIdx := int(sourceIndex)
 	tarIdx := int(targetIndex)
 	copy(tar.Buff[tar.N()*tarIdx:tar.N()*(tarIdx+1)], src.Buff[src.N()*srcIdx:src.N()*(srcIdx+1)])
+}
+
+//export lattigo_polyDegree
+func lattigo_polyDegree(polyHandle Handle14) uint64 {
+	poly := getStoredPoly(polyHandle)
+	return uint64(poly.N())
 }

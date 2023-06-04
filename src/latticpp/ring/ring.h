@@ -20,16 +20,14 @@ UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring);
 
 Poly readNewFromSampler(const UniformSampler &sampler);
 
-Poly getQ(const PolyQP &polyqp);
+Poly polyQ(const PolyQP &polyqp);
 
-Poly getP(const PolyQP &polyqp);
-
-void copyPoly(Poly targetPoly, const Poly sourcePoly);
+Poly polyP(const PolyQP &polyqp);
 
 void copyLvl(uint64_t level, const Poly sourcePoly, Poly targetPoly);
 
-void copyPolyRnsLevel(const Poly sourcePoly, uint64_t sourceIndex,
-                      const Poly targetPoly, uint64_t targetIndex);
+void copyPolySingleLevel(const Poly sourcePoly, uint64_t sourceIndex,
+                         const Poly targetPoly, uint64_t targetIndex);
 
 BasisExtender newBasisExtender(Ring ringQ, Ring ringP);
 
@@ -43,4 +41,11 @@ void invMFormLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn,
                  PolyQP pOut);
 
 void mFormLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+
+void invMFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
+
+void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
+
+uint64_t degree(Poly p);
+
 } // namespace latticpp

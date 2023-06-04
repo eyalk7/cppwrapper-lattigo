@@ -119,11 +119,19 @@ func lattigo_copyNewSecretKey(skHandle Handle5) Handle5 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(sk.CopyNew()))
 }
 
-//export lattigo_getPolyQP
-func lattigo_getPolyQP(skHandle Handle5) Handle5 {
+//export lattigo_polyQPSecretKey
+func lattigo_polyQPSecretKey(skHandle Handle5) Handle5 {
 	sk := getStoredSecretKey(skHandle)
 	polyQP := sk.Value
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&polyQP))
+}
+
+//export lattigo_polyQPCiphertextQP
+func lattigo_polyQPCiphertextQP(ctxHandle Handle5, i uint64) Handle5 {
+	ctx := getStoredCiphertextQP(ctxHandle)
+	polyPQ := ctx.Value[i]
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&polyPQ))
+
 }
 
 //export lattigo_genPublicKey
@@ -236,6 +244,12 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 	} else {
 		return uint64(0)
 	}
+}
+
+//export lattigo_ciphertextQP
+func lattigo_ciphertextQP(rotKeyHandle Handle5, i, j uint64) Handle5 {
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&(rotKey.Value[i])[j]))
 }
 
 //export lattigo_makeEvaluationKey

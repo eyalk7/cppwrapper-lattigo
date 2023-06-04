@@ -29,6 +29,7 @@ enum class GoType {
   PublicKey,
   Plaintext,
   Ciphertext,
+  CiphertextQP,
   RotationKeys,
   RotationKey,
   SwitchingKey,
@@ -46,7 +47,8 @@ enum class GoType {
   PolyQP,
   BasisExtender,
   PRNG,
-  UniformSampler
+  UniformSampler,
+  MetaData
 };
 
 template <GoType t> struct GoHandle {
@@ -186,6 +188,7 @@ using SecretKey = GoHandle<GoType::SecretKey>;
 using PublicKey = GoHandle<GoType::PublicKey>;
 using Plaintext = GoHandle<GoType::Plaintext>;
 using Ciphertext = GoHandle<GoType::Ciphertext>;
+using CiphertextQP = GoHandle<GoType::CiphertextQP>;
 using RotationKeys = GoHandle<GoType::RotationKeys>;
 using RotationKey = GoHandle<GoType::RotationKey>;
 using SwitchingKey = GoHandle<GoType::SwitchingKey>;
@@ -204,6 +207,7 @@ using PolyQP = GoHandle<GoType::PolyQP>;
 using BasisExtender = GoHandle<GoType::BasisExtender>;
 using UniformSampler = GoHandle<GoType::UniformSampler>;
 using PRNG = GoHandle<GoType::PRNG>;
+using MetaData = GoHandle<GoType::MetaData>;
 
 } // namespace latticpp
 #endif

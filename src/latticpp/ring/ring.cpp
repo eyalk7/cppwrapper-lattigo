@@ -32,26 +32,22 @@ Poly readNewFromSampler(const UniformSampler &sampler) {
   return Poly(lattigo_readNewFromSampler(sampler.getRawHandle()));
 }
 
-Poly getQ(const PolyQP &polyqp) {
-  return Poly(lattigo_getQ(polyqp.getRawHandle()));
+Poly polyQ(const PolyQP &polyqp) {
+  return Poly(lattigo_polyQ(polyqp.getRawHandle()));
 }
 
-Poly getP(const PolyQP &polyqp) {
-  return Poly(lattigo_getP(polyqp.getRawHandle()));
-}
-
-void copyPoly(Poly targetPoly, const Poly sourcePoly) {
-  lattigo_copyPoly(sourcePoly.getRawHandle(), targetPoly.getRawHandle());
+Poly polyP(const PolyQP &polyqp) {
+  return Poly(lattigo_polyP(polyqp.getRawHandle()));
 }
 
 void copyLvl(uint64_t level, const Poly sourcePoly, Poly targetPoly) {
   lattigo_copyLvl(level, sourcePoly.getRawHandle(), targetPoly.getRawHandle());
 }
 
-void copyPolyRnsLevel(const Poly sourcePoly, uint64_t sourceIndex,
-                      Poly targetPoly, uint64_t targetIndex) {
-  lattigo_copyPolyRnsLevel(sourcePoly.getRawHandle(), sourceIndex,
-                           targetPoly.getRawHandle(), targetIndex);
+void copyPolySingleLevel(const Poly sourcePoly, uint64_t sourceIndex,
+                         Poly targetPoly, uint64_t targetIndex) {
+  lattigo_copyPolySingleLevel(sourcePoly.getRawHandle(), sourceIndex,
+                              targetPoly.getRawHandle(), targetIndex);
 }
 
 BasisExtender newBasisExtender(Ring ringQ, Ring ringP) {
@@ -85,4 +81,15 @@ void mFormLvl(RingQP ringQP, int levelQ, int levelP, PolyQP pIn, PolyQP pOut) {
                    pOut.getRawHandle());
 }
 
+void invMFormLvl(Ring ring, int level, Poly pIn, Poly pOut) {
+  lattigo_invMFormLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(),
+                          pOut.getRawHandle());
+}
+
+void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut) {
+  lattigo_mFormLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(),
+                       pOut.getRawHandle());
+}
+
+uint64_t degree(Poly p) { return lattigo_polyDegree(p.getRawHandle()); }
 } // namespace latticpp
