@@ -19,6 +19,12 @@ KeyGenerator newKeyGenerator(const Parameters &params);
 RotationKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
                            int rotationStep);
 
+uint64_t rotationKeyExist(const Parameters &params,
+                          const RotationKeys &rotationKeys, int rotationStep);
+
+void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
+                    const RotationKey &rotKey, int rotStep);
+
 RotationKey copyNewRotationKey(const RotationKey &rotKey);
 
 uint64_t numOfDecomp(const RotationKey &rtk);
@@ -79,8 +85,11 @@ void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
 // BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey,
 // const RotationKeys &rotKeys);
 
-SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
-
 SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
+
+void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk,
+                Ciphertext &ctxOut);
+
+RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP);
 
 } // namespace latticpp

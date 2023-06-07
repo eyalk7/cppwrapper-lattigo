@@ -17,6 +17,18 @@ RotationKey getRotationKey(const Parameters &params,
       params.getRawHandle(), rotationKeys.getRawHandle(), rotationStep));
 }
 
+uint64_t rotationKeyExist(const Parameters &params,
+                          const RotationKeys &rotationKeys, int rotationStep) {
+  return lattigo_rotationKeyExist(params.getRawHandle(),
+                                  rotationKeys.getRawHandle(), rotationStep);
+}
+
+void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
+                    const RotationKey &rotKey, int rotStep) {
+  lattigo_setRotationKey(params.getRawHandle(), rotKeys.getRawHandle(),
+                         rotKey.getRawHandle(), rotStep);
+}
+
 RotationKey copyNewRotationKey(const RotationKey &rotKey) {
   return RotationKey(lattigo_copyNewRotationKey(rotKey.getRawHandle()));
 }
@@ -151,13 +163,8 @@ void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
 //     rotKeys.getRawHandle()));
 // }
 
-// Poly getValue(const SecretKey &sk) {
-//   return Poly(lattigo_getSecretKeyValue(sk.getRawHandle()));
-// }
-
-SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement) {
-  return SwitchingKey(
-      lattigo_getSwitchingKey(rotKeys.getRawHandle(), galoisElement));
+RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP) {
+  return lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP);
 }
 
 } // namespace latticpp

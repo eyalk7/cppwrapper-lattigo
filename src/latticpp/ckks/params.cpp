@@ -113,4 +113,9 @@ vector<uint64_t> galoisElementsForRowInnerSum(const Parameters &params) {
   lattigo_galoisElementsForRowInnerSum(params.getRawHandle(), res.data());
   return res;
 }
+
+uint64_t inverseGaloisElement(const Parameters &params, uint64_t galEl) {
+  return lattigo_inverseGaloisElement(params.getRawHandle(), galEl);
+}
+
 } // namespace latticpp

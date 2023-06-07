@@ -88,4 +88,7 @@ uint64_t logSlots(const Parameters &params);
 uint64_t galoisElementForRowRotation(const Parameters &params);
 
 std::vector<uint64_t> galoisElementsForRowInnerSum(const Parameters &params);
+
+uint64_t inverseGaloisElement(const Parameters &params, uint64_t galEl);
+
 } // namespace latticpp

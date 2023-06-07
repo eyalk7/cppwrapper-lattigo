@@ -4,6 +4,8 @@ package ring
 
 /*
 #include <stdint.h>
+typedef const uint64_t constULong;
+typedef const double constDouble;
 */
 import "C"
 
@@ -140,16 +142,16 @@ func lattigo_nTTLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHa
 	ringQP.NTTLvl(levelQ, levelP, *pIn, *pOut)
 }
 
-//export lattigo_invMFormLvl
-func lattigo_invMFormLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
+//export lattigo_invMFormLvlRingQP
+func lattigo_invMFormLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
 	pIn := getStoredPolyQP(pInHandle)
 	pOut := getStoredPolyQP(pOutHandle)
 	ringQP.InvMFormLvl(levelQ, levelP, *pIn, *pOut)
 }
 
-//export lattigo_mFormLvl
-func lattigo_mFormLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
+//export lattigo_mFormLvlRingQP
+func lattigo_mFormLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
 	pIn := getStoredPolyQP(pInHandle)
 	pOut := getStoredPolyQP(pOutHandle)
@@ -204,4 +206,35 @@ func lattigo_copyPolySingleLevel(sourcePolyHandle Handle14, sourceIndex uint64, 
 func lattigo_polyDegree(polyHandle Handle14) uint64 {
 	poly := getStoredPoly(polyHandle)
 	return uint64(poly.N())
+}
+
+//export lattigo_N
+func lattigo_N(ringHandle Handle14) uint64 {
+	ring := getStoredRing(ringHandle)
+	return uint64(ring.N)
+}
+
+//export lattigo_permuteNTTIndex
+func lattigo_permuteNTTIndex(ringHandle Handle14, galEl uint64, outValues *C.constULong) {
+	ring := getStoredRing(ringHandle)
+	res := ring.PermuteNTTIndex(galEl)
+	size := unsafe.Sizeof(uint64(0))
+	basePtr := uintptr(unsafe.Pointer(outValues))
+	for i := range res {
+		*(*uint64)(unsafe.Pointer(basePtr + size*uintptr(i))) = res[i]
+	}
+}
+
+//export lattigo_permuteNTTWithIndexLvl
+func lattigo_permuteNTTWithIndexLvl(ringHandle Handle14, level uint64, polyInHandle Handle14, index *C.constULong, polyOutHandle Handle14) {
+	ring := getStoredRing(ringHandle)
+	polyIn := getStoredPoly(polyInHandle)
+	polyOut := getStoredPoly(polyOutHandle)
+	Index := make([]uint64, ring.N)
+	indexPtr := uintptr(unsafe.Pointer(index))
+	size := unsafe.Sizeof(uint64(0))
+	for i := range Index {
+		Index[i] = *(*uint64)(unsafe.Pointer(indexPtr + size*uintptr(i)))
+	}
+	ring.PermuteNTTWithIndexLvl(int(level), polyIn, Index, polyOut)
 }

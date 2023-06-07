@@ -3,6 +3,7 @@
 #include "ring.h"
 
 using namespace std;
+using namespace latticpp;
 
 namespace latticpp {
 
@@ -72,13 +73,13 @@ void nTTLvl(RingQP ringQP, int levelQ, int levelP, PolyQP pIn, PolyQP pOut) {
 
 void invMFormLvl(RingQP ringQP, int levelQ, int levelP, PolyQP pIn,
                  PolyQP pOut) {
-  lattigo_invMFormLvl(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(),
-                      pOut.getRawHandle());
+  lattigo_invMFormLvlRingQP(ringQP.getRawHandle(), levelQ, levelP,
+                            pIn.getRawHandle(), pOut.getRawHandle());
 }
 
 void mFormLvl(RingQP ringQP, int levelQ, int levelP, PolyQP pIn, PolyQP pOut) {
-  lattigo_mFormLvl(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(),
-                   pOut.getRawHandle());
+  lattigo_mFormLvlRingQP(ringQP.getRawHandle(), levelQ, levelP,
+                         pIn.getRawHandle(), pOut.getRawHandle());
 }
 
 void invMFormLvl(Ring ring, int level, Poly pIn, Poly pOut) {
@@ -92,4 +93,20 @@ void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut) {
 }
 
 uint64_t degree(Poly p) { return lattigo_polyDegree(p.getRawHandle()); }
+
+uint64_t N(Ring ring) { return lattigo_N(ring.getRawHandle()); }
+
+vector<uint64_t> permuteNTTIndex(Ring ring, uint64_t galEl) {
+  vector<uint64_t> res(N(ring));
+  lattigo_permuteNTTIndex(ring.getRawHandle(), galEl, res.data());
+  return res;
+}
+
+void permuteNTTWithIndexLvl(Ring ring, uint64_t level, Poly polyIn,
+                            const vector<uint64_t> &index, Poly polyOut) {
+  lattigo_permuteNTTWithIndexLvl(ring.getRawHandle(), level,
+                                 polyIn.getRawHandle(), index.data(),
+                                 polyOut.getRawHandle());
+}
+
 } // namespace latticpp

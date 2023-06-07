@@ -269,3 +269,9 @@ func lattigo_galoisElementsForRowInnerSum(paramHandle Handle6, outValues *C.uint
 		*(*uint64)(unsafe.Pointer(basePtr + size*uintptr(i))) = res[i]
 	}
 }
+
+//export lattigo_inverseGaloisElement
+func lattigo_inverseGaloisElement(paramHandle Handle6, galEl uint64) uint64 {
+	params := getStoredParameters(paramHandle)
+	return params.InverseGaloisElement(galEl)
+}

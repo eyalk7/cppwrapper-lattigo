@@ -78,10 +78,23 @@ func lattigo_setCiphertextMetaData(ctxHandle, metaDataHandle Handle8) {
 	(*ctx).MetaData = *metaData
 }
 
+//export lattigo_setCiphertextQPMetaData
+func lattigo_setCiphertextQPMetaData(ctxQPHandle, metaDataHandle Handle8) {
+	ctxQP := getStoredCiphertextQP(ctxQPHandle)
+	metaData := getStoredMetaData(metaDataHandle)
+	(*ctxQP).MetaData = *metaData
+}
+
+//export lattigo_getCiphertextMetaData
+func lattigo_getCiphertextMetaData(ctxHandle Handle8) Handle8 {
+	ctx := getStoredCiphertext(ctxHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctx.MetaData))
+}
+
 //export lattigo_getCiphertextQPMetaData
 func lattigo_getCiphertextQPMetaData(ctxHandle Handle8) Handle8 {
-	ctx := getStoredCiphertextQP(ctxHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctx.MetaData))
+	ctxQP := getStoredCiphertextQP(ctxHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctxQP.MetaData))
 }
 
 //export lattigo_poly

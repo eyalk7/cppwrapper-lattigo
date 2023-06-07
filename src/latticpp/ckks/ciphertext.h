@@ -19,9 +19,13 @@ Ciphertext copyNew(const Ciphertext &ct);
 Ciphertext newCiphertext(const Parameters &params, uint64_t degree,
                          uint64_t level);
 
-void setCiphertextMetaData(const Ciphertext &ctx, MetaData &metaData);
+void set(const Ciphertext &ctx, MetaData &metaData);
 
-MetaData getCiphertextQPMetaData(const CiphertextQP &ctxQP);
+void set(const CiphertextQP &ctx, MetaData &metaData);
+
+MetaData getMetaData(const CiphertextQP &ctxQP);
+
+MetaData getMetaData(const Ciphertext &ctx);
 
 Poly poly(const Ciphertext &ctx, uint64_t i);
 

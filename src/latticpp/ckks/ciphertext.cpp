@@ -32,12 +32,20 @@ Ciphertext newCiphertext(const Parameters &params, uint64_t degree,
       lattigo_newCiphertext(params.getRawHandle(), degree, level));
 }
 
-void setCiphertextMetaData(const Ciphertext &ctx, MetaData &metaData) {
+void set(const Ciphertext &ctx, MetaData &metaData) {
   lattigo_setCiphertextMetaData(ctx.getRawHandle(), metaData.getRawHandle());
 }
 
-MetaData getCiphertextQPMetaData(const CiphertextQP &ctxQP) {
+void set(const CiphertextQP &ctx, MetaData &metaData) {
+  lattigo_setCiphertextQPMetaData(ctx.getRawHandle(), metaData.getRawHandle());
+}
+
+MetaData getMetaData(const CiphertextQP &ctxQP) {
   return lattigo_getCiphertextQPMetaData(ctxQP.getRawHandle());
+}
+
+MetaData getMetaData(const Ciphertext &ctx) {
+  return lattigo_getCiphertextMetaData(ctx.getRawHandle());
 }
 
 Poly poly(const Ciphertext &ctx, uint64_t i) {

@@ -345,3 +345,12 @@ func lattigo_relinearize(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Han
 
 	(*eval).Relinearize(ctIn, ctOut)
 }
+
+//export lattigo_switchKeys
+func lattigo_switchKeys(evalHandle, ctxInHandle, swkHandle, ctxOutHandle Handle4) {
+	eval := getStoredEvaluator(evalHandle)
+	swk := getStoredRotationKey(swkHandle)
+	ctxIn := getStoredCiphertext(ctxInHandle)
+	ctxOut := getStoredCiphertext(ctxOutHandle)
+	(*eval).SwitchKeys(ctxIn, swk, ctxOut)
+}

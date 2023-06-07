@@ -128,4 +128,10 @@ void relinearize(const Evaluator &eval, const Ciphertext &ctIn,
   lattigo_relinearize(eval.getRawHandle(), ctIn.getRawHandle(),
                       ctOut.getRawHandle());
 }
+
+void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk,
+                Ciphertext &ctxOut) {
+  lattigo_switchKeys(eval.getRawHandle(), ctxIn.getRawHandle(),
+                     swk.getRawHandle(), ctxOut.getRawHandle());
+}
 } // namespace latticpp

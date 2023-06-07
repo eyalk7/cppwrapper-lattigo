@@ -254,6 +254,6 @@ func lattigo_cksAggregateShares(protocolHandle, share1Handle, share2Handle, shar
 // 	protocol := getStoredRTGProtocol(protocolHandle)
 // 	share := getStoredRTGShare(shareHandle)
 // 	crps := getStoredCrps(crpsHandles, crpsHandlesLen)
-// 	rotKey := getStoredSwitchingKey(rotKeyHandle)
+// 	rotKey := getStoredRotationKey(rotKeyHandle)
 // 	protocol.GenRotationKey(share, crps, rotKey)
 // }

@@ -48,4 +48,10 @@ void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
 
 uint64_t degree(Poly p);
 
+uint64_t N(Ring ring);
+
+std::vector<uint64_t> permuteNTTIndex(Ring ring, uint64_t galEl);
+
+void permuteNTTWithIndexLvl(Ring ring, uint64_t level, Poly polyIn,
+                            const std::vector<uint64_t> &index, Poly polyOut);
 } // namespace latticpp
