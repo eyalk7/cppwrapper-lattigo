@@ -3,93 +3,89 @@
 
 #pragma once
 
-#include "cgo/keygen.h"
 #include "latticpp/marshal/gohandle.h"
+#include "cgo/keygen.h"
 #include <vector>
 
 namespace latticpp {
 
-struct KeyPairHandle {
-  SecretKey sk;
-  PublicKey pk;
-};
+    struct KeyPairHandle {
+        SecretKey sk;
+        PublicKey pk;
+    };
 
-KeyGenerator newKeyGenerator(const Parameters &params);
+    KeyGenerator newKeyGenerator(const Parameters &params);
 
-RotationKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
-                           int rotationStep);
+    RotationKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
+                              int rotationStep);
 
-uint64_t rotationKeyExist(const Parameters &params,
-                          const RotationKeys &rotationKeys, int rotationStep);
+    uint64_t rotationKeyExist(const Parameters &params,
+                              const RotationKeys &rotationKeys, int rotationStep);
 
-void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
-                    const RotationKey &rotKey, int rotStep);
+    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
+                        const RotationKey &rotKey, int rotStep);
 
-RotationKey copyNewRotationKey(const RotationKey &rotKey);
+    RotationKey copyNewRotationKey(const RotationKey &rotKey);
 
-uint64_t numOfDecomp(const RotationKey &rtk);
+    uint64_t numOfDecomp(const RotationKey &rtk);
 
-uint64_t galoisElementForColumnRotationBy(const Parameters &params,
-                                          uint64_t rotationStep);
+    uint64_t galoisElementForColumnRotationBy(const Parameters &params,
+                                              uint64_t rotationStep);
 
-uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
-                              SecretKey sk, const Parameters &params,
-                              uint64_t log2Bound);
+    uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
+                                  SecretKey sk, const Parameters &params,
+                                  uint64_t log2Bound);
 
-CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
+    CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
 
-SecretKey newSecretKey(const Parameters &params);
+    SecretKey newSecretKey(const Parameters &params);
 
-SecretKey copyNewSecretKey(const SecretKey &sk);
+    SecretKey copyNewSecretKey(const SecretKey &sk);
 
-PolyQP polyQP(const SecretKey &sk);
-PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i);
+    PolyQP polyQP(const SecretKey &sk);
 
-PublicKey newPublicKey(const Parameters &params);
+    PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i);
 
-RelinearizationKey newRelinearizationKey(const Parameters &params);
+    PublicKey newPublicKey(const Parameters &params);
 
-RotationKeys newRotationKeys(const Parameters &params,
-                             std::vector<uint64_t> galoisElements);
+    RelinearizationKey newRelinearizationKey(const Parameters &params);
 
-SecretKey genSecretKey(const KeyGenerator &keygen);
+    RotationKeys newRotationKeys(const Parameters &params,
+                                 std::vector<uint64_t> galoisElements);
 
-PublicKey genPublicKey(const KeyGenerator &keygen, const SecretKey &sk);
+    SecretKey genSecretKey(const KeyGenerator &keygen);
 
-KeyPairHandle genKeyPair(const KeyGenerator &keygen);
+    PublicKey genPublicKey(const KeyGenerator &keygen, const SecretKey &sk);
 
-KeyPairHandle genKeyPairSparse(const KeyGenerator &keygen, uint64_t hw);
+    KeyPairHandle genKeyPair(const KeyGenerator &keygen);
 
-RelinearizationKey genRelinKey(const KeyGenerator &keygen, const SecretKey &sk);
+    KeyPairHandle genKeyPairSparse(const KeyGenerator &keygen, uint64_t hw);
 
-RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen,
-                                         const SecretKey &sk,
-                                         std::vector<int> shifts);
+    RelinearizationKey genRelinKey(const KeyGenerator &keygen, const SecretKey &sk);
 
-EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey,
-                                const RotationKeys &rotKeys);
+    RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen, const SecretKey &sk, std::vector<int> shifts);
 
-EvaluationKey makeEmptyEvaluationKey();
+    EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
-void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey,
-                                 const RelinearizationKey &relinKey);
+    EvaluationKey makeEmptyEvaluationKey();
 
-void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
-                                const RotationKeys &rotKeys);
+    void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey,
+                                     const RelinearizationKey &relinKey);
 
-// BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const
-// Parameters &params, const BootstrappingParameters &bootParams, const
-// SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys
-// &rotKeys);
+    void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
+                                    const RotationKeys &rotKeys);
 
-// BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey,
-// const RotationKeys &rotKeys);
+    // BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
-SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
+    // BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
-void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk,
-                Ciphertext &ctxOut);
+    SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
 
-RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP);
+    Poly getValue(const SecretKey &sk);
 
-} // namespace latticpp
+    SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
+
+    RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP);
+
+    void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk, Ciphertext &ctxOut);
+}  // namespace latticpp
