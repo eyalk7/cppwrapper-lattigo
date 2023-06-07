@@ -389,6 +389,12 @@ func lattigo_getSecretKeyValue(skHandle Handle5) Handle5 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&sk.Value))
 }
 
+//export lattigo_getSwitchingKey
+func lattigo_getSwitchingKey(rotKeyHandle Handle5, galoisElement uint64) Handle5 {
+	rotKeys := getStoredRotationKeys(rotKeyHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotKeys.Keys[galoisElement]))
+}
+
 //export lattigo_newSwitchingKey
 func lattigo_newSwitchingKey(paramsHandle Handle5, levelQ, levelP uint64) Handle5 {
 	params := getStoredParameters(paramsHandle)
