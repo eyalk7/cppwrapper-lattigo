@@ -22,7 +22,6 @@ import (
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle6 = uint64
-type Handle17 = uint64
 
 func getStoredParameters(paramHandle Handle6) *ckks.Parameters {
 	ref := marshal.CrossLangObjMap.Get(paramHandle)
@@ -190,7 +189,7 @@ func lattigo_maxLevel(paramHandle Handle6) uint64 {
 }
 
 //export lattigo_paramsScale
-func lattigo_paramsScale(paramHandle Handle6) Handle17 {
+func lattigo_paramsScale(paramHandle Handle6) Handle6 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
 	scale := params.DefaultScale()
