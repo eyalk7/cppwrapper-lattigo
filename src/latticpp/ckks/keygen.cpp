@@ -114,20 +114,20 @@ namespace latticpp {
     }
 
     EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
-      return EvaluationKey(lattigo_makeEvaluationKey(relinKey.getRawHandle(),
-                                                    rotKeys.getRawHandle()));
+        return EvaluationKey(lattigo_makeEvaluationKey(relinKey.getRawHandle(), rotKeys.getRawHandle()));
     }
-
     EvaluationKey makeEmptyEvaluationKey() {
       return EvaluationKey(lattigo_makeEmptyEvaluationKey());
     }
 
-    void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey, const RelinearizationKey &relinKey) {
+    void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey, 
+                                     const RelinearizationKey &relinKey) {
       lattigo_setRelinKeyForEvaluationKey(evalKey.getRawHandle(),
                                           relinKey.getRawHandle());
     }
 
-    void setRotKeysForEvaluationKey(const EvaluationKey &evalKey, const RotationKeys &rotKeys) {
+    void setRotKeysForEvaluationKey(const EvaluationKey &evalKey, 
+                                    const RotationKeys &rotKeys) {
       lattigo_setRotKeysForEvaluationKey(evalKey.getRawHandle(),
                                         rotKeys.getRawHandle());
     }
