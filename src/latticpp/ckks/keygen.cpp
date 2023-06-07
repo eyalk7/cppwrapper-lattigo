@@ -120,16 +120,16 @@ namespace latticpp {
       return EvaluationKey(lattigo_makeEmptyEvaluationKey());
     }
 
-    void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey, 
+    void setRelinKeyForEvaluationKey(const EvaluationKey &evalKey,
                                      const RelinearizationKey &relinKey) {
       lattigo_setRelinKeyForEvaluationKey(evalKey.getRawHandle(),
                                           relinKey.getRawHandle());
     }
 
-    void setRotKeysForEvaluationKey(const EvaluationKey &evalKey, 
+    void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
                                     const RotationKeys &rotKeys) {
       lattigo_setRotKeysForEvaluationKey(evalKey.getRawHandle(),
-                                        rotKeys.getRawHandle());
+                                         rotKeys.getRawHandle());
     }
 
     // BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
