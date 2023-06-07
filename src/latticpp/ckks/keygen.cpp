@@ -7,9 +7,9 @@ using namespace std;
 
 namespace latticpp {
 
-KeyGenerator newKeyGenerator(const Parameters &params) {
-  return KeyGenerator(lattigo_newKeyGenerator(params.getRawHandle()));
-}
+    KeyGenerator newKeyGenerator(const Parameters &params) {
+      return KeyGenerator(lattigo_newKeyGenerator(params.getRawHandle()));
+    }
 
 RotationKey getRotationKey(const Parameters &params,
                            const RotationKeys &rotationKeys, int rotationStep) {
