@@ -10,11 +10,11 @@ namespace latticpp {
 
     // These correspond to the default bootstrapping parameters provided in Lattigo
     enum NamedBootstrappingParams {
-      BootstrapParams_Set1,
-      BootstrapParams_Set2,
-      BootstrapParams_Set3,
-      BootstrapParams_Set4,
-      BootstrapParams_Set5
+        BootstrapParams_Set1,
+        BootstrapParams_Set2,
+        BootstrapParams_Set3,
+        BootstrapParams_Set4,
+        BootstrapParams_Set5
     };
 
 // BootstrappingParameters
