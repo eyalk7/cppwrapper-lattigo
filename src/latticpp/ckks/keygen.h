@@ -88,4 +88,6 @@ namespace latticpp {
     RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP);
 
     void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk, Ciphertext &ctxOut);
+
+     RotationKey copyNew(const RotationKey &rotKey);
 }  // namespace latticpp

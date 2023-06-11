@@ -26,7 +26,7 @@ namespace latticpp {
                             rotKey.getRawHandle(), rotStep);
     }
 
-    RotationKey copyNewRotationKey(const RotationKey &rotKey) {
+    RotationKey copyNew(const RotationKey &rotKey) {
       return RotationKey(lattigo_copyNewRotationKey(rotKey.getRawHandle()));
     }
 
@@ -151,6 +151,6 @@ namespace latticpp {
     }
 
     RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP) {
-      return lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP);
+      return RotationKey(lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP));
     }
 }  // namespace latticpp

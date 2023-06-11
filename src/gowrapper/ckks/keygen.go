@@ -17,6 +17,7 @@ struct Lattigo_KeyPairHandle {
 import "C"
 
 import (
+	"fmt"
 	"lattigo-cpp/marshal"
 	"unsafe"
 
@@ -216,7 +217,7 @@ func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep int
 }
 
 //export lattigo_rotationKeyExist
-func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep int) uint64 {
+func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep int) int {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
 	_, exist := rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotationStep)]
@@ -228,10 +229,10 @@ func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep i
 }
 
 //export lattigo_setRotationKey
-func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rootStep uint64) {
+func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rootStep int) {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
-	rotKey := getStoredRotationKey(rotKeysHandle)
+	rotKey := getStoredRotationKey(rotKeyHandle)
 	rotKeys.Keys[param.GaloisElementForColumnRotationBy(int(rootStep))] = rotKey
 
 }
@@ -245,7 +246,7 @@ func lattigo_copyNewRotationKey(rotKeyHandle Handle5) Handle5 {
 //export lattigo_numOfDecomp
 func lattigo_numOfDecomp(rotKeyHandle Handle5) uint64 {
 	rotKey := getStoredRotationKey(rotKeyHandle)
-	return uint64(len(rotKey.Value))
+	return uint64(len(rotKey.Value) - 1)
 }
 
 //export lattigo_galoisElementForColumnRotationBy
@@ -259,6 +260,9 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 	rotKey := getStoredRotationKey(rotKeyHandle)
 	sk := getStoredSecretKey(skHandle)
 	param := getStoredParameters(paramHandle)
+	fmt.Println("len(ct.Value): ", len(rotKey.Value))
+	rotKey.GadgetCiphertext.CopyNew()
+	rotKey.CopyNew()
 	isCorrect := rlwe.RotationKeyIsCorrect(rotKey.CopyNew(), galEl, sk.CopyNew(), param.Parameters, int(log2Bound))
 	if isCorrect {
 		return uint64(1)
