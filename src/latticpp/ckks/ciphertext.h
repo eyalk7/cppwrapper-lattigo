@@ -20,6 +20,8 @@ namespace latticpp {
 
     Ciphertext newCiphertext(const Parameters &params, uint64_t degree, uint64_t level);
 
+    CiphertextQP newCiphertextQP(const Parameters &params);
+
     void set(const Ciphertext &ctx, MetaData &metaData);
 
     void set(const CiphertextQP &ctx, MetaData &metaData);
@@ -33,6 +35,8 @@ namespace latticpp {
     PolyQP polyQP(const CiphertextQP &ctQP, uint64_t i);
 
     CiphertextQP newZeroCiphertextQP(const Parameters &params, const SecretKey &sk);
+
+    Ciphertext newZeroCiphertext(const Parameters &params, const SecretKey &sk);
 
     void printMetaData(const CiphertextQP &ctQP);
 

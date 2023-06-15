@@ -80,6 +80,14 @@ func lattigo_newCiphertext(paramsHandle Handle8, degree uint64, level uint64) Ha
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(newCt))
 }
 
+//export lattigo_newCiphertextQP
+func lattigo_newCiphertextQP(paramsHandle Handle8) Handle8 {
+	params := getStoredParameters(paramsHandle)
+	ringQP := params.RingQP()
+	newCtQp := rlwe.CiphertextQP{Value: [2]ringqp.Poly{ringQP.NewPoly(), ringQP.NewPoly()}, MetaData: rlwe.MetaData{Scale: params.DefaultScale(), IsNTT: true}}
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&newCtQp))
+}
+
 //export lattigo_newZeroCiphertextQP
 func lattigo_newZeroCiphertextQP(paramsHandle, skHandle Handle8) Handle8 {
 	params := getStoredParameters(paramsHandle)
@@ -89,6 +97,16 @@ func lattigo_newZeroCiphertextQP(paramsHandle, skHandle Handle8) Handle8 {
 	encryptor := ckks.NewEncryptor(*params, sk)
 	encryptor.EncryptZero(&ctxQP)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctxQP))
+}
+
+//export lattigo_newZeroCiphertext
+func lattigo_newZeroCiphertext(paramsHandle, skHandle Handle8) Handle8 {
+	params := getStoredParameters(paramsHandle)
+	sk := getStoredSecretKey(skHandle)
+	ct := ckks.NewCiphertext(*params, 1, params.MaxLevel())
+	encryptor := ckks.NewEncryptor(*params, sk)
+	encryptor.EncryptZero(ct)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ct))
 }
 
 //export lattigo_setCiphertextMetaData

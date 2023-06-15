@@ -37,6 +37,11 @@ namespace latticpp {
         return Ciphertext(lattigo_newCiphertext(params.getRawHandle(), degree, level));
     }
 
+    CiphertextQP newCiphertextQP(const Parameters &params) {
+        return CiphertextQP(lattigo_newCiphertextQP(params.getRawHandle()));
+    }
+
+
     void set(const Ciphertext &ctx, MetaData &metaData) {
       lattigo_setCiphertextMetaData(ctx.getRawHandle(), metaData.getRawHandle());
     }
@@ -64,6 +69,10 @@ namespace latticpp {
 
     CiphertextQP newZeroCiphertextQP(const Parameters &params, const SecretKey &sk){
       return lattigo_newZeroCiphertextQP(params.getRawHandle(), sk.getRawHandle());
+    }
+
+    Ciphertext newZeroCiphertext(const Parameters &params, const SecretKey &sk){
+      return lattigo_newZeroCiphertext(params.getRawHandle(), sk.getRawHandle());
     }
 
     void printMetaData(const CiphertextQP &ctQP){
