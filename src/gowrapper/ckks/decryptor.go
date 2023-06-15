@@ -42,3 +42,9 @@ func lattigo_decryptNew(decryptorHandle Handle1, ctHandle Handle1) Handle1 {
 	pt = (*dec).DecryptNew(ct)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(pt))
 }
+
+//export lattigo_plaintextPoly
+func lattigo_plaintextPoly(plaintextHandle Handle1) Handle1 {
+	plaintext := getStoredPlaintext(plaintextHandle)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(plaintext.Value))
+}

@@ -17,7 +17,6 @@ struct Lattigo_KeyPairHandle {
 import "C"
 
 import (
-	"fmt"
 	"lattigo-cpp/marshal"
 	"unsafe"
 
@@ -125,14 +124,6 @@ func lattigo_polyQPSecretKey(skHandle Handle5) Handle5 {
 	sk := getStoredSecretKey(skHandle)
 	polyQP := sk.Value
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&polyQP))
-}
-
-//export lattigo_polyQPCiphertextQP
-func lattigo_polyQPCiphertextQP(ctxHandle Handle5, i uint64) Handle5 {
-	ctx := getStoredCiphertextQP(ctxHandle)
-	polyPQ := ctx.Value[i]
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&polyPQ))
-
 }
 
 //export lattigo_genPublicKey
@@ -260,7 +251,6 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 	rotKey := getStoredRotationKey(rotKeyHandle)
 	sk := getStoredSecretKey(skHandle)
 	param := getStoredParameters(paramHandle)
-	fmt.Println("len(ct.Value): ", len(rotKey.Value))
 	rotKey.GadgetCiphertext.CopyNew()
 	rotKey.CopyNew()
 	isCorrect := rlwe.RotationKeyIsCorrect(rotKey.CopyNew(), galEl, sk.CopyNew(), param.Parameters, int(log2Bound))
@@ -274,7 +264,7 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 //export lattigo_ciphertextQP
 func lattigo_ciphertextQP(rotKeyHandle Handle5, i, j uint64) Handle5 {
 	rotKey := getStoredRotationKey(rotKeyHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&(rotKey.Value[i])[j]))
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&(rotKey.Value[i][j])))
 }
 
 //export lattigo_makeEvaluationKey
@@ -386,12 +376,6 @@ func lattigo_setRotKeysForEvaluationKey(evalKeyHandle Handle5, rotKeysHandle Han
 
 // 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
 // }
-
-//export lattigo_getSecretKeyValue
-func lattigo_getSecretKeyValue(skHandle Handle5) Handle5 {
-	sk := getStoredSecretKey(skHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&sk.Value))
-}
 
 //export lattigo_getSwitchingKey
 func lattigo_getSwitchingKey(rotKeyHandle Handle5, galoisElement uint64) Handle5 {

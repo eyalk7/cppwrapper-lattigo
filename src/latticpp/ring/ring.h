@@ -26,7 +26,7 @@ namespace latticpp {
 
     void copyLvl(uint64_t level, const Poly sourcePoly, Poly targetPoly);
 
-    void copyPolySingleLevel(const Poly sourcePoly, uint64_t sourceIndex, const Poly targetPoly, uint64_t targetIndex);
+    void copyPolyAtLevel(const Poly dstPoly, uint64_t dstIndex, Poly srcPoly, uint64_t srcIndex);
 
     BasisExtender newBasisExtender(Ring ringQ, Ring ringP);
 
@@ -35,6 +35,10 @@ namespace latticpp {
     void invNTTLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
 
     void nTTLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+
+    void invNTTLvl(Ring ring, int level, Poly pIn, Poly pOut);
+
+    void nTTLvl(Ring ring, int level, Poly pIn, Poly pOut);
 
     void invMFormLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
 
@@ -52,4 +56,16 @@ namespace latticpp {
 
     void permuteNTTWithIndexLvl(Ring ring, uint64_t level, Poly polyIn, const std::vector<uint64_t> &index, Poly polyOut);
 
+    int log2OfInnerSum(int level, Ring ring, Poly poly);
+
+	// MulCoeffsMontgomeryAndAddLvl multiplies p1 by p2 coefficient-wise with a Montgomery
+	// modular reduction for the moduli from q_0 up to q_level and adds the result to p3.
+    void mulCoeffsMontgomeryAndAddLvl(RingQP ringQP, int levelQ, int levelP, PolyQP p1, PolyQP p2, PolyQP p3);
+
+    void mulCoeffsMontgomeryAndAddLvl(Ring ring, int level, Poly p1, Poly p2, Poly p3);
+
+    int equals(const Poly &p1, const Poly &p2);
+
+    void print(const Poly &p);
+    
 } // namespace latticpp

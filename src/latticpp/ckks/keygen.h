@@ -81,7 +81,7 @@ namespace latticpp {
 
     SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
 
-    Poly getValue(const SecretKey &sk);
+    Poly polyQP(const SecretKey &sk);
 
     SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
 

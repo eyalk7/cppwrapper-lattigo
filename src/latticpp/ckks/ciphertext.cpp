@@ -25,6 +25,14 @@ namespace latticpp {
         return lattigo_copyNew(ct.getRawHandle());
     }
 
+    CiphertextQP copyNew(const CiphertextQP &ctQP) {
+        // a handle of 0 is an invalid Go reference (my equivalent of a nil/null pointer)
+        if (ctQP.getRawHandle() == 0) {
+            return ctQP;
+        }
+        return lattigo_copyNewCiphertextQP(ctQP.getRawHandle());
+    }
+
     Ciphertext newCiphertext(const Parameters &params, uint64_t degree, uint64_t level) {
         return Ciphertext(lattigo_newCiphertext(params.getRawHandle(), degree, level));
     }
@@ -48,5 +56,28 @@ namespace latticpp {
     Poly poly(const Ciphertext &ctx, uint64_t i) {
       return lattigo_poly(ctx.getRawHandle(), i);
     }
+
+    PolyQP polyQP(const CiphertextQP &ctQP, uint64_t i) {
+      return lattigo_polyQPCiphertextQP(ctQP.getRawHandle(), i);
+    }
+    
+
+    CiphertextQP newZeroCiphertextQP(const Parameters &params, const SecretKey &sk){
+      return lattigo_newZeroCiphertextQP(params.getRawHandle(), sk.getRawHandle());
+    }
+
+    void printMetaData(const CiphertextQP &ctQP){
+      lattigo_printMetaCtQP(ctQP.getRawHandle());
+    }
+
+    void printMetaData(const Ciphertext &ct){
+      lattigo_printMetaCt(ct.getRawHandle());
+    }
+
+    void printMetaData(const Plaintext &pt){
+      lattigo_printMetaPt(pt.getRawHandle());
+    }
+
+    
 
 }  // namespace latticpp

@@ -12,4 +12,9 @@ namespace latticpp {
     Plaintext decryptNew(const Decryptor &decryptor, const Ciphertext &ct) {
         return Plaintext(lattigo_decryptNew(decryptor.getRawHandle(), ct.getRawHandle()));
     }
+
+    Poly poly(Plaintext plaintext){
+        return Poly(lattigo_plaintextPoly(plaintext.getRawHandle()));
+    }
+
 }  // namespace latticpp

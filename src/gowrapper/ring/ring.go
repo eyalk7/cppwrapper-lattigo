@@ -10,6 +10,7 @@ typedef const double constDouble;
 import "C"
 
 import (
+	"fmt"
 	"lattigo-cpp/marshal"
 	"lattigo-cpp/utils"
 	"unsafe"
@@ -126,20 +127,36 @@ func lattigo_modUpQtoP(basisExtenderHandle Handle14, levelQ, levelP int, polQHan
 	basisExtender.ModUpQtoP(levelQ, levelP, polQ, polP)
 }
 
-//export lattigo_invNTTLvl
-func lattigo_invNTTLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
+//export lattigo_invNTTLvlRingQP
+func lattigo_invNTTLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
 	pIn := getStoredPolyQP(pInHandle)
 	pOut := getStoredPolyQP(pOutHandle)
 	ringQP.InvNTTLvl(levelQ, levelP, *pIn, *pOut)
 }
 
-//export lattigo_nTTLvl
-func lattigo_nTTLvl(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
+//export lattigo_nTTLvlRingQP
+func lattigo_nTTLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
 	pIn := getStoredPolyQP(pInHandle)
 	pOut := getStoredPolyQP(pOutHandle)
 	ringQP.NTTLvl(levelQ, levelP, *pIn, *pOut)
+}
+
+//export lattigo_invNTTLvlRing
+func lattigo_invNTTLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle Handle14) {
+	ring := getStoredRing(ringHandle)
+	pIn := getStoredPoly(pInHandle)
+	pOut := getStoredPoly(pOutHandle)
+	ring.InvNTTLvl(level, pIn, pOut)
+}
+
+//export lattigo_nNTTLvlRing
+func lattigo_nNTTLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle Handle14) {
+	ring := getStoredRing(ringHandle)
+	pIn := getStoredPoly(pInHandle)
+	pOut := getStoredPoly(pOutHandle)
+	ring.NTTLvl(level, pIn, pOut)
 }
 
 //export lattigo_invMFormLvlRingQP
@@ -193,13 +210,16 @@ func lattigo_copyLvl(level uint64, sourcePolyHandle, targetPolyHandle Handle14) 
 	ring.CopyLvl(int(level), sourcePoly, targetPoly)
 }
 
-//export lattigo_copyPolySingleLevel
-func lattigo_copyPolySingleLevel(sourcePolyHandle Handle14, sourceIndex uint64, targetPolyHandle Handle14, targetIndex uint64) {
-	src := getStoredPoly(sourcePolyHandle)
-	tar := getStoredPoly(targetPolyHandle)
-	srcIdx := int(sourceIndex)
-	tarIdx := int(targetIndex)
-	copy(tar.Buff[tar.N()*tarIdx:tar.N()*(tarIdx+1)], src.Buff[src.N()*srcIdx:src.N()*(srcIdx+1)])
+//export lattigo_copyPolyAtLevel
+func lattigo_copyPolyAtLevel(dstPolyHandle Handle14, dstIndex uint64, srcPolyHandle Handle14, srcIndex uint64) {
+	src := getStoredPoly(srcPolyHandle)
+	dst := getStoredPoly(dstPolyHandle)
+	srcIdx := int(srcIndex)
+	dstIdx := int(dstIndex)
+	copy(dst.Coeffs[dstIdx], src.Coeffs[srcIdx])
+
+	// copy(dst.Buff[dst.N()*dstIdx:dst.N()*(dstIdx+1)], src.Buff[src.N()*srcIdx:src.N()*(srcIdx+1)])
+
 }
 
 //export lattigo_polyDegree
@@ -237,4 +257,49 @@ func lattigo_permuteNTTWithIndexLvl(ringHandle Handle14, level uint64, polyInHan
 		Index[i] = *(*uint64)(unsafe.Pointer(indexPtr + size*uintptr(i)))
 	}
 	ring.PermuteNTTWithIndexLvl(int(level), polyIn, Index, polyOut)
+}
+
+//export lattigo_log2OfInnerSum
+func lattigo_log2OfInnerSum(levelQ int, ringQHandle, polyHandle Handle14) int {
+	ringQ := getStoredRing(ringQHandle)
+	poly := getStoredPoly(polyHandle)
+	return ringQ.Log2OfInnerSum(levelQ, poly)
+}
+
+//export lattigo_MulCoeffsMontgomeryAndAddLvl
+func lattigo_MulCoeffsMontgomeryAndAddLvl(ringQPHandle Handle14, levelQ, levelP int, p1Handle, p2Handle, p3Handle Handle14) {
+	p1 := getStoredPolyQP(p1Handle)
+	p2 := getStoredPolyQP(p2Handle)
+	p3 := getStoredPolyQP(p3Handle)
+	ringQP := getStoredRingQP(ringQPHandle)
+	ringQP.RingQ.MulCoeffsMontgomeryAndAddLvl(levelQ, p1.Q, p2.Q, p3.Q)
+	ringQP.RingP.MulCoeffsMontgomeryAndAddLvl(levelP, p1.P, p2.P, p3.P)
+}
+
+//export lattigo_MulCoeffsMontgomeryAndAddLvlRing
+func lattigo_MulCoeffsMontgomeryAndAddLvlRing(ringHandle Handle14, level int, p1Handle, p2Handle, p3Handle Handle14) {
+	p1 := getStoredPoly(p1Handle)
+	p2 := getStoredPoly(p2Handle)
+	p3 := getStoredPoly(p3Handle)
+	ring := getStoredRing(ringHandle)
+	ring.MulCoeffsMontgomeryAndAddLvl(level, p1, p2, p3)
+}
+
+//export lattigo_equals
+func lattigo_equals(p1Handle, p2Handle Handle14) int {
+	p1 := getStoredPoly(p1Handle)
+	p2 := getStoredPoly(p2Handle)
+	if p1.Equals(p2) {
+		return 1
+	} else {
+		return 0
+	}
+}
+
+//export lattigo_printPoly
+func lattigo_printPoly(pHandle Handle14) {
+	p := getStoredPoly(pHandle)
+	for level := range p.Coeffs {
+		fmt.Println("level:", level, " = ", p.Coeffs[level][0], p.Coeffs[level][1], p.Coeffs[level][2], p.Coeffs[level][3], p.Coeffs[level][4])
+	}
 }

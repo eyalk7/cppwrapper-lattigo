@@ -57,11 +57,6 @@ namespace latticpp {
       return PolyQP(lattigo_polyQPSecretKey(sk.getRawHandle()));
     }
 
-    PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i) {
-      return PolyQP(lattigo_polyQPCiphertextQP(ctx.getRawHandle(), i));
-    }
-
-
     PublicKey newPublicKey(const Parameters &params) {
       return PublicKey(lattigo_newPublicKey(params.getRawHandle()));
     }
@@ -140,9 +135,6 @@ namespace latticpp {
     //     return BootstrappingKey(lattigo_makeBootstrappingKey(relinKey.getRawHandle(), rotKeys.getRawHandle()));
     // }
 
-    Poly getValue(const SecretKey &sk) {
-      return Poly(lattigo_getSecretKeyValue(sk.getRawHandle()));
-    }
 
     SwitchingKey getSwitchingKey(RotationKeys &rotKeys,
                                  uint64_t galoisElement) {

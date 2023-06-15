@@ -38,3 +38,12 @@ func lattigo_encryptNew(encryptorHandle Handle3, ptHandle Handle3) Handle3 {
 	ct = (*encryptorPtr).EncryptNew(ptPtr)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ct))
 }
+
+//export lattigo_zeroCiphertextQP
+func lattigo_zeroCiphertextQP(paramHandle, skHandle, ctxQPHandle Handle3) {
+	params := getStoredParameters(paramHandle)
+	sk := getStoredSecretKey(skHandle)
+	enc := rlwe.NewEncryptor(params.Parameters, sk)
+	ctxQP := getStoredCiphertextQP(ctxQPHandle)
+	enc.EncryptZero(ctxQP)
+}
