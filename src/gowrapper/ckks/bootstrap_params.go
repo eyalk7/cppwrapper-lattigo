@@ -5,42 +5,51 @@ package ckks
 
 import "C"
 
-// import (
-// 	"errors"
-// 	"lattigo-cpp/marshal"
-// 	"unsafe"
+import (
+	"errors"
+	"lattigo-cpp/marshal"
+	"unsafe"
 
-// 	"github.com/tuneinsight/lattigo/v4/ckks"
-// )
+	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/ckks/bootstrapping"
+)
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
-// type Handle11 = uint64
+type Handle11 = uint64
 
-// func getStoredBootstrappingParameters(bootParamHandle Handle11) *ckks.BootstrappingParameters {
-// 	ref := marshal.CrossLangObjMap.Get(bootParamHandle)
-// 	return (*ckks.BootstrappingParameters)(ref.Ptr)
-// }
+type bootstrappingParameterSet struct {
+	SchemeParams        ckks.ParametersLiteral
+	BootstrappingParams bootstrapping.Parameters
+}
 
-//export lattigo_getBootstrappingParams
-// func lattigo_getBootstrappingParams(bootParamEnum uint8) Handle11 {
-// 	if int(bootParamEnum) >= len(ckks.DefaultBootstrapParams) {
-// 		panic(errors.New("bootstrapping parameter enum index out of bounds"))
-// 	}
+func getStoredBootstrappingParameters(bootParamHandle Handle11) *bootstrappingParameterSet {
+	ref := marshal.CrossLangObjMap.Get(bootParamHandle)
+	return (*bootstrappingParameterSet)(ref.Ptr)
+}
 
-// 	var bootParams *ckks.BootstrappingParameters
-// 	bootParams = ckks.DefaultBootstrapParams[bootParamEnum]
+// export lattigo_getBootstrappingParams
+func lattigo_getBootstrappingParams(bootParamEnum uint8, sparseParameters bool) Handle11 {
+	defaultParameters := bootstrapping.DefaultParametersDense
+	if sparseParameters {
+		defaultParameters = bootstrapping.DefaultParametersSparse
+	}
+	if int(bootParamEnum) >= len(defaultParameters) {
+		panic(errors.New("bootstrapping parameter enum index out of bounds"))
+	}
 
-// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(bootParams))
-// }
+	paramsSet := defaultParameters[bootParamEnum]
+	packedSet := bootstrappingParameterSet{paramsSet.SchemeParams, paramsSet.BootstrappingParams}
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&packedSet))
+}
 
-//export lattigo_bootstrap_h
+// // export lattigo_bootstrap_h
 // func lattigo_bootstrap_h(bootParamHandle Handle11) uint64 {
 // 	var bootParams *ckks.BootstrappingParameters
 // 	bootParams = getStoredBootstrappingParameters(bootParamHandle)
 // 	return uint64(bootParams.H)
 // }
 
-//export lattigo_bootstrap_depth
+// // export lattigo_bootstrap_depth
 // func lattigo_bootstrap_depth(bootParamHandle Handle11) uint64 {
 // 	var bootParams *ckks.BootstrappingParameters
 // 	bootParams = getStoredBootstrappingParameters(bootParamHandle)
@@ -54,18 +63,20 @@ import "C"
 // 	return uint64(bootParams.MaxLevel() - len(bootParams.ResidualModuli) + 1)
 // }
 
-//export lattigo_params
-// func lattigo_params(bootParamHandle Handle11) Handle11 {
-// 	var bootParams *ckks.BootstrappingParameters
-// 	bootParams = getStoredBootstrappingParameters(bootParamHandle)
+// export lattigo_params
+func lattigo_params(bootParamHandle Handle11) Handle11 {
+	var bootParamsSet *bootstrappingParameterSet
+	bootParamsSet = getStoredBootstrappingParameters(bootParamHandle)
 
-// 	var params ckks.Parameters
-// 	var err error
-// 	params, err = bootParams.Params()
+	var paramsLit ckks.ParametersLiteral
+	paramsLit = bootParamsSet.SchemeParams
 
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	var params ckks.Parameters
+	var err error
+	params, err = ckks.NewParametersFromLiteral(paramsLit)
+	if err != nil {
+		panic(err)
+	}
 
-// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&params))
-// }
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&params))
+}
