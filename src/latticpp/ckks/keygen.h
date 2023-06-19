@@ -75,9 +75,7 @@ namespace latticpp {
     void setRotKeysForEvaluationKey(const EvaluationKey &evalKey,
                                     const RotationKeys &rotKeys);
 
-    // BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
-
-    // BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
+    BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
     SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
 

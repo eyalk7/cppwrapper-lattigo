@@ -4,7 +4,7 @@
 #pragma once
 
 #include "latticpp/marshal/gohandle.h"
-// #include "cgo/bootstrap.h"
+#include "cgo/bootstrap.h"
 
 namespace latticpp {
 

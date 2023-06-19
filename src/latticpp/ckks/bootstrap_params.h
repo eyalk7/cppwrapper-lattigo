@@ -16,12 +16,12 @@ namespace latticpp {
         BootstrapParams_Set4
     };
 
-    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters);
+    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
 
-    Parameters genParams(const BootstrappingParameters &bootParams);
+    Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
 
-    // // Get the secret key Hamming weight for which these bootstrapping parameters were created
-    // uint64_t secretHammingWeight(const BootstrappingParameters &bootParams);
+    // Get the Hamming weight of the ephemeral secret. If 0, no ephemeral secret is used during the bootstrapping.
+    uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams);
 
     // // The multiplicative depth of the bootstrapping circuit
     // int bootstrapDepth(const BootstrappingParameters &bootParams);

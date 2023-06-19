@@ -22,9 +22,9 @@ namespace latticpp {
         lattigo_marshalBinaryParameters(params.getRawHandle(), &writeToStream, (void*)(&stream));
     }
 
-    // void marshalBinaryBootstrapParameters(const BootstrappingParameters &btp_params, std::ostream &stream) {
-    //     lattigo_marshalBinaryBootstrapParameters(btp_params.getRawHandle(), &writeToStream, (void*)(&stream));
-    // }
+    void marshalBinaryBootstrapParameters(const BootstrappingParameters &btp_params, std::ostream &stream) {
+        lattigo_marshalBinaryBootstrapParameters(btp_params.getRawHandle(), &writeToStream, (void*)(&stream));
+    }
 
     void marshalBinarySecretKey(const SecretKey &sk, std::ostream &stream) {
         lattigo_marshalBinarySecretKey(sk.getRawHandle(), &writeToStream, (void*)(&stream));
@@ -57,10 +57,10 @@ namespace latticpp {
         return Parameters(lattigo_unmarshalBinaryParameters(buffer.data(), buffer.size()));
     }
 
-    // BootstrappingParameters unmarshalBinaryBootstrapParameters(std::istream &stream) {
-    //     vector<char> buffer(istreambuf_iterator<char>{stream}, {});
-    //     return BootstrappingParameters(lattigo_unmarshalBinaryBootstrapParameters(buffer.data(), buffer.size()));
-    // }
+    BootstrappingParameters unmarshalBinaryBootstrapParameters(std::istream &stream) {
+        vector<char> buffer(istreambuf_iterator<char>{stream}, {});
+        return BootstrappingParameters(lattigo_unmarshalBinaryBootstrapParameters(buffer.data(), buffer.size()));
+    }
 
     SecretKey unmarshalBinarySecretKey(istream &stream) {
         vector<char> buffer(istreambuf_iterator<char>{stream}, {});

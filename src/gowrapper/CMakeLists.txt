@@ -70,7 +70,7 @@ add_custom_command(
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS
     latticppMain.go
-    #ckks/bootstrap.go
+    ckks/bootstrap.go
     ckks/bootstrap_params.go
     ckks/ciphertext.go
     ckks/decryptor.go
@@ -89,7 +89,7 @@ add_custom_command(
 )
 
 add_library(latticpp_gowrapper STATIC
-    # ${CGO_HEADER_DST}/bootstrap.h
+    ${CGO_HEADER_DST}/bootstrap.h
     ${CGO_HEADER_DST}/bootstrap_params.h
     ${CGO_HEADER_DST}/ciphertext.h
     ${CGO_HEADER_DST}/decryptor.h
