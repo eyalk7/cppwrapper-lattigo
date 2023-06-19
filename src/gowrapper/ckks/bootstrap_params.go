@@ -32,7 +32,7 @@ func lattigo_getBootstrappingParams(bootParamEnum uint8, sparseParameters bool) 
 		panic(errors.New("bootstrapping parameter enum index out of bounds"))
 	}
 
-	var bootParams *bootstrapping.Parameters
+	var bootParams bootstrapping.Parameters
 	bootParams = defaultParameters[bootParamEnum].BootstrappingParams
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&bootParams))
 }
