@@ -61,10 +61,10 @@ func lattigo_marshalBinaryParameters(paramsHandle Handle9, callback C.streamWrit
 
 //export lattigo_marshalBinaryBootstrapParameters
 func lattigo_marshalBinaryBootstrapParameters(paramsHandle Handle9, callback C.streamWriter, stream *C.void) {
-	var bootParams *bootstrapping.Parameters
-	bootParams = getStoredBootstrappingParameters(paramsHandle)
+	var params *bootstrapping.Parameters
+	params = getStoredBootstrappingParameters(paramsHandle)
 
-	data, err := bootParams.MarshalBinary()
+	data, err := params.MarshalBinary()
 	if err != nil {
 		panic(err)
 	}

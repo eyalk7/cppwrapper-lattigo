@@ -22,4 +22,4 @@ namespace latticpp {
     // int bootstrapDepth(const BootstrappingParameters &bootParams) {
     //     return lattigo_bootstrap_depth(bootParams.getRawHandle());
     // }
-} // namespace latticpp
+}  // namespace latticpp

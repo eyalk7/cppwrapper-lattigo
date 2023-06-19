@@ -27,15 +27,15 @@ func lattigo_newBootstrapper(paramHandle Handle10, btpParamHandle Handle10, btpK
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
 
-	var bootParams *bootstrapping.Parameters
-	bootParams = getStoredBootstrappingParameters(btpParamHandle)
+	var btpParams *bootstrapping.Parameters
+	btpParams = getStoredBootstrappingParameters(btpParamHandle)
 
 	var btpKey *bootstrapping.EvaluationKeys
 	btpKey = getStoredBootstrappingKey(btpKeyHandle)
 
 	var btp *bootstrapping.Bootstrapper
 	var err error
-	btp, err = bootstrapping.NewBootstrapper(*params, *bootParams, *btpKey)
+	btp, err = bootstrapping.NewBootstrapper(*params, *btpParams, *btpKey)
 	if err != nil {
 		panic(err)
 	}

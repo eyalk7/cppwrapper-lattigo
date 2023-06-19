@@ -304,14 +304,14 @@ func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpP
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
 
-	var bootParams *bootstrapping.Parameters
-	bootParams = getStoredBootstrappingParameters(btpParamsHandle)
+	var btpParams *bootstrapping.Parameters
+	btpParams = getStoredBootstrappingParameters(btpParamsHandle)
 
 	var sk *rlwe.SecretKey
 	sk = getStoredSecretKey(skHandle)
 
 	var btpKey bootstrapping.EvaluationKeys
-	btpKey = bootstrapping.GenEvaluationKeys(*bootParams, *params, sk)
+	btpKey = bootstrapping.GenEvaluationKeys(*btpParams, *params, sk)
 
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
 }
