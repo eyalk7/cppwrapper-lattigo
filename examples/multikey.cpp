@@ -157,10 +157,6 @@ void testPublicKeyGen(const TestContext &testContext) {
   const vector<SecretKey> &sk0Shards = testContext.sk0Shards;
   const Parameters &params = testContext.params;
 
-  UniformSampler crpGenerator =
-      newUniformSampler(testContext.prng, testContext.ringQP);
-  Poly crp = readNewFromSampler(crpGenerator);
-
   vector<PartyCKG> ckgParties(testContext.numParties);
   for (size_t i = 0; i < ckgParties.size(); i++) {
     PartyCKG &p = ckgParties.at(i);
@@ -170,6 +166,8 @@ void testPublicKeyGen(const TestContext &testContext) {
   }
 
   PartyCKG &p0 = ckgParties.at(0);
+  CKGCRP crp = ckgSampleCRP(p0.ckgProtocol, testContext.prng);
+
   for (size_t i = 0; i < ckgParties.size(); i++) {
     PartyCKG &p = ckgParties.at(i);
     ckgGenShare(p.ckgProtocol, p.s, crp, p.s1);
@@ -203,21 +201,15 @@ void testRelinKeyGen(const TestContext &testContext) {
     p.ephSk = newSecretKey(params);
     p.share1 = newRKGShare();
     p.share2 = newRKGShare();
-    rkgAllocateShares(p.rkgProtocol, p.ephSk, p.share1, p.share2);
+    rkgAllocateShare(p.rkgProtocol, p.ephSk, p.share1, p.share2);
   }
 
   PartyRKG &p0 = rkgParties.at(0);
-
-  UniformSampler crpGenerator =
-      newUniformSampler(testContext.prng, testContext.ringQP);
-  vector<Poly> crps(beta(params));
-  for (size_t i = 0; i < crps.size(); i++) {
-    crps.at(i) = readNewFromSampler(crpGenerator);
-  }
+  RKGCRP crp = rkgSampleCRP(p0.rkgProtocol, testContext.prng);
 
   for (size_t i = 0; i < rkgParties.size(); i++) {
     PartyRKG &p = rkgParties.at(i);
-    rkgGenShareRoundOne(p.rkgProtocol, p.sk, crps, p.ephSk, p.share1);
+    rkgGenShareRoundOne(p.rkgProtocol, p.sk, crp, p.ephSk, p.share1);
     if (i > 0) {
       rkgAggregateShares(p0.rkgProtocol, p.share1, p0.share1, p0.share1);
     }
@@ -293,7 +285,7 @@ void testKeySwitching(const TestContext &testContext) {
 
     Ciphertext ksCiphertext =
         newCiphertext(params, 1, level(ciphertext), scale(ciphertext) / 2);
-    cksKeySwitch(p0.cksProtocol, p0.share, ciphertext, ksCiphertext);
+    cksKeySwitch(p0.cksProtocol, ciphertext, p0.share ksCiphertext);
 
     verifyTestVectors(testContext, decryptorSk1, values, ksCiphertext);
   }
@@ -311,14 +303,7 @@ void testRotKeyGenCols(const TestContext &testContext) {
     PartyRTG &p = rtgParties.at(i);
     p.rtgProtocol = newRTGProtocol(params);
     p.s = sk0Shards.at(i);
-    p.share = rtgAllocateShares(p.rtgProtocol);
-  }
-
-  UniformSampler crpGenerator =
-      newUniformSampler(testContext.prng, testContext.ringQP);
-  vector<Poly> crps(beta(params));
-  for (size_t i = 0; i < crps.size(); i++) {
-    crps.at(i) = readNewFromSampler(crpGenerator);
+    p.share = rtgAllocateShare(p.rtgProtocol);
   }
 
   vector<double> values;
@@ -333,18 +318,19 @@ void testRotKeyGenCols(const TestContext &testContext) {
   RotationKeys rotKeySet = newRotationKeys(params, galEls);
 
   PartyRTG &p0 = rtgParties.at(0);
+  RTGCRP crp = rtgSampleCRP(p0.rtgProtocol, testContext.prng);
 
   for (uint64_t galEl : galEls) {
     for (size_t i = 0; i < rtgParties.size(); i++) {
       PartyRTG &p = rtgParties.at(i);
-      rtgGenShare(p.rtgProtocol, p.s, galEl, crps, p.share);
+      rtgGenShare(p.rtgProtocol, p.s, galEl, crp, p.share);
       if (i > 0) {
-        rtgAggregate(p.rtgProtocol, p.share, p0.share, p0.share);
+        rtgAggregateShares(p.rtgProtocol, p.share, p0.share, p0.share);
       }
     }
 
     SwitchingKey rotKey = getSwitchingKey(rotKeySet, galEl);
-    rtgGenRotationKey(p0.rtgProtocol, p0.share, crps, rotKey);
+    rtgGenRotationKey(p0.rtgProtocol, p0.share, crp, rotKey);
   }
 
   EvaluationKey evalKey = makeEmptyEvaluationKey();

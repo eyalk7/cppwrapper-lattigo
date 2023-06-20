@@ -34,13 +34,16 @@ namespace latticpp {
         SwitchingKey,
         RotationKey,
         CKGProtocol,
+        CKGCRP,
         CKGShare,
         RKGProtocol,
         RKGShare,
+        RKGCRP,
         CKSProtocol,
         CKSShare,
         RTGProtocol,
         RTGShare,
+        RTGCRP,
         Ring,
         Poly,
         PRNG,
@@ -48,8 +51,7 @@ namespace latticpp {
         MetaData,
         RingQP,
         PolyQP,
-        BasisExtender,
-
+        BasisExtender
     };
 
     template<GoType t>
@@ -189,12 +191,15 @@ namespace latticpp {
     using SwitchingKey = GoHandle<GoType::SwitchingKey>;
     using RotationKey = GoHandle<GoType::RotationKey>;
     using CKGProtocol = GoHandle<GoType::CKGProtocol>;
+    using CKGCRP = GoHandle<GoType::CKGCRP>;
     using CKGShare = GoHandle<GoType::CKGShare>;
     using RKGProtocol = GoHandle<GoType::RKGProtocol>;
+    using RKGCRP = GoHandle<GoType::RKGCRP>;
     using RKGShare = GoHandle<GoType::RKGShare>;
     using CKSProtocol = GoHandle<GoType::CKSProtocol>;
     using CKSShare = GoHandle<GoType::CKSShare>;
     using RTGProtocol = GoHandle<GoType::RTGProtocol>;
+    using RTGCRP = GoHandle<GoType::RTGCRP>;
     using RTGShare = GoHandle<GoType::RTGShare>;
     using Ring = GoHandle<GoType::Ring>;
     using RingQP = GoHandle<GoType::RingQP>;
