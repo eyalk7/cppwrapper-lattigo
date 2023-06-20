@@ -44,20 +44,6 @@ func lattigo_ephemeralSecretWeight(bootParamHandle Handle11) uint64 {
 	return uint64(bootParams.EphemeralSecretWeight)
 }
 
-// // export lattigo_bootstrap_depth
-// func lattigo_bootstrap_depth(bootParamHandle Handle11) uint64 {
-// 	var bootParams *ckks.BootstrappingParameters
-// 	bootParams = getStoredBootstrappingParameters(bootParamHandle)
-// 	// len(bootParams.ResidualModuli) is the number of moduli available
-// 	// post-bootstrapping, which is one more than the ciphertext level
-// 	// after bootstrapping. Thus the difference, plus one, is the depth of
-// 	// the bootstrapping circuit. For example, if the highest ciphertext
-// 	// level is 10 and the post-bootstrapping *level* is 5, then the
-// 	// length of the residual moduli vector is 6, so the depth of the bootstrapping
-// 	// circuit is 10 - 6 + 1 = 5.
-// 	return uint64(bootParams.MaxLevel() - len(bootParams.ResidualModuli) + 1)
-// }
-
 //export lattigo_params
 func lattigo_params(bootParamEnum uint8, sparseParameters bool) Handle11 {
 	defaultParameters := bootstrapping.DefaultParametersDense

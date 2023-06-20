@@ -22,7 +22,4 @@ namespace latticpp {
 
     // Get the Hamming weight of the ephemeral secret. If 0, no ephemeral secret is used during the bootstrapping.
     uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams);
-
-    // // The multiplicative depth of the bootstrapping circuit
-    // int bootstrapDepth(const BootstrappingParameters &bootParams);
 }  // namespace latticpp

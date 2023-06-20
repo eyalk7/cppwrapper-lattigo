@@ -18,8 +18,4 @@ namespace latticpp {
     uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams) {
         return lattigo_ephemeralSecretWeight(bootParams.getRawHandle());
     }
-
-    // int bootstrapDepth(const BootstrappingParameters &bootParams) {
-    //     return lattigo_bootstrap_depth(bootParams.getRawHandle());
-    // }
 }  // namespace latticpp
