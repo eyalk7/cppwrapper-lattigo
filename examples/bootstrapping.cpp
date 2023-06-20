@@ -43,16 +43,16 @@ vector<double> printDebug(const Parameters &params, const Ciphertext &ciphertext
 }
 
 int main() {
-    BootstrappingParameters btpParams = getBootstrappingParams(BootstrapParams_Set5);
-    Parameters params = genParams(btpParams);
+    BootstrappingParameters btpParams = getBootstrappingParams(BootstrapParams_Set4);
+    Parameters params = genParams(BootstrapParams_Set4);
 
     cout << "CKKS parameters: logN = " << logN(params) << ", logSlots = " << logSlots(params)
-         << ", h = " << secretHammingWeight(btpParams) << ", logQP = " << logQP(params)
+         << ", h = " << ephemeralSecretWeight(btpParams) << ", logQP = " << logQP(params)
          << ", levels = " << qiCount(params) << ", scale = 2^" << log2(scale(params))
          << ", sigma = " << sigma(params) << endl;
 
     KeyGenerator kgen = newKeyGenerator(params);
-    struct KeyPairHandle kp = genKeyPairSparse(kgen, secretHammingWeight(btpParams));
+    struct KeyPairHandle kp = genKeyPairSparse(kgen, ephemeralSecretWeight(btpParams));
 
     Encoder encoder = newEncoder(params);
     Decryptor decryptor = newDecryptor(params, kp.sk);
