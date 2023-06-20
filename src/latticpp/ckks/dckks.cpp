@@ -19,7 +19,7 @@ namespace latticpp {
     }    
 
     void ckgGenShare(const CKGProtocol &protocol, const SecretKey &sk,
-                    const Poly &crp, CKGShare &shareOut) {
+                    const CKGCRP &crp, CKGShare &shareOut) {
         lattigo_ckgGenShare(protocol.getRawHandle(), sk.getRawHandle(),
                             crp.getRawHandle(), shareOut.getRawHandle());
     }

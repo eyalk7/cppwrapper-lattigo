@@ -16,7 +16,7 @@ struct TestContext {
 
   Parameters params;
   Ring ringQ;
-  Ring ringQP;
+  RingQP ringQP;
 
   PRNG prng;
 
@@ -59,12 +59,12 @@ struct PartyRTG {
 
 Parameters generateParamsForTest() {
   BootstrappingParameters btpParams =
-      getBootstrappingParams(BootstrapParams_Set5);
-  Parameters params = genParams(btpParams);
+      getBootstrappingParams(BootstrapParams_Set4);
+  Parameters params = genParams(BootstrapParams_Set4);
 
   cout << "CKKS parameters: logN = " << logN(params)
        << ", logSlots = " << logSlots(params)
-       << ", h = " << secretHammingWeight(btpParams)
+       << ", h = " << ephemeralSecretWeight(btpParams)
        << ", logQP = " << logQP(params) << ", levels = " << qiCount(params)
        << ", scale = 2^" << log2(scale(params)) << ", sigma = " << sigma(params)
        << endl;
@@ -89,20 +89,23 @@ TestContext generateTestContextForTest(const Parameters &params,
 
   res.sk0Shards.resize(numParties);
   res.sk1Shards.resize(numParties);
-  Poly tmp0 = newPoly(res.ringQP);
-  Poly tmp1 = newPoly(res.ringQP);
+  PolyQP tmp0 = newPolyQP(res.ringQP);
+  PolyQP tmp1 = newPolyQP(res.ringQP);
+
+  uint64_t levelQ = qiCount(params)-1;
+  uint64_t levelP = piCount(params)-1;
 
   for (int j = 0; j < numParties; j++) {
     res.sk0Shards.at(j) = genSecretKey(kgen);
     res.sk1Shards.at(j) = genSecretKey(kgen);
-    add(res.ringQP, tmp0, getValue(res.sk0Shards.at(j)), tmp0);
-    add(res.ringQP, tmp1, getValue(res.sk1Shards.at(j)), tmp1);
+    addLvl(res.ringQP, levelQ, levelP, tmp0, polyQP(res.sk0Shards.at(j)), tmp0);
+    addLvl(res.ringQP, levelQ, levelP, tmp1, polyQP(res.sk1Shards.at(j)), tmp1);
   }
 
   res.sk0 = newSecretKey(params);
   res.sk1 = newSecretKey(params);
-  Poly sk0Value = getValue(res.sk0);
-  Poly sk1Value = getValue(res.sk1);
+  PolyQP sk0Value = polyQP(res.sk0);
+  PolyQP sk1Value = polyQP(res.sk1);
   copy(sk0Value, tmp0);
   copy(sk1Value, tmp1);
 
@@ -162,7 +165,7 @@ void testPublicKeyGen(const TestContext &testContext) {
     PartyCKG &p = ckgParties.at(i);
     p.ckgProtocol = newCKGProtocol(params);
     p.s = sk0Shards.at(i);
-    p.s1 = ckgAllocateShares(p.ckgProtocol);
+    p.s1 = ckgAllocateShare(p.ckgProtocol);
   }
 
   PartyCKG &p0 = ckgParties.at(0);
@@ -217,8 +220,7 @@ void testRelinKeyGen(const TestContext &testContext) {
 
   for (size_t i = 0; i < rkgParties.size(); i++) {
     PartyRKG &p = rkgParties.at(i);
-    rkgGenShareRoundTwo(p.rkgProtocol, p.ephSk, p.sk, p0.share1, crps,
-                        p.share2);
+    rkgGenShareRoundTwo(p.rkgProtocol, p.ephSk, p.sk, p0.share1, p.share2);
     if (i > 0) {
       rkgAggregateShares(p0.rkgProtocol, p.share2, p0.share2, p0.share2);
     }
@@ -283,16 +285,15 @@ void testKeySwitching(const TestContext &testContext) {
       }
     }
 
-    Ciphertext ksCiphertext =
-        newCiphertext(params, 1, level(ciphertext), scale(ciphertext) / 2);
-    cksKeySwitch(p0.cksProtocol, ciphertext, p0.share ksCiphertext);
+    Ciphertext ksCiphertext = newCiphertext(params, 1, level(ciphertext));
+    cksKeySwitch(p0.cksProtocol, ciphertext, p0.share, ksCiphertext);
 
     verifyTestVectors(testContext, decryptorSk1, values, ksCiphertext);
   }
 }
 
 void testRotKeyGenCols(const TestContext &testContext) {
-  const Ring &ringQP = testContext.ringQP;
+  const RingQP &ringQP = testContext.ringQP;
   const Encryptor &encryptorPk0 = testContext.encryptorPk0;
   const Decryptor &decryptorSk0 = testContext.decryptorSk0;
   const vector<SecretKey> &sk0Shards = testContext.sk0Shards;
@@ -311,8 +312,7 @@ void testRotKeyGenCols(const TestContext &testContext) {
   Ciphertext ciphertext;
   newTestVectors(testContext, encryptorPk0, values, plaintext, ciphertext);
 
-  Ciphertext receiver = newCiphertext(params, degree(ciphertext),
-                                      level(ciphertext), scale(ciphertext));
+  Ciphertext receiver = newCiphertext(params, degree(ciphertext), level(ciphertext));
 
   vector<uint64_t> galEls = galoisElementsForRowInnerSum(params);
   RotationKeys rotKeySet = newRotationKeys(params, galEls);

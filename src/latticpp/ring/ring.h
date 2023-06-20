@@ -10,11 +10,11 @@ namespace latticpp {
 
     Ring newRing(uint64_t n, std::vector<uint64_t> moduli);
 
-    Poly newPoly(const Ring &ring);
+    PolyQP newPolyQP(const RingQP &ring);
 
-    void add(const Ring &ring, const Poly &p1, const Poly &p2, Poly &p3);
+    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &p3);
 
-    void copy(Poly &pTarget, const Poly &pSrc);
+    void copy(PolyQP &pTarget, const PolyQP &pSrc);
 
     UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring);
 

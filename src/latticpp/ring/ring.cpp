@@ -10,17 +10,17 @@ namespace latticpp {
         return Ring(lattigo_newRing(n, moduli.data(), moduli.size()));
     }
 
-    Poly newPoly(const Ring &ring) {
-        return Poly(lattigo_newPoly(ring.getRawHandle()));
+    PolyQP newPolyQP(const RingQP &ring) {
+        return PolyQP(lattigo_newPolyQP(ring.getRawHandle()));
     }
 
-    void add(const Ring &ring, const Poly &p1, const Poly &p2, Poly &p3) {
-        lattigo_ringAdd(ring.getRawHandle(), p1.getRawHandle(), p2.getRawHandle(),
+    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &p3) {
+        lattigo_ringQPAddLvl(ring.getRawHandle(), levelQ, levelP, p1.getRawHandle(), p2.getRawHandle(),
                         p3.getRawHandle());
-    }
+    }    
 
-    void copy(Poly &pTarget, const Poly &pSrc) {
-        lattigo_polyCopy(pTarget.getRawHandle(), pSrc.getRawHandle());
+    void copy(PolyQP &pTarget, const PolyQP &pSrc) {
+        lattigo_polyQPCopy(pTarget.getRawHandle(), pSrc.getRawHandle());
     }
 
     UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring) {

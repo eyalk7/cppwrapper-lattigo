@@ -15,7 +15,7 @@ namespace latticpp {
     CKGCRP ckgSampleCRP(const CKGProtocol &protocol, const PRNG &prng);
 
     void ckgGenShare(const CKGProtocol &protocol, const SecretKey &sk,
-                    const Poly &crp, CKGShare &shareOut);
+                    const CKGCRP &crp, CKGShare &shareOut);
 
     void ckgAggregateShares(const CKGProtocol &protocol, const CKGShare &share1,
                             const CKGShare &share2, CKGShare &shareOut);
