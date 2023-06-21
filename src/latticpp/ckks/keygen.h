@@ -36,7 +36,9 @@ namespace latticpp {
                                   SecretKey sk, const Parameters &params,
                                   uint64_t log2Bound);
 
-    CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
+    CiphertextQP getCiphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
+
+    void setCiphertextQP(RotationKey rtk, CiphertextQP ctQP, uint64_t i, uint64_t j);
 
     SecretKey newSecretKey(const Parameters &params);
 

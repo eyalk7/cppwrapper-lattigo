@@ -104,9 +104,14 @@ namespace latticpp {
         return RotationKeys(lattigo_genRotationKeysForRotations(keygen.getRawHandle(), sk.getRawHandle(), fixed_width_shifts.data(), shifts.size()));
     }
 
-    CiphertextQP ciphertextQP(RotationKey rtk, uint64_t i, uint64_t j) {
-      return CiphertextQP(lattigo_ciphertextQP(rtk.getRawHandle(), i, j));
+    CiphertextQP getCiphertextQP(RotationKey rtk, uint64_t i, uint64_t j) {
+      return CiphertextQP(lattigo_getCiphertextQP(rtk.getRawHandle(), i, j));
     }
+
+    void setCiphertextQP(RotationKey rtk, CiphertextQP ctQP, uint64_t i, uint64_t j) {
+      lattigo_setCiphertextQP(rtk.getRawHandle(), ctQP.getRawHandle(), i, j);
+    }
+    
 
     EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
         return EvaluationKey(lattigo_makeEvaluationKey(relinKey.getRawHandle(), rotKeys.getRawHandle()));

@@ -204,7 +204,6 @@ func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep int
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
 	rotationKey := rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotationStep)]
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotationKey))
-
 }
 
 //export lattigo_rotationKeyExist
@@ -220,12 +219,11 @@ func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep i
 }
 
 //export lattigo_setRotationKey
-func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rootStep int) {
+func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rotStep int) {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
 	rotKey := getStoredRotationKey(rotKeyHandle)
-	rotKeys.Keys[param.GaloisElementForColumnRotationBy(int(rootStep))] = rotKey
-
+	rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotStep)] = rotKey.CopyNew()
 }
 
 //export lattigo_copyNewRotationKey
@@ -237,7 +235,7 @@ func lattigo_copyNewRotationKey(rotKeyHandle Handle5) Handle5 {
 //export lattigo_numOfDecomp
 func lattigo_numOfDecomp(rotKeyHandle Handle5) uint64 {
 	rotKey := getStoredRotationKey(rotKeyHandle)
-	return uint64(len(rotKey.Value) - 1)
+	return uint64(len(rotKey.Value))
 }
 
 //export lattigo_galoisElementForColumnRotationBy
@@ -261,10 +259,17 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 	}
 }
 
-//export lattigo_ciphertextQP
-func lattigo_ciphertextQP(rotKeyHandle Handle5, i, j uint64) Handle5 {
+//export lattigo_getCiphertextQP
+func lattigo_getCiphertextQP(rotKeyHandle Handle5, i, j uint64) Handle5 {
 	rotKey := getStoredRotationKey(rotKeyHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&(rotKey.Value[i][j])))
+}
+
+//export lattigo_setCiphertextQP
+func lattigo_setCiphertextQP(rotKeyHandle, ctQPHandle Handle5, i, j uint64) {
+	rotKey := getStoredRotationKey(rotKeyHandle)
+	ctQP := getStoredCiphertextQP(ctQPHandle)
+	rotKey.Value[i][j] = *ctQP
 }
 
 //export lattigo_makeEvaluationKey

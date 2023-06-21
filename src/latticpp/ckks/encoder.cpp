@@ -30,4 +30,13 @@ namespace latticpp {
         lattigo_decode(encoder.getRawHandle(), pt.getRawHandle(), logSlots, coeffs.data());
         return coeffs;
     }
+
+    latticpp::Plaintext newPlaintext(const Parameters &params, const Poly &poly, int level){
+        return Plaintext(lattigo_newPlaintext(params.getRawHandle(), poly.getRawHandle(), level));
+    }
+
+    Poly getPoly(Plaintext plaintext) {
+        return Poly(lattigo_getPoly(plaintext.getRawHandle()));
+    }
+
 }  // namespace latticpp
