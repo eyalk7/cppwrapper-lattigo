@@ -18,7 +18,6 @@ import (
 
 // https://github.com/golang/go/issues/35715#issuecomment-791039692
 type Handle4 = uint64
-type Handle18 = uint64
 
 func getStoredEvaluator(evalHandle Handle4) *ckks.Evaluator {
 	ref := marshal.CrossLangObjMap.Get(evalHandle)
@@ -113,7 +112,7 @@ func lattigo_addConst(evalHandle Handle4, ctInHandle Handle4, constant float64, 
 }
 
 //export lattigo_rescale
-func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle18, ctOutHandle Handle4) {
+func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle4, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
@@ -130,26 +129,6 @@ func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle1
 		panic(err)
 	}
 }
-
-// //export lattigo_rescaleMany
-// func lattigo_rescaleMany(evalHandle Handle4, paramsHandle Handle4, ctInHandle Handle4, numRescales uint64, ctOutHandle Handle4) {
-// 	var params *ckks.Parameters
-// 	params = getStoredParameters(paramsHandle)
-
-// 	var ctIn *rlwe.Ciphertext
-// 	ctIn = getStoredCiphertext(ctInHandle)
-
-// 	targetScale := ctIn.MetaData.Scale.Value
-
-// 	for i := 0; i < int(numRescales); i++ {
-// 		targetScale /= (float64(params.RingQ().Modulus[ctIn.Level()-i]))
-// 	}
-
-// 	if targetScale <= 0 {
-// 		panic(errors.New("Target scale is too small: " + strconv.FormatFloat(targetScale, 'E', -1, 64) + "\t" + strconv.FormatFloat(ctIn.Scale, 'E', -1, 64) + "\t" + strconv.FormatFloat(math.Log2(ctIn.Scale), 'E', -1, 64) + "\t" + strconv.FormatUint(numRescales, 10)))
-// 	}
-// 	lattigo_rescale(evalHandle, ctInHandle, NewScale(targetScale), ctOutHandle)
-// }
 
 //export lattigo_mulRelinNew
 func lattigo_mulRelinNew(evalHandle Handle4, op0Handle Handle4, op1Handle Handle4) Handle4 {

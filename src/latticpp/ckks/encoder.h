@@ -14,10 +14,5 @@ namespace latticpp {
     Plaintext encodeNTTAtLvlNew(const Parameters &params, const Encoder &encoder, const std::vector<double> &values, uint64_t level, double scale);
 
     std::vector<double> decode(const Encoder &encoder, const Plaintext &pt, uint64_t logSlots);
-
-    // TODO: move to new file
-    latticpp::Plaintext newPlaintext(const Parameters &params, const Poly &poly, int level);
-
-    Poly getPoly(const Plaintext &plaintext);
     
 }  // namespace latticpp

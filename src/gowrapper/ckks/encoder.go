@@ -10,7 +10,6 @@ import "C"
 
 import (
 	"lattigo-cpp/marshal"
-	"lattigo-cpp/ring"
 
 	"math"
 	"unsafe"
@@ -87,19 +86,4 @@ func lattigo_decode(encoderHandle Handle2, ptHandle Handle2, logSlots uint64, ou
 		x = res[i]
 		*(*float64)(unsafe.Pointer(basePtr + size*uintptr(i))) = real(x)
 	}
-}
-
-//export lattigo_newPlaintext
-func lattigo_newPlaintext(paramsHandle, polyHandle Handle2, level int) Handle2 {
-	params := getStoredParameters(paramsHandle)
-	poly := ring.GetStoredPoly(polyHandle)
-	plaintext := ckks.NewPlaintext(*params, level)
-	plaintext.Value = poly
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(plaintext))
-}
-
-//export lattigo_getPoly
-func lattigo_getPoly(plaintextHandler Handle2) Handle2 {
-	plaintext := getStoredPlaintext(plaintextHandler)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(plaintext.Value))
 }

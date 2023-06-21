@@ -6,7 +6,6 @@ package ckks
 import "C"
 
 import (
-	"fmt"
 	"lattigo-cpp/marshal"
 	"unsafe"
 
@@ -88,17 +87,6 @@ func lattigo_newCiphertextQP(paramsHandle Handle8) Handle8 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&newCtQp))
 }
 
-//export lattigo_newZeroCiphertextQP
-func lattigo_newZeroCiphertextQP(paramsHandle, skHandle Handle8) Handle8 {
-	params := getStoredParameters(paramsHandle)
-	sk := getStoredSecretKey(skHandle)
-	ringQP := params.RingQP()
-	ctxQP := rlwe.CiphertextQP{Value: [2]ringqp.Poly{ringQP.NewPoly(), ringQP.NewPoly()}, MetaData: rlwe.MetaData{Scale: params.DefaultScale(), IsNTT: true}}
-	encryptor := ckks.NewEncryptor(*params, sk)
-	encryptor.EncryptZero(&ctxQP)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctxQP))
-}
-
 //export lattigo_newZeroCiphertext
 func lattigo_newZeroCiphertext(paramsHandle, skHandle Handle8) Handle8 {
 	params := getStoredParameters(paramsHandle)
@@ -135,8 +123,8 @@ func lattigo_getCiphertextQPMetaData(ctxHandle Handle8) Handle8 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctxQP.MetaData))
 }
 
-//export lattigo_poly
-func lattigo_poly(ctxHandle Handle8, i uint64) Handle8 {
+//export lattigo_getCiphertextPoly
+func lattigo_getCiphertextPoly(ctxHandle Handle8, i uint64) Handle8 {
 	ctx := getStoredCiphertext(ctxHandle)
 	if int(i) > ctx.Degree() {
 		panic("index exceed ciphertext degree")
@@ -144,29 +132,8 @@ func lattigo_poly(ctxHandle Handle8, i uint64) Handle8 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ctx.Value[i]))
 }
 
-//export lattigo_polyQPCiphertextQP
-func lattigo_polyQPCiphertextQP(ctQPHandle Handle8, i uint64) Handle8 {
+//export lattigo_getCiphertextPolyQP
+func lattigo_getCiphertextPolyQP(ctQPHandle Handle8, i uint64) Handle8 {
 	ctxQP := getStoredCiphertextQP(ctQPHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&ctxQP.Value[i]))
-}
-
-//export lattigo_printMetaCtQP
-func lattigo_printMetaCtQP(ctQPHandle Handle8) {
-	ctxQP := getStoredCiphertextQP(ctQPHandle)
-	fmt.Printf("isNTT: %t\n", ctxQP.MetaData.IsNTT)
-	fmt.Printf("IsMontgomery: %t\n", ctxQP.MetaData.IsMontgomery)
-}
-
-//export lattigo_printMetaCt
-func lattigo_printMetaCt(ctHandle Handle8) {
-	ctx := getStoredCiphertext(ctHandle)
-	fmt.Printf("isNTT: %t\n", ctx.MetaData.IsNTT)
-	fmt.Printf("IsMontgomery: %t\n", ctx.MetaData.IsMontgomery)
-}
-
-//export lattigo_printMetaPt
-func lattigo_printMetaPt(ptHandle Handle8) {
-	pt := getStoredCiphertextQP(ptHandle)
-	fmt.Printf("isNTT: %t\n", pt.MetaData.IsNTT)
-	fmt.Printf("isMontgomery: %t\n", pt.MetaData.IsMontgomery)
 }

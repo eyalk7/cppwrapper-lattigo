@@ -13,8 +13,8 @@ namespace latticpp {
         return Ciphertext(lattigo_encryptNew(encryptor.getRawHandle(), pt.getRawHandle()));
     }
 
-    void zeroCiphertextQP(const Parameters &params,const SecretKey &sk, const CiphertextQP &ctxQP){
-        lattigo_zeroCiphertextQP(params.getRawHandle(), sk.getRawHandle(), ctxQP.getRawHandle());
+    void encryptZeroQP(const Parameters &params,const SecretKey &sk, const CiphertextQP &ctxQP){
+        lattigo_encryptZeroQP(params.getRawHandle(), sk.getRawHandle(), ctxQP.getRawHandle());
     }
 
 }  // namespace latticpp

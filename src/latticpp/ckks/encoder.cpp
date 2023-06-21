@@ -31,12 +31,4 @@ namespace latticpp {
         return coeffs;
     }
 
-    latticpp::Plaintext newPlaintext(const Parameters &params, const Poly &poly, int level){
-        return Plaintext(lattigo_newPlaintext(params.getRawHandle(), poly.getRawHandle(), level));
-    }
-
-    Poly getPoly(const Plaintext &plaintext) {
-        return Poly(lattigo_getPoly(plaintext.getRawHandle()));
-    }
-
 }  // namespace latticpp

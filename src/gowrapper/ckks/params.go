@@ -85,7 +85,6 @@ func lattigo_newParameters(logN uint64, qi *C.constULong, numQi uint8, pi *C.con
 
 	var rlweParams rlwe.Parameters
 	var err error
-	// TODO: expose constant parameters through this function API.
 	scale := rlwe.NewScale(float64(uint64(1) << uint64(logScale)))
 	rlweParams, err = rlwe.NewParameters(int(logN), Qi, Pi, 0, 192, rlwe.DefaultSigma, ring.Standard, scale, ckks.DefaultNTTFlag)
 	if err != nil {
@@ -202,12 +201,6 @@ func lattigo_sigma(paramHandle Handle6) float64 {
 	params = getStoredParameters(paramHandle)
 	return params.Sigma()
 }
-
-//export lattigo_beta
-// func lattigo_beta(paramHandle Handle6) uint64 {
-// 	params := getStoredParameters(paramHandle)
-// 	return uint64(params.Beta())
-// }
 
 //export lattigo_getQi
 func lattigo_getQi(paramHandle Handle6, i uint64) uint64 {

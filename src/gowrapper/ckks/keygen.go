@@ -155,7 +155,6 @@ func lattigo_genKeyPairSparse(keygenHandle Handle5, hw uint64) C.struct_Lattigo_
 	var pk *rlwe.PublicKey
 	sk = (*keygen).GenSecretKeyWithHammingWeight(int(hw))
 	pk = (*keygen).GenPublicKey(sk)
-	// sk, pk = (*keygen).GenKeyPairSparse(int(hw))
 	var kpHandle C.struct_Lattigo_KeyPairHandle
 	kpHandle.sk = C.uint64_t(marshal.CrossLangObjMap.Add(unsafe.Pointer(sk)))
 	kpHandle.pk = C.uint64_t(marshal.CrossLangObjMap.Add(unsafe.Pointer(pk)))
@@ -208,23 +207,23 @@ func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep int
 }
 
 //export lattigo_rotationKeyExist
-func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep int) int {
+func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep uint64) uint64 {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
-	_, exist := rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotationStep)]
+	_, exist := rotKeys.Keys[param.GaloisElementForColumnRotationBy(int(rotationStep))]
 	if exist {
-		return 1
+		return uint64(1)
 	} else {
-		return 0
+		return uint64(0)
 	}
 }
 
 //export lattigo_setRotationKey
-func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rotStep int) {
+func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rotStep uint64) {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
 	rotKey := getStoredSwitchingKey(rotKeyHandle)
-	rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotStep)] = rotKey.CopyNew()
+	rotKeys.Keys[param.GaloisElementForColumnRotationBy(int(rotStep))] = rotKey.CopyNew()
 }
 
 //export lattigo_copyNewRotationKey

@@ -18,7 +18,6 @@ namespace latticpp {
     }
 
     Ciphertext copyNew(const Ciphertext &ct) {
-        // a handle of 0 is an invalid Go reference (my equivalent of a nil/null pointer)
         if (ct.getRawHandle() == 0) {
             return ct;
         }
@@ -26,7 +25,6 @@ namespace latticpp {
     }
 
     CiphertextQP copyNew(const CiphertextQP &ctQP) {
-        // a handle of 0 is an invalid Go reference (my equivalent of a nil/null pointer)
         if (ctQP.getRawHandle() == 0) {
             return ctQP;
         }
@@ -41,12 +39,11 @@ namespace latticpp {
         return CiphertextQP(lattigo_newCiphertextQP(params.getRawHandle()));
     }
 
-
-    void set(const Ciphertext &ctx, MetaData &metaData) {
+    void set(Ciphertext &ctx, const MetaData &metaData) {
       lattigo_setCiphertextMetaData(ctx.getRawHandle(), metaData.getRawHandle());
     }
 
-    void set(const CiphertextQP &ctx, MetaData &metaData) {
+    void set(CiphertextQP &ctx, const MetaData &metaData) {
       lattigo_setCiphertextQPMetaData(ctx.getRawHandle(), metaData.getRawHandle());
     }
 
@@ -59,34 +56,11 @@ namespace latticpp {
     }
 
     Poly poly(const Ciphertext &ctx, uint64_t i) {
-      return lattigo_poly(ctx.getRawHandle(), i);
+      return lattigo_getCiphertextPoly(ctx.getRawHandle(), i);
     }
 
     PolyQP polyQP(const CiphertextQP &ctQP, uint64_t i) {
-      return lattigo_polyQPCiphertextQP(ctQP.getRawHandle(), i);
+      return lattigo_getCiphertextPolyQP(ctQP.getRawHandle(), i);
     }
-    
-
-    CiphertextQP newZeroCiphertextQP(const Parameters &params, const SecretKey &sk){
-      return lattigo_newZeroCiphertextQP(params.getRawHandle(), sk.getRawHandle());
-    }
-
-    Ciphertext newZeroCiphertext(const Parameters &params, const SecretKey &sk){
-      return lattigo_newZeroCiphertext(params.getRawHandle(), sk.getRawHandle());
-    }
-
-    void printMetaData(const CiphertextQP &ctQP){
-      lattigo_printMetaCtQP(ctQP.getRawHandle());
-    }
-
-    void printMetaData(const Ciphertext &ct){
-      lattigo_printMetaCt(ct.getRawHandle());
-    }
-
-    void printMetaData(const Plaintext &pt){
-      lattigo_printMetaPt(pt.getRawHandle());
-    }
-
-    
 
 }  // namespace latticpp

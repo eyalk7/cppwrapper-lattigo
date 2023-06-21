@@ -12,6 +12,6 @@ namespace latticpp {
 
     Ciphertext encryptNew(const Encryptor &encryptor, const Plaintext &pt);
 
-    void zeroCiphertextQP(const Parameters &params,const SecretKey &sk, const CiphertextQP &ctxQP);
+    void encryptZeroQP(const Parameters &params,const SecretKey &sk, const CiphertextQP &ctxQP);
 
 }  // namespace latticpp
