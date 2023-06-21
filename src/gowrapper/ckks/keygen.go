@@ -58,7 +58,7 @@ func getStoredRotationKeys(rotKeysHandle Handle5) *rlwe.RotationKeySet {
 	return (*rlwe.RotationKeySet)(ref.Ptr)
 }
 
-func getStoredRotationKey(rotationKeyHandle Handle5) *rlwe.SwitchingKey {
+func getStoredSwitchingKey(rotationKeyHandle Handle5) *rlwe.SwitchingKey {
 	ref := marshal.CrossLangObjMap.Get(rotationKeyHandle)
 	return (*rlwe.SwitchingKey)(ref.Ptr)
 }
@@ -223,19 +223,19 @@ func lattigo_rotationKeyExist(paramHandle, rotKeysHandle Handle5, rotationStep i
 func lattigo_setRotationKey(paramHandle, rotKeysHandle, rotKeyHandle Handle5, rotStep int) {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotStep)] = rotKey.CopyNew()
 }
 
 //export lattigo_copyNewRotationKey
 func lattigo_copyNewRotationKey(rotKeyHandle Handle5) Handle5 {
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotKey.CopyNew()))
 }
 
 //export lattigo_numOfDecomp
 func lattigo_numOfDecomp(rotKeyHandle Handle5) uint64 {
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	return uint64(len(rotKey.Value))
 }
 
@@ -247,7 +247,7 @@ func lattigo_galoisElementForColumnRotationBy(paramHandle Handle5, rotationStep 
 
 //export lattigo_rotationKeyIsCorrect
 func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle Handle5, paramHandle Handle5, log2Bound uint64) uint64 {
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	sk := getStoredSecretKey(skHandle)
 	param := getStoredParameters(paramHandle)
 	rotKey.GadgetCiphertext.CopyNew()
@@ -262,13 +262,13 @@ func lattigo_rotationKeyIsCorrect(rotKeyHandle Handle5, galEl uint64, skHandle H
 
 //export lattigo_getCiphertextQP
 func lattigo_getCiphertextQP(rotKeyHandle Handle5, i, j uint64) Handle5 {
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&(rotKey.Value[i][j])))
 }
 
 //export lattigo_setCiphertextQP
 func lattigo_setCiphertextQP(rotKeyHandle, ctQPHandle Handle5, i, j uint64) {
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	ctQP := getStoredCiphertextQP(ctQPHandle)
 	rotKey.Value[i][j] = *ctQP
 }
@@ -319,12 +319,6 @@ func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpP
 	btpKey = bootstrapping.GenEvaluationKeys(*btpParams, *params, sk)
 
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
-}
-
-//export lattigo_getSwitchingKey
-func lattigo_getSwitchingKey(rotKeyHandle Handle5, galoisElement uint64) Handle5 {
-	rotKeys := getStoredRotationKeys(rotKeyHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotKeys.Keys[galoisElement]))
 }
 
 //export lattigo_newSwitchingKey

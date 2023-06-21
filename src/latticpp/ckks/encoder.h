@@ -15,8 +15,9 @@ namespace latticpp {
 
     std::vector<double> decode(const Encoder &encoder, const Plaintext &pt, uint64_t logSlots);
 
+    // TODO: move to new file
     latticpp::Plaintext newPlaintext(const Parameters &params, const Poly &poly, int level);
 
-    Poly getPoly(Plaintext plaintext);
+    Poly getPoly(const Plaintext &plaintext);
     
 }  // namespace latticpp

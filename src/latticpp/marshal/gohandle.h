@@ -32,7 +32,6 @@ namespace latticpp {
         CiphertextQP,
         RotationKeys,
         SwitchingKey,
-        RotationKey,
         CKGProtocol,
         CKGCRP,
         CKGShare,
@@ -189,7 +188,6 @@ namespace latticpp {
     using CiphertextQP = GoHandle<GoType::CiphertextQP>;
     using RotationKeys = GoHandle<GoType::RotationKeys>;
     using SwitchingKey = GoHandle<GoType::SwitchingKey>;
-    using RotationKey = GoHandle<GoType::RotationKey>;
     using CKGProtocol = GoHandle<GoType::CKGProtocol>;
     using CKGCRP = GoHandle<GoType::CKGCRP>;
     using CKGShare = GoHandle<GoType::CKGShare>;

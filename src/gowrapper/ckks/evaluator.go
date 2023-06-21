@@ -349,7 +349,7 @@ func lattigo_relinearize(evalHandle Handle4, ctInHandle Handle4, ctOutHandle Han
 //export lattigo_switchKeys
 func lattigo_switchKeys(evalHandle, ctxInHandle, swkHandle, ctxOutHandle Handle4) {
 	eval := getStoredEvaluator(evalHandle)
-	swk := getStoredRotationKey(swkHandle)
+	swk := getStoredSwitchingKey(swkHandle)
 	ctxIn := getStoredCiphertext(ctxInHandle)
 	ctxOut := getStoredCiphertext(ctxOutHandle)
 	(*eval).SwitchKeys(ctxIn, swk, ctxOut)

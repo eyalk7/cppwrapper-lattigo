@@ -11,8 +11,8 @@ namespace latticpp {
         return KeyGenerator(lattigo_newKeyGenerator(params.getRawHandle()));
     }
 
-    RotationKey getRotationKey(const Parameters &params, const RotationKeys &rotationKeys, int rotationStep) {
-      return RotationKey(lattigo_getRotationKey(
+    SwitchingKey getRotationKey(const Parameters &params, const RotationKeys &rotationKeys, int rotationStep) {
+      return SwitchingKey(lattigo_getRotationKey(
           params.getRawHandle(), rotationKeys.getRawHandle(), rotationStep));
     }
 
@@ -21,16 +21,16 @@ namespace latticpp {
                                       rotationKeys.getRawHandle(), rotationStep);
     }
 
-    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys, const RotationKey &rotKey, int rotStep) {
+    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys, const SwitchingKey &rotKey, int rotStep) {
       lattigo_setRotationKey(params.getRawHandle(), rotKeys.getRawHandle(),
                             rotKey.getRawHandle(), rotStep);
     }
 
-    RotationKey copyNew(const RotationKey &rotKey) {
-      return RotationKey(lattigo_copyNewRotationKey(rotKey.getRawHandle()));
+    SwitchingKey copyNew(const SwitchingKey &rotKey) {
+      return SwitchingKey(lattigo_copyNewRotationKey(rotKey.getRawHandle()));
     }
 
-    uint64_t numOfDecomp(const RotationKey &rtk) {
+    uint64_t numOfDecomp(const SwitchingKey &rtk) {
       return lattigo_numOfDecomp(rtk.getRawHandle());
     }
 
@@ -39,7 +39,7 @@ namespace latticpp {
                                                       rotationStep);
     }
 
-    uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl, SecretKey sk, const Parameters &params, uint64_t log2Bound) {
+    uint64_t rotationKeyIsCorrect(const SwitchingKey &rtk, uint64_t galEl, SecretKey sk, const Parameters &params, uint64_t log2Bound) {
       return lattigo_rotationKeyIsCorrect(rtk.getRawHandle(), galEl,
                                           sk.getRawHandle(), params.getRawHandle(),
                                           log2Bound);
@@ -104,11 +104,11 @@ namespace latticpp {
         return RotationKeys(lattigo_genRotationKeysForRotations(keygen.getRawHandle(), sk.getRawHandle(), fixed_width_shifts.data(), shifts.size()));
     }
 
-    CiphertextQP getCiphertextQP(RotationKey rtk, uint64_t i, uint64_t j) {
+    CiphertextQP getCiphertextQP(const SwitchingKey &rtk, uint64_t i, uint64_t j) {
       return CiphertextQP(lattigo_getCiphertextQP(rtk.getRawHandle(), i, j));
     }
 
-    void setCiphertextQP(RotationKey rtk, CiphertextQP ctQP, uint64_t i, uint64_t j) {
+    void setCiphertextQP(SwitchingKey &rtk, const CiphertextQP &ctQP, uint64_t i, uint64_t j) {
       lattigo_setCiphertextQP(rtk.getRawHandle(), ctQP.getRawHandle(), i, j);
     }
     
@@ -136,13 +136,7 @@ namespace latticpp {
         return BootstrappingKey(lattigo_genBootstrappingKey(keygen.getRawHandle(), params.getRawHandle(), bootParams.getRawHandle(), sk.getRawHandle(), relinKey.getRawHandle(), rotKeys.getRawHandle()));
     }
 
-    SwitchingKey getSwitchingKey(RotationKeys &rotKeys,
-                                 uint64_t galoisElement) {
-      return SwitchingKey(
-          lattigo_getSwitchingKey(rotKeys.getRawHandle(), galoisElement));
-    }
-
-    RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP) {
-      return RotationKey(lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP));
+    SwitchingKey newSwitchingKey(const Parameters &params, int levelQ, int levelP) {
+      return SwitchingKey(lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP));
     }
 }  // namespace latticpp

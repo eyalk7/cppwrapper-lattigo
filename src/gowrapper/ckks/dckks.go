@@ -281,6 +281,6 @@ func lattigo_rtgGenRotationKey(protocolHandle, shareHandle Handle13, crpHandle, 
 	protocol := getStoredRTGProtocol(protocolHandle)
 	share := getStoredRTGShare(shareHandle)
 	crp := getStoredRTGCRP(crpHandle)
-	rotKey := getStoredRotationKey(rotKeyHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
 	protocol.GenRotationKey(share, *crp, rotKey)
 }

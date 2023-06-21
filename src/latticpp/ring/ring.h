@@ -18,8 +18,6 @@ namespace latticpp {
 
     UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring);
 
-    Poly readNewFromSampler(const UniformSampler &sampler);
-
     Poly polyQ(const PolyQP &polyqp);
 
     Poly polyP(const PolyQP &polyqp);
@@ -28,45 +26,43 @@ namespace latticpp {
 
     void copyPolyAtLevel(const Poly dstPoly, uint64_t dstIndex, Poly srcPoly, uint64_t srcIndex);
 
-    BasisExtender newBasisExtender(Ring ringQ, Ring ringP);
+    BasisExtender newBasisExtender(const Ring &ringQ, const Ring &ringP);
 
-    void modUpQtoP(BasisExtender ext, int levelQ, int levelP, Poly polQ, Poly polP);
+    void modUpQtoP(const BasisExtender &ext, int levelQ, int levelP, const Poly &polQ, Poly &polP);
 
-    void invNTTLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+    void invNTTLvl(const RingQP &ringqp, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut);
 
-    void nTTLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+    void nTTLvl(const RingQP &ringqp, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut);
 
-    void invNTTLvl(Ring ring, int level, Poly pIn, Poly pOut);
+    void invNTTLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut);
 
-    void nTTLvl(Ring ring, int level, Poly pIn, Poly pOut);
+    void nTTLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut);
 
-    void invMFormLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+    void invMFormLvl(const RingQP &ringqp, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut);
 
-    void mFormLvl(RingQP ringqp, int levelQ, int levelP, PolyQP pIn, PolyQP pOut);
+    void mFormLvl(const RingQP &ringqp, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut);
 
-    void invMFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
+    void invMFormLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut);
 
-    void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
+    void mFormLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut);
 
-    Poly newPoly(Ring ring);
+    Poly newPoly(const Ring &ring);
 
-    void copyPoly(Poly dst, Poly src);
+    void copyPoly(Poly &dst, const Poly &src);
 
-    uint64_t degree(Poly p);
+    uint64_t degree(const Poly &p);
 
-    uint64_t N(Ring ring);
+    uint64_t N(const Ring &ring);
 
-    std::vector<uint64_t> permuteNTTIndex(Ring ring, uint64_t galEl);
+    std::vector<uint64_t> permuteNTTIndex(const Ring &ring, uint64_t galEl);
 
-    void permuteNTTWithIndexLvl(Ring ring, uint64_t level, Poly polyIn, const std::vector<uint64_t> &index, Poly polyOut);
+    void permuteNTTWithIndexLvl(const Ring &ring, uint64_t level, const Poly &polyIn, const std::vector<uint64_t> &index, const Poly &polyOut);
 
-    int log2OfInnerSum(int level, Ring ring, Poly poly);
+    int log2OfInnerSum(int level, const Ring &ring, const Poly &poly);
 
-	// MulCoeffsMontgomeryAndAddLvl multiplies p1 by p2 coefficient-wise with a Montgomery
-	// modular reduction for the moduli from q_0 up to q_level and adds the result to p3.
-    void mulCoeffsMontgomeryAndAddLvl(RingQP ringQP, int levelQ, int levelP, PolyQP p1, PolyQP p2, PolyQP p3);
+    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &p1, const PolyQP &p2, const PolyQP &p3);
 
-    void mulCoeffsMontgomeryAndAddLvl(Ring ring, int level, Poly p1, Poly p2, Poly p3);
+    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, int level, const Poly &p1, const Poly &p2, const Poly &p3);
 
     int equals(const Poly &p1, const Poly &p2);
 

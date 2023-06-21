@@ -35,7 +35,7 @@ namespace latticpp {
         return Plaintext(lattigo_newPlaintext(params.getRawHandle(), poly.getRawHandle(), level));
     }
 
-    Poly getPoly(Plaintext plaintext) {
+    Poly getPoly(const Plaintext &plaintext) {
         return Poly(lattigo_getPoly(plaintext.getRawHandle()));
     }
 

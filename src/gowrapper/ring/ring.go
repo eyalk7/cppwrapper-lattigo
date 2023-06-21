@@ -105,12 +105,6 @@ func lattigo_newUniformSampler(prngHandle, baseRingHandle Handle14) Handle14 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(sampler))
 }
 
-//export lattigo_readNewFromSampler
-func lattigo_readNewFromSampler(samplerHandle Handle14) Handle14 {
-	sampler := getStoredUniformSampler(samplerHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(sampler.ReadNew()))
-}
-
 //export lattigo_newBasisExtender
 func lattigo_newBasisExtender(ringQHandle, ringPHandle Handle14) Handle14 {
 	ringQ := getStoredRing(ringQHandle)

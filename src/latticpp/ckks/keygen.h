@@ -16,29 +16,29 @@ namespace latticpp {
 
     KeyGenerator newKeyGenerator(const Parameters &params);
 
-    RotationKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
+    SwitchingKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
                               int rotationStep);
 
-    uint64_t rotationKeyExist(const Parameters &params,
-                              const RotationKeys &rotationKeys, int rotationStep);
+    uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, 
+                              int rotationStep);
 
     void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
-                        const RotationKey &rotKey, int rotStep);
+                        const SwitchingKey &rotKey, int rotStep);
 
-    RotationKey copyNewRotationKey(const RotationKey &rotKey);
+    SwitchingKey copyNewRotationKey(const SwitchingKey &rotKey);
 
-    uint64_t numOfDecomp(const RotationKey &rtk);
+    uint64_t numOfDecomp(const SwitchingKey &rtk);
 
     uint64_t galoisElementForColumnRotationBy(const Parameters &params,
                                               uint64_t rotationStep);
 
-    uint64_t rotationKeyIsCorrect(const RotationKey &rtk, uint64_t galEl,
-                                  SecretKey sk, const Parameters &params,
+    uint64_t rotationKeyIsCorrect(const SwitchingKey  &rtk, uint64_t galEl,
+                                  const SecretKey &sk, const Parameters &params,
                                   uint64_t log2Bound);
 
-    CiphertextQP getCiphertextQP(RotationKey rtk, uint64_t i, uint64_t j);
+    CiphertextQP getCiphertextQP(const SwitchingKey& rtk, uint64_t i, uint64_t j);
 
-    void setCiphertextQP(RotationKey rtk, CiphertextQP ctQP, uint64_t i, uint64_t j);
+    void setCiphertextQP(const SwitchingKey& rtk, const CiphertextQP& ctQP, uint64_t i, uint64_t j);
 
     SecretKey newSecretKey(const Parameters &params);
 
@@ -52,8 +52,7 @@ namespace latticpp {
 
     RelinearizationKey newRelinearizationKey(const Parameters &params);
 
-    RotationKeys newRotationKeys(const Parameters &params,
-                                 std::vector<uint64_t> galoisElements);
+    RotationKeys newRotationKeys(const Parameters &params, std::vector<uint64_t> galoisElements);
 
     SecretKey genSecretKey(const KeyGenerator &keygen);
 
@@ -79,15 +78,13 @@ namespace latticpp {
 
     BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
-    SwitchingKey genEmptyTestSwitchingKey(Parameters &params, SecretKey &sk);
+    SwitchingKey genEmptyTestSwitchingKey(const Parameters &params, SecretKey &sk);
 
     Poly polyQP(const SecretKey &sk);
 
-    SwitchingKey getSwitchingKey(RotationKeys &rotKeys, uint64_t galoisElement);
+    SwitchingKey newSwitchingKey(const Parameters &params, int levelQ, int levelP);
 
-    RotationKey newSwitchingKey(Parameters params, int levelQ, int levelP);
+    void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut);
 
-    void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk, Ciphertext &ctxOut);
-
-     RotationKey copyNew(const RotationKey &rotKey);
+     SwitchingKey copyNew(const SwitchingKey &rotKey);
 }  // namespace latticpp

@@ -12,6 +12,4 @@ namespace latticpp {
 
     Plaintext decryptNew(const Decryptor &decryptor, const Ciphertext &ct);
 
-    Poly poly(Plaintext plaintext);
-
 }  // namespace latticpp

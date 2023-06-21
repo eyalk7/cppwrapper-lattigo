@@ -95,7 +95,7 @@ namespace latticpp {
         lattigo_relinearize(eval.getRawHandle(), ctIn.getRawHandle(), ctOut.getRawHandle());
     }
 
-    void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk, Ciphertext &ctxOut) {
+    void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut) {
         lattigo_switchKeys(eval.getRawHandle(), ctxIn.getRawHandle(), swk.getRawHandle(), ctxOut.getRawHandle());
     }
 }  // namespace latticpp

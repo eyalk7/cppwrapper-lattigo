@@ -50,6 +50,6 @@ namespace latticpp {
 
     void relinearize(const Evaluator &eval, const Ciphertext &ctIn, Ciphertext &ctOut);
 
-    void switchKeys(Evaluator &eval, Ciphertext &ctxIn, RotationKey &swk, Ciphertext &ctxOut);
+    void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut);
 
 }  // namespace latticpp
