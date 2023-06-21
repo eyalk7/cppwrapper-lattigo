@@ -1,6 +1,6 @@
 ## C++ Bindings for the Lattigo Homomorphic Encryption Library
 
-This library provides partial C++ bindings for the [Lattigo v2.2.0](https://github.com/ldsec/lattigo/releases/tag/v2.2.0) Go-lang homomorphic encryption library. This wrapper does not attempt to provide a bindings for all public Lattigo APIs, but new bindings are quite easy to add and PRs are welcome.
+This library provides partial C++ bindings for the [Lattigo v4.1.0](https://github.com/ldsec/lattigo/releases/tag/v4.1.0) Go-lang homomorphic encryption library. This wrapper does not attempt to provide a bindings for all public Lattigo APIs, but new bindings are quite easy to add and PRs are welcome.
 
 ## Building
 
