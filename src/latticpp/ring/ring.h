@@ -48,6 +48,10 @@ namespace latticpp {
 
     void mFormLvl(Ring ring, int level, Poly pIn, Poly pOut);
 
+    Poly newPoly(Ring ring);
+
+    void copyPoly(Poly dst, Poly src);
+
     uint64_t degree(Poly p);
 
     uint64_t N(Ring ring);

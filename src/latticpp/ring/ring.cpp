@@ -90,6 +90,14 @@ namespace latticpp {
        lattigo_mFormLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
+    Poly newPoly(Ring ring){
+        return Poly(lattigo_newPoly(ring.getRawHandle()));
+    }
+
+    void copyPoly(Poly dst, Poly src){
+        lattigo_copyPoly(dst.getRawHandle(), src.getRawHandle());
+    }
+
     uint64_t degree(Poly p) { 
         return lattigo_polyDegree(p.getRawHandle()); 
     }

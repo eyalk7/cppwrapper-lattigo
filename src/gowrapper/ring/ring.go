@@ -218,9 +218,20 @@ func lattigo_copyPolyAtLevel(dstPolyHandle Handle14, dstIndex uint64, srcPolyHan
 	srcIdx := int(srcIndex)
 	dstIdx := int(dstIndex)
 	copy(dst.Coeffs[dstIdx], src.Coeffs[srcIdx])
+}
 
-	// copy(dst.Buff[dst.N()*dstIdx:dst.N()*(dstIdx+1)], src.Buff[src.N()*srcIdx:src.N()*(srcIdx+1)])
+//export lattigo_newPoly
+func lattigo_newPoly(ringHandle Handle14) Handle14 {
+	ring := getStoredRing(ringHandle)
+	poly := ring.NewPoly()
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(poly))
+}
 
+//export lattigo_copyPoly
+func lattigo_copyPoly(polyTargetHandle, polySrcHandle Handle14) {
+	pTarget := GetStoredPoly(polyTargetHandle)
+	pSrc := GetStoredPoly(polySrcHandle)
+	pTarget.Copy(pSrc)
 }
 
 //export lattigo_polyDegree
