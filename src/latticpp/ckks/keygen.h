@@ -17,13 +17,13 @@ namespace latticpp {
     KeyGenerator newKeyGenerator(const Parameters &params);
 
     SwitchingKey getRotationKey(const Parameters &params, const RotationKeys &rtks,
-                              int rotationStep);
+                              uint64_t rotationStep);
 
     uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, 
-                              int rotationStep);
+                              uint64_t rotationStep);
 
     void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
-                        const SwitchingKey &rotKey, int rotStep);
+                        const SwitchingKey &rotKey, uint64_t rotStep);
 
     SwitchingKey copyNewRotationKey(const SwitchingKey &rotKey);
 
@@ -82,7 +82,7 @@ namespace latticpp {
 
     Poly polyQP(const SecretKey &sk);
 
-    SwitchingKey newSwitchingKey(const Parameters &params, int levelQ, int levelP);
+    SwitchingKey newSwitchingKey(const Parameters &params, uint64_t levelQ, uint64_t levelP);
 
     void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut);
 

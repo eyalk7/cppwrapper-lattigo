@@ -11,7 +11,7 @@ namespace latticpp {
         return Parameters(lattigo_getDefaultClassicalParams(paramId));
     }
 
-    Parameters getDefaulPQParams(NamedPQParams paramId) {
+    Parameters getDefaultPQParams(NamedPQParams paramId) {
         return Parameters(lattigo_getDefaultPQParams(paramId));
     }
 
@@ -65,10 +65,6 @@ namespace latticpp {
         return lattigo_sigma(params.getRawHandle());
     }
 
-    // uint64_t beta(const Parameters &params) {
-    //   return lattigo_beta(params.getRawHandle());
-    // }
-
     uint64_t qi(const Parameters &params, uint64_t i) {
         return lattigo_getQi(params.getRawHandle(), i);
     }
@@ -110,6 +106,5 @@ namespace latticpp {
     uint64_t noiseBound(const Parameters &params) {
       return lattigo_noiseBound(params.getRawHandle());
     }
-
 
 }  // namespace latticpp

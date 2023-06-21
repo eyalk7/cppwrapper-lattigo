@@ -28,12 +28,12 @@ namespace latticpp {
             lattigo_newUniformSampler(prng.getRawHandle(), ring.getRawHandle()));
     }
 
-    Poly polyQ(const PolyQP &polyqp) {
-        return Poly(lattigo_polyQ(polyqp.getRawHandle()));
+    Poly polyQ(const PolyQP &polyQp) {
+        return Poly(lattigo_polyQ(polyQp.getRawHandle()));
     }
 
-    Poly polyP(const PolyQP &polyqp) {
-        return Poly(lattigo_polyP(polyqp.getRawHandle()));
+    Poly polyP(const PolyQP &polyQp) {
+        return Poly(lattigo_polyP(polyQp.getRawHandle()));
     }
 
     void copyLvl(uint64_t level, const Poly &sourcePoly, Poly &targetPoly) {
@@ -48,40 +48,39 @@ namespace latticpp {
         return lattigo_newBasisExtender(ringQ.getRawHandle(), ringP.getRawHandle());
     }
 
-    void modUpQtoP(const BasisExtender &ext, int levelQ, int levelP, const Poly &polQ, Poly &polP) {
+    void modUpQtoP(const BasisExtender &ext, uint64_t levelQ, uint64_t levelP, const Poly &polQ, Poly &polP) {
         lattigo_modUpQtoP(ext.getRawHandle(), levelQ, levelP, polQ.getRawHandle(), polP.getRawHandle());
     }
 
-    void invNTTLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut) {
+    void invNTTLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &pIn, PolyQP &pOut) {
         lattigo_invNTTLvlRingQP(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void nTTLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut) {
-        lattigo_nTTLvlRingQP(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(), pOut.getRawHandle());
+    void nttLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &pIn, PolyQP &pOut) {
+        lattigo_nttLvlRingQP(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void invNTTLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut) {
+    void invNTTLvl(const Ring &ring, uint64_t level, const Poly &pIn, Poly &pOut) {
         lattigo_invNTTLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void nTTLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut) {
-        lattigo_nNTTLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
+    void nttLvl(const Ring &ring, uint64_t level, const Poly &pIn, Poly &pOut) {
+        lattigo_nttLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
     }
-    
 
-    void invMFormLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut) {
+    void invMFormLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &pIn, PolyQP &pOut) {
         lattigo_invMFormLvlRingQP(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void mFormLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &pIn, PolyQP &pOut) {
+    void mFormLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &pIn, PolyQP &pOut) {
        lattigo_mFormLvlRingQP(ringQP.getRawHandle(), levelQ, levelP, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void invMFormLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut) {
+    void invMFormLvl(const Ring &ring, uint64_t level, const Poly &pIn, Poly &pOut) {
        lattigo_invMFormLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
-    void mFormLvl(const Ring &ring, int level, const Poly &pIn, Poly &pOut) {
+    void mFormLvl(const Ring &ring, uint64_t level, const Poly &pIn, Poly &pOut) {
        lattigo_mFormLvlRing(ring.getRawHandle(), level, pIn.getRawHandle(), pOut.getRawHandle());
     }
 
@@ -97,12 +96,12 @@ namespace latticpp {
         return lattigo_polyDegree(p.getRawHandle()); 
     }
 
-    uint64_t N(const Ring &ring) { 
-        return lattigo_N(ring.getRawHandle()); 
+    uint64_t ringN(const Ring &ring) { 
+        return lattigo_ringN(ring.getRawHandle()); 
     }
 
     vector<uint64_t> permuteNTTIndex(const Ring &ring, uint64_t galEl) {
-        vector<uint64_t> res(N(ring));
+        vector<uint64_t> res(ringN(ring));
         lattigo_permuteNTTIndex(ring.getRawHandle(), galEl, res.data());
         return res;
     }
@@ -111,24 +110,20 @@ namespace latticpp {
         lattigo_permuteNTTWithIndexLvl(ring.getRawHandle(), level, polyIn.getRawHandle(), index.data(), polyOut.getRawHandle());
     }
 
-    int log2OfInnerSum(int level, const Ring &ring, const Poly &poly){
+    uint64_t log2OfInnerSum(uint64_t level, const Ring &ring, const Poly &poly){
         return lattigo_log2OfInnerSum(level, ring.getRawHandle(), poly.getRawHandle());
     }
 
-    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, int levelQ, int levelP, const PolyQP &p1, const PolyQP &p2, const PolyQP &p3) {
-        lattigo_MulCoeffsMontgomeryAndAddLvl(ringQP.getRawHandle(),levelQ, levelP, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
+    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, const PolyQP &p3) {
+        lattigo_mulCoeffsMontgomeryAndAddLvl(ringQP.getRawHandle(),levelQ, levelP, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
     }
 
-    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, int level, const Poly &p1, const Poly &p2, const Poly &p3) {
-        lattigo_MulCoeffsMontgomeryAndAddLvlRing(ring.getRawHandle(),level, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
+    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, uint64_t level, const Poly &p1, const Poly &p2, const Poly &p3) {
+        lattigo_mulCoeffsMontgomeryAndAddLvlRing(ring.getRawHandle(),level, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
     }
 
-    int equals(const Poly &p1, const Poly &p2){
+    uint64_t equals(const Poly &p1, const Poly &p2){
         return lattigo_equals(p1.getRawHandle(), p2.getRawHandle());
-    }
-
-    void print(const Poly &p){
-        lattigo_printPoly(p.getRawHandle());
     }
 
 } // namespace latticpp

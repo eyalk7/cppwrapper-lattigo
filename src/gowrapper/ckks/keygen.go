@@ -199,10 +199,10 @@ func lattigo_genRotationKeysForRotations(keygenHandle Handle5, skHandle Handle5,
 }
 
 //export lattigo_getRotationKey
-func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep int) Handle5 {
+func lattigo_getRotationKey(paramHandle, rotKeysHandle Handle5, rotationStep uint64) Handle5 {
 	param := getStoredParameters(paramHandle)
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
-	rotationKey := rotKeys.Keys[param.GaloisElementForColumnRotationBy(rotationStep)]
+	rotationKey := rotKeys.Keys[param.GaloisElementForColumnRotationBy(int(rotationStep))]
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotationKey))
 }
 

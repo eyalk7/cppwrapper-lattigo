@@ -263,19 +263,17 @@ func lattigo_unmarshalBinaryRotationKeys(buf *C.char, len uint64) Handle9 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotkeys))
 }
 
-//export lattigo_MarshalBinarySizeCiphertext
-func lattigo_MarshalBinarySizeCiphertext(ctHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizeCiphertext
+func lattigo_marshalBinarySizeCiphertext(ctHandle Handle9) uint64 {
 	var ct *rlwe.Ciphertext
 	ct = getStoredCiphertext(ctHandle)
 	return uint64(ct.MarshalBinarySize())
 }
 
-//export lattigo_MarshalBinarySizeParameters
-func lattigo_MarshalBinarySizeParameters(paramsHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizeParameters
+func lattigo_marshalBinarySizeParameters(paramsHandle Handle9) uint64 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramsHandle)
-	// see https://github.com/ldsec/lattigo/issues/115
-	// return params.GetDataLen(withMetaData)
 	paramBytes, err := params.MarshalBinary()
 	if err != nil {
 		panic(err)
@@ -283,29 +281,29 @@ func lattigo_MarshalBinarySizeParameters(paramsHandle Handle9) uint64 {
 	return uint64(len(paramBytes))
 }
 
-//export lattigo_MarshalBinarySizeSecretKey
-func lattigo_MarshalBinarySizeSecretKey(skHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizeSecretKey
+func lattigo_marshalBinarySizeSecretKey(skHandle Handle9) uint64 {
 	var sk *rlwe.SecretKey
 	sk = getStoredSecretKey(skHandle)
 	return uint64(sk.MarshalBinarySize())
 }
 
-//export lattigo_MarshalBinarySizePublicKey
-func lattigo_MarshalBinarySizePublicKey(pkHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizePublicKey
+func lattigo_marshalBinarySizePublicKey(pkHandle Handle9) uint64 {
 	var pk *rlwe.PublicKey
 	pk = getStoredPublicKey(pkHandle)
 	return uint64(pk.MarshalBinarySize())
 }
 
-//export lattigo_MarshalBinarySizeRelinearizationKey
-func lattigo_MarshalBinarySizeRelinearizationKey(relinKeyHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizeRelinearizationKey
+func lattigo_marshalBinarySizeRelinearizationKey(relinKeyHandle Handle9) uint64 {
 	var relinKey *rlwe.RelinearizationKey
 	relinKey = getStoredRelinKey(relinKeyHandle)
 	return uint64(relinKey.MarshalBinarySize())
 }
 
-//export lattigo_MarshalBinarySizeRotationKeys
-func lattigo_MarshalBinarySizeRotationKeys(rotkeysHandle Handle9) uint64 {
+//export lattigo_marshalBinarySizeRotationKeys
+func lattigo_marshalBinarySizeRotationKeys(rotkeysHandle Handle9) uint64 {
 	var rotkeys *rlwe.RotationKeySet
 	rotkeys = getStoredRotationKeys(rotkeysHandle)
 	return uint64(rotkeys.MarshalBinarySize())

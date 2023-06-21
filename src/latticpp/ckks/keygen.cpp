@@ -11,17 +11,17 @@ namespace latticpp {
         return KeyGenerator(lattigo_newKeyGenerator(params.getRawHandle()));
     }
 
-    SwitchingKey getRotationKey(const Parameters &params, const RotationKeys &rotationKeys, int rotationStep) {
+    SwitchingKey getRotationKey(const Parameters &params, const RotationKeys &rotationKeys, uint64_t rotationStep) {
       return SwitchingKey(lattigo_getRotationKey(
           params.getRawHandle(), rotationKeys.getRawHandle(), rotationStep));
     }
 
-    uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, int rotationStep) {
+    uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, uint64_t rotationStep) {
       return lattigo_rotationKeyExist(params.getRawHandle(),
                                       rotationKeys.getRawHandle(), rotationStep);
     }
 
-    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys, const SwitchingKey &rotKey, int rotStep) {
+    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys, const SwitchingKey &rotKey, uint64_t rotStep) {
       lattigo_setRotationKey(params.getRawHandle(), rotKeys.getRawHandle(),
                             rotKey.getRawHandle(), rotStep);
     }
@@ -136,7 +136,7 @@ namespace latticpp {
         return BootstrappingKey(lattigo_genBootstrappingKey(keygen.getRawHandle(), params.getRawHandle(), bootParams.getRawHandle(), sk.getRawHandle(), relinKey.getRawHandle(), rotKeys.getRawHandle()));
     }
 
-    SwitchingKey newSwitchingKey(const Parameters &params, int levelQ, int levelP) {
+    SwitchingKey newSwitchingKey(const Parameters &params, uint64_t levelQ, uint64_t levelP) {
       return SwitchingKey(lattigo_newSwitchingKey(params.getRawHandle(), levelQ, levelP));
     }
 }  // namespace latticpp

@@ -43,10 +43,6 @@ namespace latticpp {
         lattigo_rescale(eval.getRawHandle(), ctIn.getRawHandle(), threshold, ctOut.getRawHandle());
     }
 
-    // void rescaleMany(const Evaluator &eval, const Parameters &params, const Ciphertext &ctIn, uint64_t numRescales, Ciphertext &ctOut) {
-    //     lattigo_rescaleMany(eval.getRawHandle(), params.getRawHandle(), ctIn.getRawHandle(), numRescales, ctOut.getRawHandle());
-    // }
-
     Ciphertext mulRelinNew(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1) {
         return Ciphertext(lattigo_mulRelinNew(eval.getRawHandle(), ct0.getRawHandle(), ct1.getRawHandle()));
     }
@@ -98,4 +94,4 @@ namespace latticpp {
     void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut) {
         lattigo_switchKeys(eval.getRawHandle(), ctxIn.getRawHandle(), swk.getRawHandle(), ctxOut.getRawHandle());
     }
-}  // namespace latticpp
+} // namespace latticpp
