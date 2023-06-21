@@ -21,6 +21,7 @@ import (
 	"unsafe"
 
 	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/ckks/bootstrapping"
 	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
@@ -62,10 +63,10 @@ func getStoredRotationKey(rotationKeyHandle Handle5) *rlwe.SwitchingKey {
 	return (*rlwe.SwitchingKey)(ref.Ptr)
 }
 
-// func getStoredBootstrappingKey(bootKeyHandle Handle5) *ckks.BootstrappingKey {
-// 	ref := marshal.CrossLangObjMap.Get(bootKeyHandle)
-// 	return (*ckks.BootstrappingKey)(ref.Ptr)
-// }
+func getStoredBootstrappingKey(bootKeyHandle Handle5) *bootstrapping.EvaluationKeys {
+	ref := marshal.CrossLangObjMap.Get(bootKeyHandle)
+	return (*bootstrapping.EvaluationKeys)(ref.Ptr)
+}
 
 //export lattigo_newKeyGenerator
 func lattigo_newKeyGenerator(paramHandle Handle5) Handle5 {
@@ -303,84 +304,22 @@ func lattigo_setRotKeysForEvaluationKey(evalKeyHandle Handle5, rotKeysHandle Han
 	evalKey.Rtks = getStoredRotationKeys(rotKeysHandle)
 }
 
-// Generates any missing Galois keys
-//
 //export lattigo_genBootstrappingKey
-// func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpParamsHandle Handle5, skHandle Handle5, relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
-// 	var keygen *rlwe.KeyGenerator
-// 	keygen = getStoredKeyGenerator(keygenHandle)
+func lattigo_genBootstrappingKey(keygenHandle Handle5, paramHandle Handle5, btpParamsHandle Handle5, skHandle Handle5, relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
+	var params *ckks.Parameters
+	params = getStoredParameters(paramHandle)
 
-// 	var params *ckks.Parameters
-// 	params = getStoredParameters(paramHandle)
+	var btpParams *bootstrapping.Parameters
+	btpParams = getStoredBootstrappingParameters(btpParamsHandle)
 
-// 	var btpParams *ckks.BootstrappingParameters
-// 	btpParams = getStoredBootstrappingParameters(btpParamsHandle)
+	var sk *rlwe.SecretKey
+	sk = getStoredSecretKey(skHandle)
 
-// 	var sk *rlwe.SecretKey
-// 	sk = getStoredSecretKey(skHandle)
+	var btpKey bootstrapping.EvaluationKeys
+	btpKey = bootstrapping.GenEvaluationKeys(*btpParams, *params, sk)
 
-// 	// get existing keys
-// 	var relinKey *rlwe.RelinearizationKey
-// 	relinKey = getStoredRelinKey(relinKeyHandle)
-
-// 	var rotKeys *rlwe.RotationKeySet
-// 	rotKeys = getStoredRotationKeys(rotKeyHandle)
-
-// 	// generate the set of keys needed for bootstrapping
-// 	btpRots := btpParams.RotationsForBootstrapping(params.LogSlots())
-
-// 	// galois elements corresponding to the bootstrapping rotation indices
-// 	var galEls []uint64
-// 	for _, k := range btpRots {
-// 		// generate the Galois index for this rotation
-// 		var galoisIdx uint64
-// 		galoisIdx = params.GaloisElementForColumnRotationBy(k)
-
-// 		// test if this galoisIdx is already in the set of rotation keys.
-// 		// if NOT, add it to galEls so that it will be generated
-// 		if _, ok := rotKeys.Keys[galoisIdx]; !ok {
-// 			galEls = append(galEls, galoisIdx)
-// 		}
-// 	}
-// 	// include a conjugation key
-// 	var conjIdx uint64
-// 	conjIdx = params.GaloisElementForRowRotation()
-// 	if _, ok := rotKeys.Keys[conjIdx]; !ok {
-// 		galEls = append(galEls, conjIdx)
-// 	}
-
-// 	// galEls contains the Galois indices needed for bootstrapping, but which are not already in the set of rotation keys.
-// 	// Generate a new set of rotation keys for the missing indices, then merge the two maps.
-// 	var btpRotKeys *rlwe.RotationKeySet
-// 	btpRotKeys = (*keygen).GenRotationKeys(galEls, sk)
-
-// 	for k, v := range btpRotKeys.Keys {
-// 		if _, ok := rotKeys.Keys[k]; ok {
-// 			panic(errors.New("Internal error: Generated a bootstrapping key that is already in the map"))
-// 		}
-// 		rotKeys.Keys[k] = v
-// 	}
-
-// 	var btpKey ckks.BootstrappingKey
-// 	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
-
-// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
-// }
-
-//export lattigo_makeBootstrappingKey
-// func lattigo_makeBootstrappingKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
-// 	// get existing keys
-// 	var relinKey *rlwe.RelinearizationKey
-// 	relinKey = getStoredRelinKey(relinKeyHandle)
-
-// 	var rotKeys *rlwe.RotationKeySet
-// 	rotKeys = getStoredRotationKeys(rotKeyHandle)
-
-// 	var btpKey ckks.BootstrappingKey
-// 	btpKey = ckks.BootstrappingKey{Rlk: relinKey, Rtks: rotKeys}
-
-// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
-// }
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btpKey))
+}
 
 //export lattigo_getSwitchingKey
 func lattigo_getSwitchingKey(rotKeyHandle Handle5, galoisElement uint64) Handle5 {

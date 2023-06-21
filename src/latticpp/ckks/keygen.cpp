@@ -132,14 +132,9 @@ namespace latticpp {
                                          rotKeys.getRawHandle());
     }
 
-    // BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
-    //     return BootstrappingKey(lattigo_genBootstrappingKey(keygen.getRawHandle(), params.getRawHandle(), bootParams.getRawHandle(), sk.getRawHandle(), relinKey.getRawHandle(), rotKeys.getRawHandle()));
-    // }
-
-    // BootstrappingKey makeBootstrappingKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
-    //     return BootstrappingKey(lattigo_makeBootstrappingKey(relinKey.getRawHandle(), rotKeys.getRawHandle()));
-    // }
-
+    BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
+        return BootstrappingKey(lattigo_genBootstrappingKey(keygen.getRawHandle(), params.getRawHandle(), bootParams.getRawHandle(), sk.getRawHandle(), relinKey.getRawHandle(), rotKeys.getRawHandle()));
+    }
 
     SwitchingKey getSwitchingKey(RotationKeys &rotKeys,
                                  uint64_t galoisElement) {

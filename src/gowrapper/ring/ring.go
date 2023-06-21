@@ -42,7 +42,7 @@ func getStoredUniformSampler(samplerHandle Handle14) *ring.UniformSampler {
 	return (*ring.UniformSampler)(ref.Ptr)
 }
 
-func getStoredPolyQP(polyQpHandle Handle14) *ringqp.Poly {
+func GetStoredPolyQP(polyQpHandle Handle14) *ringqp.Poly {
 	ref := marshal.CrossLangObjMap.Get(polyQpHandle)
 	return (*ringqp.Poly)(ref.Ptr)
 }
@@ -74,26 +74,27 @@ func lattigo_newRing(n uint64, moduli *C.uint64_t, moduliLen uint64) Handle14 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(r))
 }
 
-//export lattigo_newPoly
-func lattigo_newPoly(ringHandle Handle14) Handle14 {
-	r := getStoredRing(ringHandle)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(r.NewPoly()))
+//export lattigo_newPolyQP
+func lattigo_newPolyQP(ringHandle Handle14) Handle14 {
+	r := getStoredRingQP(ringHandle)
+	poly := r.NewPoly()
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&poly))
 }
 
-//export lattigo_ringAdd
-func lattigo_ringAdd(ringHandle, poly1Handle, poly2Handle, poly3Handle Handle14) {
-	r := getStoredRing(ringHandle)
-	p1 := GetStoredPoly(poly1Handle)
-	p2 := GetStoredPoly(poly2Handle)
-	p3 := GetStoredPoly(poly3Handle)
-	r.Add(p1, p2, p3)
+//export lattigo_ringQPAddLvl
+func lattigo_ringQPAddLvl(ringHandle Handle14, levelQ, levelP uint64, poly1Handle, poly2Handle, poly3Handle Handle14) {
+	r := getStoredRingQP(ringHandle)
+	p1 := GetStoredPolyQP(poly1Handle)
+	p2 := GetStoredPolyQP(poly2Handle)
+	p3 := GetStoredPolyQP(poly3Handle)
+	r.AddLvl(int(levelQ), int(levelP), *p1, *p2, *p3)
 }
 
-//export lattigo_polyCopy
-func lattigo_polyCopy(polyTargetHandle, polySrcHandle Handle14) {
-	pTarget := GetStoredPoly(polyTargetHandle)
-	pSrc := GetStoredPoly(polySrcHandle)
-	pTarget.Copy(pSrc)
+//export lattigo_polyQPCopy
+func lattigo_polyQPCopy(polyTargetHandle, polySrcHandle Handle14) {
+	pTarget := GetStoredPolyQP(polyTargetHandle)
+	pSrc := GetStoredPolyQP(polySrcHandle)
+	pTarget.Copy(*pSrc)
 }
 
 //export lattigo_newUniformSampler
@@ -130,16 +131,16 @@ func lattigo_modUpQtoP(basisExtenderHandle Handle14, levelQ, levelP int, polQHan
 //export lattigo_invNTTLvlRingQP
 func lattigo_invNTTLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
-	pIn := getStoredPolyQP(pInHandle)
-	pOut := getStoredPolyQP(pOutHandle)
+	pIn := GetStoredPolyQP(pInHandle)
+	pOut := GetStoredPolyQP(pOutHandle)
 	ringQP.InvNTTLvl(levelQ, levelP, *pIn, *pOut)
 }
 
 //export lattigo_nTTLvlRingQP
 func lattigo_nTTLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
-	pIn := getStoredPolyQP(pInHandle)
-	pOut := getStoredPolyQP(pOutHandle)
+	pIn := GetStoredPolyQP(pInHandle)
+	pOut := GetStoredPolyQP(pOutHandle)
 	ringQP.NTTLvl(levelQ, levelP, *pIn, *pOut)
 }
 
@@ -162,16 +163,16 @@ func lattigo_nNTTLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle H
 //export lattigo_invMFormLvlRingQP
 func lattigo_invMFormLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
-	pIn := getStoredPolyQP(pInHandle)
-	pOut := getStoredPolyQP(pOutHandle)
+	pIn := GetStoredPolyQP(pInHandle)
+	pOut := GetStoredPolyQP(pOutHandle)
 	ringQP.InvMFormLvl(levelQ, levelP, *pIn, *pOut)
 }
 
 //export lattigo_mFormLvlRingQP
 func lattigo_mFormLvlRingQP(ringQPHandle Handle14, levelQ, levelP int, pInHandle, pOutHandle Handle14) {
 	ringQP := getStoredRingQP(ringQPHandle)
-	pIn := getStoredPolyQP(pInHandle)
-	pOut := getStoredPolyQP(pOutHandle)
+	pIn := GetStoredPolyQP(pInHandle)
+	pOut := GetStoredPolyQP(pOutHandle)
 	ringQP.MFormLvl(levelQ, levelP, *pIn, *pOut)
 }
 
@@ -193,13 +194,13 @@ func lattigo_mFormLvlRing(ringHandle Handle14, level int, pInHandle, pOutHandle 
 
 //export lattigo_polyQ
 func lattigo_polyQ(polyQPHandle Handle14) Handle14 {
-	polyQP := getStoredPolyQP(polyQPHandle)
+	polyQP := GetStoredPolyQP(polyQPHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(polyQP.Q))
 }
 
 //export lattigo_polyP
 func lattigo_polyP(polyQPHandle Handle14) Handle14 {
-	polyQP := getStoredPolyQP(polyQPHandle)
+	polyQP := GetStoredPolyQP(polyQPHandle)
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(polyQP.P))
 }
 
@@ -268,9 +269,9 @@ func lattigo_log2OfInnerSum(levelQ int, ringQHandle, polyHandle Handle14) int {
 
 //export lattigo_MulCoeffsMontgomeryAndAddLvl
 func lattigo_MulCoeffsMontgomeryAndAddLvl(ringQPHandle Handle14, levelQ, levelP int, p1Handle, p2Handle, p3Handle Handle14) {
-	p1 := getStoredPolyQP(p1Handle)
-	p2 := getStoredPolyQP(p2Handle)
-	p3 := getStoredPolyQP(p3Handle)
+	p1 := GetStoredPolyQP(p1Handle)
+	p2 := GetStoredPolyQP(p2Handle)
+	p3 := GetStoredPolyQP(p3Handle)
 	ringQP := getStoredRingQP(ringQPHandle)
 	ringQP.RingQ.MulCoeffsMontgomeryAndAddLvl(levelQ, p1.Q, p2.Q, p3.Q)
 	ringQP.RingP.MulCoeffsMontgomeryAndAddLvl(levelP, p1.P, p2.P, p3.P)

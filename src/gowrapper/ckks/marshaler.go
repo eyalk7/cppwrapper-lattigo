@@ -22,6 +22,7 @@ import (
 	"unsafe"
 
 	"github.com/tuneinsight/lattigo/v4/ckks"
+	"github.com/tuneinsight/lattigo/v4/ckks/bootstrapping"
 	"github.com/tuneinsight/lattigo/v4/rlwe"
 )
 
@@ -59,23 +60,19 @@ func lattigo_marshalBinaryParameters(paramsHandle Handle9, callback C.streamWrit
 }
 
 //export lattigo_marshalBinaryBootstrapParameters
-// func lattigo_marshalBinaryBootstrapParameters(paramsHandle Handle9, callback C.streamWriter, stream *C.void) {
-// 	var params *ckks.BootstrappingParameters
-// 	params = getStoredBootstrappingParameters(paramsHandle)
+func lattigo_marshalBinaryBootstrapParameters(paramsHandle Handle9, callback C.streamWriter, stream *C.void) {
+	var params *bootstrapping.Parameters
+	params = getStoredBootstrappingParameters(paramsHandle)
 
-// 	// https://kpbird.medium.com/golang-serialize-struct-using-gob-part-2-f6134dd4f22c
-// 	var buf bytes.Buffer
-// 	var encoder *gob.Encoder = gob.NewEncoder(&buf)
-// 	if err := encoder.Encode(*params); err != nil {
-// 		panic(err)
-// 	}
+	data, err := params.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
 
-// 	var data []byte = buf.Bytes()
-
-// 	if len(data) > 0 {
-// 		C.callStreamWriter(callback, unsafe.Pointer(stream), unsafe.Pointer(&data[0]), C.uint64_t(len(data)))
-// 	}
-// }
+	if len(data) > 0 {
+		C.callStreamWriter(callback, unsafe.Pointer(stream), unsafe.Pointer(&data[0]), C.uint64_t(len(data)))
+	}
+}
 
 //export lattigo_marshalBinarySecretKey
 func lattigo_marshalBinarySecretKey(skHandle Handle9, callback C.streamWriter, stream *C.void) {
@@ -206,19 +203,17 @@ func lattigo_unmarshalBinaryParameters(buf *C.char, len uint64) Handle9 {
 }
 
 //export lattigo_unmarshalBinaryBootstrapParameters
-// func lattigo_unmarshalBinaryBootstrapParameters(cbuf *C.char, len uint64) Handle9 {
-// 	var serializedBytes []byte = unsafeCPtrToSlice(cbuf, len)
+func lattigo_unmarshalBinaryBootstrapParameters(buf *C.char, len uint64) Handle9 {
+	var serializedBytes []byte = unsafeCPtrToSlice(buf, len)
 
-// 	var bbuf *bytes.Buffer = bytes.NewBuffer(serializedBytes)
-// 	var decoder *gob.Decoder = gob.NewDecoder(bbuf)
+	params := new(bootstrapping.Parameters)
+	err := params.UnmarshalBinary(serializedBytes)
+	if err != nil {
+		panic(err)
+	}
 
-// 	var btp_params ckks.BootstrappingParameters
-// 	if err := decoder.Decode(&btp_params); err != nil {
-// 		panic(err)
-// 	}
-
-// 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&btp_params))
-// }
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(params))
+}
 
 //export lattigo_unmarshalBinarySecretKey
 func lattigo_unmarshalBinarySecretKey(buf *C.char, len uint64) Handle9 {

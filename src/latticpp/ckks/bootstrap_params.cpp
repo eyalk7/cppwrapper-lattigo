@@ -7,20 +7,15 @@ using namespace std;
 
 namespace latticpp {
 
-// BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams
-// paramId) {
-//     return BootstrappingParameters(lattigo_getBootstrappingParams(paramId));
-// }
+    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters) {
+        return BootstrappingParameters(lattigo_getBootstrappingParams(paramId, sparseParameters));
+    }
 
-// Parameters genParams(const BootstrappingParameters &bootParams) {
-//   return Parameters(lattigo_params(bootParams.getRawHandle()));
-// }
+    Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters) {
+        return Parameters(lattigo_params(paramId, sparseParameters));
+    }
 
-// uint64_t secretHammingWeight(const BootstrappingParameters &bootParams) {
-//   return lattigo_bootstrap_h(bootParams.getRawHandle());
-// }
-
-// int bootstrapDepth(const BootstrappingParameters &bootParams) {
-//   return lattigo_bootstrap_depth(bootParams.getRawHandle());
-// }
-} // namespace latticpp
+    uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams) {
+        return lattigo_ephemeralSecretWeight(bootParams.getRawHandle());
+    }
+}  // namespace latticpp

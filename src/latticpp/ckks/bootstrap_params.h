@@ -4,7 +4,7 @@
 #pragma once
 
 #include "latticpp/marshal/gohandle.h"
-// #include "cgo/bootstrap_params.h"
+#include "cgo/bootstrap_params.h"
 
 namespace latticpp {
 
@@ -13,22 +13,13 @@ namespace latticpp {
         BootstrapParams_Set1,
         BootstrapParams_Set2,
         BootstrapParams_Set3,
-        BootstrapParams_Set4,
-        BootstrapParams_Set5
+        BootstrapParams_Set4
     };
 
-// BootstrappingParameters
-// getBootstrappingParams(const NamedBootstrappingParams paramId);
+    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
 
-// Parameters
-// genParams(const BootstrappingParameters &bootParams);
+    Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
 
-// Get the secret key Hamming weight for which these bootstrapping
-// parameters were created
-// uint64_t
-// secretHammingWeight(const BootstrappingParameters &bootParams);
-
-// The multiplicative depth of the bootstrapping circuit
-// int
-// bootstrapDepth(const BootstrappingParameters &bootParams);
-} // namespace latticpp
+    // Get the Hamming weight of the ephemeral secret. If 0, no ephemeral secret is used during the bootstrapping.
+    uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams);
+}  // namespace latticpp
