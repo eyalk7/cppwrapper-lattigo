@@ -24,8 +24,6 @@ namespace latticpp {
 
     void rescale(const Evaluator &eval, const Ciphertext &ctIn, double threshold, Ciphertext &ctOut);
 
-    void rescaleMany(const Evaluator &eval, const Parameters &params, const Ciphertext &ctIn, uint64_t numRescales, Ciphertext &ctOut);
-
     Ciphertext mulRelinNew(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1);
 
     void mulRelin(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1, Ciphertext &ctOut);

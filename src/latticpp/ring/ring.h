@@ -22,9 +22,9 @@ namespace latticpp {
 
     Poly polyP(const PolyQP &polyQp);
 
-    void copyLvl(uint64_t level, const Poly sourcePoly, Poly targetPoly);
+    void copyLvl(uint64_t level, const Poly &sourcePoly, Poly &targetPoly);
 
-    void copyPolyAtLevel(const Poly dstPoly, uint64_t dstIndex, Poly srcPoly, uint64_t srcIndex);
+    void copyPolyAtLevel(Poly &dstPoly, uint64_t dstIndex, const Poly &srcPoly, uint64_t srcIndex);
 
     BasisExtender newBasisExtender(const Ring &ringQ, const Ring &ringP);
 

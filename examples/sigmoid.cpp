@@ -15,6 +15,8 @@ using namespace latticpp;
 typedef map<uint64_t, Ciphertext> ChebyMap;
 typedef pair<uint64_t, Ciphertext> ChebyKeyValuePair;
 
+// TODO: fix this test
+
 // generate a random vector of the given dimension, where each value is in the range [-maxNorm, maxNorm].
 vector<double> randomVector(int dim, double maxNorm) {
     vector<double> x(dim);

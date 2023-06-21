@@ -87,16 +87,6 @@ func lattigo_newCiphertextQP(paramsHandle Handle8) Handle8 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&newCtQp))
 }
 
-//export lattigo_newZeroCiphertext
-func lattigo_newZeroCiphertext(paramsHandle, skHandle Handle8) Handle8 {
-	params := getStoredParameters(paramsHandle)
-	sk := getStoredSecretKey(skHandle)
-	ct := ckks.NewCiphertext(*params, 1, params.MaxLevel())
-	encryptor := ckks.NewEncryptor(*params, sk)
-	encryptor.EncryptZero(ct)
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(ct))
-}
-
 //export lattigo_setCiphertextMetaData
 func lattigo_setCiphertextMetaData(ctxHandle, metaDataHandle Handle8) {
 	ctx := getStoredCiphertext(ctxHandle)
