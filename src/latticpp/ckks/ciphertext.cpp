@@ -10,7 +10,11 @@ namespace latticpp {
     }
 
     double scale(const Ciphertext &ct) {
-        return lattigo_ciphertextScale(ct.getRawHandle());
+        return lattigo_ciphertextGetScale(ct.getRawHandle());
+    }
+
+    void setScale(Ciphertext &ct, double scale) {
+        lattigo_ciphertextSetScale(ct.getRawHandle(), scale);
     }
 
     uint64_t degree(const Ciphertext &ct) {
@@ -39,11 +43,11 @@ namespace latticpp {
         return CiphertextQP(lattigo_newCiphertextQP(params.getRawHandle()));
     }
 
-    void set(Ciphertext &ctx, const MetaData &metaData) {
+    void setMetaData(Ciphertext &ctx, const MetaData &metaData) {
       lattigo_setCiphertextMetaData(ctx.getRawHandle(), metaData.getRawHandle());
     }
 
-    void set(CiphertextQP &ctx, const MetaData &metaData) {
+    void setMetaData(CiphertextQP &ctx, const MetaData &metaData) {
       lattigo_setCiphertextQPMetaData(ctx.getRawHandle(), metaData.getRawHandle());
     }
 

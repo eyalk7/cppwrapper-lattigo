@@ -65,6 +65,8 @@ namespace latticpp {
 
     RotationKeys genRotationKeysForRotations(const KeyGenerator &keygen, const SecretKey &sk, std::vector<int> shifts);
 
+    EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey);
+
     EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
     EvaluationKey makeEmptyEvaluationKey();

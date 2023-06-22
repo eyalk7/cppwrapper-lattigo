@@ -21,6 +21,15 @@ func getStoredEncrypter(encryptorHandle Handle3) *rlwe.Encryptor {
 	return (*rlwe.Encryptor)(ref.Ptr)
 }
 
+//export lattigo_newEncryptorFromSk
+func lattigo_newEncryptorFromSk(paramHandle Handle3, skHandle Handle3) Handle3 {
+	params := getStoredParameters(paramHandle)
+	sk := getStoredSecretKey(skHandle)
+	var encryptor rlwe.Encryptor
+	encryptor = ckks.NewEncryptor(*params, sk)
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&encryptor))
+}
+
 //export lattigo_newEncryptorFromPk
 func lattigo_newEncryptorFromPk(paramHandle Handle3, pkHandle Handle3) Handle3 {
 	params := getStoredParameters(paramHandle)

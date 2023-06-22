@@ -56,7 +56,7 @@ int main() {
 
     Encoder encoder = newEncoder(params);
     Decryptor decryptor = newDecryptor(params, kp.sk);
-    Encryptor encryptor = newEncryptorFromPk(params, kp.pk);
+    Encryptor encryptor = newEncryptor(params, kp.pk);
 
     cout << "Generating bootstrapping keys..." << endl;
     RelinearizationKey relinKey = genRelinKey(kgen, kp.sk);
@@ -68,7 +68,7 @@ int main() {
     uint64_t num_slots = numSlots(params);
     vector<double> values = randomVector(num_slots, 1);
 
-    Plaintext plaintext = encodeNTTAtLvlNew(params, encoder, values, maxLevel(params), scale(params));
+    Plaintext plaintext = encodeNew(encoder, values, maxLevel(params), scale(params));
 
     Ciphertext ciphertext1 = encryptNew(encryptor, plaintext);
 

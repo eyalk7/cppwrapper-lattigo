@@ -7,8 +7,8 @@ using namespace std;
 
 namespace latticpp {
 
-    Evaluator newEvaluator(const Parameters &params, const EvaluationKey &evakey) {
-        return Evaluator(lattigo_newEvaluator(params.getRawHandle(), evakey.getRawHandle()));
+    Evaluator newEvaluator(const Parameters &params, const EvaluationKey &evalKey) {
+        return Evaluator(lattigo_newEvaluator(params.getRawHandle(), evalKey.getRawHandle()));
     }
 
     Evaluator evaluatorWithKey(const Evaluator &eval,
@@ -39,8 +39,8 @@ namespace latticpp {
         lattigo_addConst(eval.getRawHandle(), ctIn.getRawHandle(), constant, ctOut.getRawHandle());
     }
 
-    void rescale(const Evaluator &eval, const Ciphertext &ctIn, double threshold, Ciphertext &ctOut) {
-        lattigo_rescale(eval.getRawHandle(), ctIn.getRawHandle(), threshold, ctOut.getRawHandle());
+    void rescale(const Evaluator &eval, const Ciphertext &ctIn, double scale, Ciphertext &ctOut) {
+        lattigo_rescale(eval.getRawHandle(), ctIn.getRawHandle(), scale, ctOut.getRawHandle());
     }
 
     Ciphertext mulRelinNew(const Evaluator &eval, const Ciphertext &ct0, const Ciphertext &ct1) {

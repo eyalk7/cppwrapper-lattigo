@@ -188,11 +188,11 @@ func lattigo_maxLevel(paramHandle Handle6) uint64 {
 }
 
 //export lattigo_paramsScale
-func lattigo_paramsScale(paramHandle Handle6) Handle6 {
+func lattigo_paramsScale(paramHandle Handle6) float64 {
 	var params *ckks.Parameters
 	params = getStoredParameters(paramHandle)
 	scale := params.DefaultScale()
-	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&scale))
+	return scale.Float64()
 }
 
 //export lattigo_sigma

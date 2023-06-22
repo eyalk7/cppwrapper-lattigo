@@ -39,11 +39,18 @@ func lattigo_level(ctHandle Handle8) uint64 {
 	return uint64(ctIn.Level())
 }
 
-//export lattigo_ciphertextScale
-func lattigo_ciphertextScale(ctHandle Handle8) float64 {
+//export lattigo_ciphertextGetScale
+func lattigo_ciphertextGetScale(ctHandle Handle8) float64 {
 	var ctIn *rlwe.Ciphertext
 	ctIn = getStoredCiphertext(ctHandle)
-	return ctIn.Scale.Float64()
+	return ctIn.GetScale().Float64()
+}
+
+//export lattigo_ciphertextSetScale
+func lattigo_ciphertextSetScale(ctHandle Handle8, scale float64) {
+	var ctIn *rlwe.Ciphertext
+	ctIn = getStoredCiphertext(ctHandle)
+	ctIn.SetScale(rlwe.NewScale(scale))
 }
 
 //export lattigo_ciphertextDegree

@@ -271,6 +271,17 @@ func lattigo_setCiphertextQP(rotKeyHandle, ctQPHandle Handle5, i, j uint64) {
 	rotKey.Value[i][j] = *ctQP
 }
 
+//export lattigo_makeEvaluationKeyOnlyRelin
+func lattigo_makeEvaluationKeyOnlyRelin(relinKeyHandle Handle5) Handle5 {
+	var relinKey *rlwe.RelinearizationKey
+	relinKey = getStoredRelinKey(relinKeyHandle)
+
+	var evalKey rlwe.EvaluationKey
+	evalKey = rlwe.EvaluationKey{Rlk: relinKey}
+
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&evalKey))
+}
+
 //export lattigo_makeEvaluationKey
 func lattigo_makeEvaluationKey(relinKeyHandle Handle5, rotKeyHandle Handle5) Handle5 {
 	var relinKey *rlwe.RelinearizationKey

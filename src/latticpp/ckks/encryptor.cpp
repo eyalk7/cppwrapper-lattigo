@@ -5,7 +5,11 @@
 
 namespace latticpp {
 
-    Encryptor newEncryptorFromPk(const Parameters &params, const PublicKey &pk) {
+    Encryptor newEncryptor(const Parameters &params, const SecretKey &sk) {
+        return Encryptor(lattigo_newEncryptorFromSk(params.getRawHandle(), sk.getRawHandle()));
+    }
+
+    Encryptor newEncryptor(const Parameters &params, const PublicKey &pk) {
         return Encryptor(lattigo_newEncryptorFromPk(params.getRawHandle(), pk.getRawHandle()));
     }
 

@@ -112,7 +112,7 @@ func lattigo_addConst(evalHandle Handle4, ctInHandle Handle4, constant float64, 
 }
 
 //export lattigo_rescale
-func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle4, ctOutHandle Handle4) {
+func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scale float64, ctOutHandle Handle4) {
 	var eval *ckks.Evaluator
 	eval = getStoredEvaluator(evalHandle)
 
@@ -122,9 +122,7 @@ func lattigo_rescale(evalHandle Handle4, ctInHandle Handle4, scaleHandle Handle4
 	var ctOut *rlwe.Ciphertext
 	ctOut = getStoredCiphertext(ctOutHandle)
 
-	var scale *rlwe.Scale
-	scale = getStoredScale(scaleHandle)
-	err := (*eval).Rescale(ctIn, *scale, ctOut)
+	err := (*eval).Rescale(ctIn, rlwe.NewScale(scale), ctOut)
 	if err != nil {
 		panic(err)
 	}

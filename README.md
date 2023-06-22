@@ -19,11 +19,13 @@ ninja -Cbuild
 
 If you are using clang, you may need to compile dependent libraries with `-Wno-c99-extensions` to suppress warnings in the cgo-generated header files.
 
-This library includes an example, which matches the corresponding [Lattigo example](https://github.com/ldsec/lattigo/blob/fa4175901a31d20b5336e7705e6a1243d0477e62/examples/ckks/sigmoid/main.go) as closely as possible.
-The example can be run with
+This library includes examples which matches some of the corresponding [Lattigo examples](https://github.com/tuneinsight/lattigo/tree/5b707142db0fc16acad96c1e46e7a9d68fb5b014/examples) as closely as possible.
+The examples can be run with
 ```!sh
 cmake -Bbuild -GNinja -DLATTICPP_BUILD_EXAMPLES=ON
-ninja -Cbuild run_gobindingtest
+ninja -Cbuild run_bootstrapexample
+ninja -Cbuild run_eulerexample
+ninja -Cbuild run_multikeyexample
 ```
 
 This library's API is in src/latticpp/ckks. This library was tested with Go version 1.15.8. This library makes use of the `unsafe` Go package, so there is a small chance that newer versions of Go might be incompatible with this library.

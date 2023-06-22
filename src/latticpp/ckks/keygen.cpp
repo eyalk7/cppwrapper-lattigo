@@ -110,11 +110,15 @@ namespace latticpp {
     void setCiphertextQP(SwitchingKey &rtk, const CiphertextQP &ctQP, uint64_t i, uint64_t j) {
       lattigo_setCiphertextQP(rtk.getRawHandle(), ctQP.getRawHandle(), i, j);
     }
-    
+
+    EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey) {
+        return EvaluationKey(lattigo_makeEvaluationKeyOnlyRelin(relinKey.getRawHandle()));
+    }    
 
     EvaluationKey makeEvaluationKey(const RelinearizationKey &relinKey, const RotationKeys &rotKeys) {
         return EvaluationKey(lattigo_makeEvaluationKey(relinKey.getRawHandle(), rotKeys.getRawHandle()));
     }
+
     EvaluationKey makeEmptyEvaluationKey() {
       return EvaluationKey(lattigo_makeEmptyEvaluationKey());
     }

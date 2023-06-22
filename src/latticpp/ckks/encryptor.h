@@ -8,7 +8,9 @@
 
 namespace latticpp {
 
-    Encryptor newEncryptorFromPk(const Parameters &params, const PublicKey &pk);
+    Encryptor newEncryptor(const Parameters &params, const SecretKey &sk);
+
+    Encryptor newEncryptor(const Parameters &params, const PublicKey &pk);
 
     Ciphertext encryptNew(const Encryptor &encryptor, const Plaintext &pt);
 
