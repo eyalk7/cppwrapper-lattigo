@@ -112,7 +112,7 @@ TestContext generateTestContextForTest(const Parameters &params,
   res.pk0 = genPublicKey(kgen, res.sk0);
   res.pk1 = genPublicKey(kgen, res.sk1);
 
-  res.encryptorPk0 = newEncryptorFromPk(params, res.pk0);
+  res.encryptorPk0 = newEncryptor(params, res.pk0);
   res.decryptorSk0 = newDecryptor(params, res.sk0);
   res.decryptorSk1 = newDecryptor(params, res.sk1);
 
@@ -133,8 +133,7 @@ void newTestVectors(const TestContext &testContext, const Encryptor &encryptor,
     values.at(i) = unif(re);
   }
 
-  plaintext = encodeNTTAtLvlNew(params, testContext.encoder, values,
-                                maxLevel(params), scale(params));
+  plaintext = encodeNew(testContext.encoder, values, maxLevel(params), scale(params));
   ciphertext = encryptNew(encryptor, plaintext);
 }
 
@@ -181,7 +180,7 @@ void testPublicKeyGen(const TestContext &testContext) {
   PublicKey pk = newPublicKey(params);
   ckgGenPublicKey(p0.ckgProtocol, p0.s1, crp, pk);
 
-  Encryptor encryptorTester = newEncryptorFromPk(params, pk);
+  Encryptor encryptorTester = newEncryptor(params, pk);
   vector<double> values;
   Plaintext plaintext;
   Ciphertext ciphertext;
