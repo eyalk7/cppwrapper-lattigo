@@ -14,9 +14,9 @@ namespace latticpp {
         return PolyQP(lattigo_newPolyQP(ring.getRawHandle()));
     }
 
-    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &p3) {
+    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &pOut) {
         lattigo_ringQPAddLvl(ring.getRawHandle(), levelQ, levelP, p1.getRawHandle(), p2.getRawHandle(),
-                        p3.getRawHandle());
+                        pOut.getRawHandle());
     }
 
     void copy(PolyQP &pTarget, const PolyQP &pSrc) {
@@ -114,12 +114,12 @@ namespace latticpp {
         return lattigo_log2OfInnerSum(level, ring.getRawHandle(), poly.getRawHandle());
     }
 
-    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, const PolyQP &p3) {
-        lattigo_mulCoeffsMontgomeryAndAddLvl(ringQP.getRawHandle(),levelQ, levelP, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
+    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut) {
+        lattigo_mulCoeffsMontgomeryAndAddLvl(ringQP.getRawHandle(), levelQ, levelP, p1.getRawHandle(), p2.getRawHandle(), polyOut.getRawHandle());
     }
 
-    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, uint64_t level, const Poly &p1, const Poly &p2, const Poly &p3) {
-        lattigo_mulCoeffsMontgomeryAndAddLvlRing(ring.getRawHandle(),level, p1.getRawHandle(),p2.getRawHandle(),p3.getRawHandle());
+    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, uint64_t level, const Poly &p1, const Poly &p2, Poly &polyOut) {
+        lattigo_mulCoeffsMontgomeryAndAddLvlRing(ring.getRawHandle(), level, p1.getRawHandle(), p2.getRawHandle(), polyOut.getRawHandle());
     }
 
     uint64_t equals(const Poly &p1, const Poly &p2){

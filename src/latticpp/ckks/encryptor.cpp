@@ -17,7 +17,7 @@ namespace latticpp {
         return Ciphertext(lattigo_encryptNew(encryptor.getRawHandle(), pt.getRawHandle()));
     }
 
-    void encryptZeroQP(const Parameters &params,const SecretKey &sk, const CiphertextQP &ctxQP){
+    void encryptZeroQP(const Parameters &params, const SecretKey &sk, CiphertextQP &ctxQP){
         lattigo_encryptZeroQP(params.getRawHandle(), sk.getRawHandle(), ctxQP.getRawHandle());
     }
 

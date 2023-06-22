@@ -14,7 +14,7 @@ namespace latticpp {
 
     double scale(const Plaintext &ct);
 
-    void setScale(Plaintext &ct, double scale);    
+    void setScale(Plaintext &ct, double scale);
 
     Poly poly(const Plaintext &plaintext);
 }  // namespace latticpp

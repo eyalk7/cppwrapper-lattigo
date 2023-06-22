@@ -12,7 +12,7 @@ namespace latticpp {
 
     PolyQP newPolyQP(const RingQP &ring);
 
-    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &p3);
+    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut);
 
     void copy(PolyQP &pTarget, const PolyQP &pSrc);
 
@@ -56,13 +56,13 @@ namespace latticpp {
 
     std::vector<uint64_t> permuteNTTIndex(const Ring &ring, uint64_t galEl);
 
-    void permuteNTTWithIndexLvl(const Ring &ring, uint64_t level, const Poly &polyIn, const std::vector<uint64_t> &index, const Poly &polyOut);
+    void permuteNTTWithIndexLvl(const Ring &ring, uint64_t level, const Poly &polyIn, const std::vector<uint64_t> &index, Poly &polyOut);
 
     uint64_t log2OfInnerSum(uint64_t level, const Ring &ring, const Poly &poly);
 
-    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, const PolyQP &p3);
+    void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut);
 
-    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, uint64_t level, const Poly &p1, const Poly &p2, const Poly &p3);
+    void mulCoeffsMontgomeryAndAddLvl(const Ring &ring, uint64_t level, const Poly &p1, const Poly &p2, Poly &polyOut);
 
     uint64_t equals(const Poly &p1, const Poly &p2);
     
