@@ -20,6 +20,5 @@ namespace latticpp {
 
     Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
 
-    // Get the Hamming weight of the ephemeral secret. If 0, no ephemeral secret is used during the bootstrapping.
     uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams);
 }  // namespace latticpp

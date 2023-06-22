@@ -45,8 +45,6 @@ namespace latticpp {
 
     PolyQP polyQP(const SecretKey &sk);
 
-    PolyQP polyQP(const CiphertextQP &ctx, const uint64_t i);
-
     PublicKey newPublicKey(const Parameters &params);
 
     RelinearizationKey newRelinearizationKey(const Parameters &params);
@@ -84,5 +82,4 @@ namespace latticpp {
     SwitchingKey newSwitchingKey(const Parameters &params, uint64_t levelQ, uint64_t levelP);
 
     void switchKeys(const Evaluator &eval, const Ciphertext &ctxIn, const SwitchingKey &swk, const Ciphertext &ctxOut);
-
 }  // namespace latticpp

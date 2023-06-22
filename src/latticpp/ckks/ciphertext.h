@@ -35,5 +35,4 @@ namespace latticpp {
     Poly poly(const Ciphertext &ctx, uint64_t i);
 
     PolyQP polyQP(const CiphertextQP &ctQP, uint64_t i);
-
 }  // namespace latticpp

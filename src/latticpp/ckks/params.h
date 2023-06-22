@@ -83,5 +83,4 @@ namespace latticpp {
     uint64_t inverseGaloisElement(const Parameters &params, uint64_t galEl);
     
     uint64_t noiseBound(const Parameters &params);
-
 }  // namespace latticpp

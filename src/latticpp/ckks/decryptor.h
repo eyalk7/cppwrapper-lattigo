@@ -11,5 +11,4 @@ namespace latticpp {
     Decryptor newDecryptor(const Parameters &params, const SecretKey &sk);
 
     Plaintext decryptNew(const Decryptor &decryptor, const Ciphertext &ct);
-
 }  // namespace latticpp

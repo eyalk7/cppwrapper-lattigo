@@ -17,7 +17,7 @@ namespace latticpp {
     void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &p3) {
         lattigo_ringQPAddLvl(ring.getRawHandle(), levelQ, levelP, p1.getRawHandle(), p2.getRawHandle(),
                         p3.getRawHandle());
-    }    
+    }
 
     void copy(PolyQP &pTarget, const PolyQP &pSrc) {
         lattigo_polyQPCopy(pTarget.getRawHandle(), pSrc.getRawHandle());
