@@ -5,7 +5,6 @@ package ring
 /*
 #include <stdint.h>
 typedef const uint64_t constULong;
-typedef const double constDouble;
 */
 import "C"
 
