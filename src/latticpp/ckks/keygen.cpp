@@ -15,14 +15,12 @@ namespace latticpp {
       return SwitchingKey(lattigo_getRotationKey(rotationKeys.getRawHandle(), galEl));
     }
 
-    uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, uint64_t rotationStep) {
-      return lattigo_rotationKeyExist(params.getRawHandle(),
-                                      rotationKeys.getRawHandle(), rotationStep);
+    uint64_t rotationKeyExist(const RotationKeys &rotationKeys, uint64_t galEl) {
+      return lattigo_rotationKeyExist(rotationKeys.getRawHandle(), galEl);
     }
 
-    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys, const SwitchingKey &rotKey, uint64_t rotStep) {
-      lattigo_setRotationKey(params.getRawHandle(), rotKeys.getRawHandle(),
-                            rotKey.getRawHandle(), rotStep);
+    void setRotationKey(const RotationKeys &rotKeys, const SwitchingKey &rotKey, uint64_t galEl) {
+      lattigo_setRotationKey(rotKeys.getRawHandle(), rotKey.getRawHandle(), galEl);
     }
 
     SwitchingKey copyNew(const SwitchingKey &rotKey) {

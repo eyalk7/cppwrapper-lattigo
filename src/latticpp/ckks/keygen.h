@@ -18,11 +18,9 @@ namespace latticpp {
 
     SwitchingKey getRotationKey(const RotationKeys &rtks, uint64_t galEl);
 
-    uint64_t rotationKeyExist(const Parameters &params, const RotationKeys &rotationKeys, 
-                              uint64_t rotationStep);
+    uint64_t rotationKeyExist(const RotationKeys &rotationKeys, uint64_t galEl);
 
-    void setRotationKey(const Parameters &params, const RotationKeys &rotKeys,
-                        const SwitchingKey &rotKey, uint64_t rotStep);
+    void setRotationKey(const RotationKeys &rotKeys, const SwitchingKey &rotKey, uint64_t galEl);
 
     SwitchingKey copyNew(const SwitchingKey &rotKey);
 
