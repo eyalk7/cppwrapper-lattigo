@@ -35,4 +35,4 @@ namespace latticpp {
     RelinearizationKey unmarshalBinaryRelinearizationKey(std::istream &stream);
 
     RotationKeys unmarshalBinaryRotationKeys(std::istream &stream);
-}  // namespace latticpp 
+}  // namespace latticpp
