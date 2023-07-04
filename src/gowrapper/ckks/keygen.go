@@ -205,6 +205,13 @@ func lattigo_getRotationKey(rotKeysHandle Handle5, galEl uint64) Handle5 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(rotationKey))
 }
 
+//export lattigo_setRotationKey
+func lattigo_setRotationKey(rotKeysHandle, rotKeyHandle Handle5, galEl uint64) {
+	rotKeys := getStoredRotationKeys(rotKeysHandle)
+	rotKey := getStoredSwitchingKey(rotKeyHandle)
+	rotKeys.Keys[galEl] = rotKey.CopyNew()
+}
+
 //export lattigo_rotationKeyExist
 func lattigo_rotationKeyExist(rotKeysHandle Handle5, galEl uint64) uint64 {
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
@@ -216,11 +223,28 @@ func lattigo_rotationKeyExist(rotKeysHandle Handle5, galEl uint64) uint64 {
 	}
 }
 
-//export lattigo_setRotationKey
-func lattigo_setRotationKey(rotKeysHandle, rotKeyHandle Handle5, galEl uint64) {
+//export lattigo_getNumRotationKeys
+func lattigo_getNumRotationKeys(rotKeysHandle Handle5) uint64 {
 	rotKeys := getStoredRotationKeys(rotKeysHandle)
-	rotKey := getStoredSwitchingKey(rotKeyHandle)
-	rotKeys.Keys[galEl] = rotKey.CopyNew()
+	return uint64(len(rotKeys.Keys))
+}
+
+//export lattigo_getGaloisElementsOfRotationKeys
+func lattigo_getGaloisElementsOfRotationKeys(rotKeysHandle Handle5, outValues *C.uint64_t) {
+	rotKeys := getStoredRotationKeys(rotKeysHandle)
+	galoisElements := make([]uint64, len(rotKeys.Keys))
+
+	i := 0
+	for k := range rotKeys.Keys {
+		galoisElements[i] = k
+		i++
+	}
+
+	size := unsafe.Sizeof(uint64(0))
+	basePtr := uintptr(unsafe.Pointer(outValues))
+	for i := range galoisElements {
+		*(*uint64)(unsafe.Pointer(basePtr + size*uintptr(i))) = galoisElements[i]
+	}
 }
 
 //export lattigo_copyNewRotationKey

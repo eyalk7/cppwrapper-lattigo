@@ -200,7 +200,7 @@ namespace latticpp {
     using Ring = GoHandle<GoType::Ring>;
     using RingQP = GoHandle<GoType::RingQP>;
     using Poly = GoHandle<GoType::Poly>;
-    using PolyQP = GoHandle<GoType::Poly>;
+    using PolyQP = GoHandle<GoType::PolyQP>;
     using UniformSampler = GoHandle<GoType::UniformSampler>;
     using PRNG = GoHandle<GoType::PRNG>;
     using MetaData = GoHandle<GoType::MetaData>;

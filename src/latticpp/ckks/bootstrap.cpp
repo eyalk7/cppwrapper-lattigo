@@ -14,4 +14,4 @@ namespace latticpp {
     Ciphertext bootstrap(const Bootstrapper &btp, const Ciphertext &ct) {
         return Ciphertext(lattigo_bootstrap(btp.getRawHandle(), ct.getRawHandle()));
     }
-} // namespace latticpp
+}  // namespace latticpp
