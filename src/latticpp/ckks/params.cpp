@@ -103,6 +103,10 @@ namespace latticpp {
       return lattigo_inverseGaloisElement(params.getRawHandle(), galEl);
     }
 
+    uint64_t rotationFromGaloisElement(const Parameters &params, uint64_t galEl) {
+        return lattigo_rotationFromGaloisElement(params.getRawHandle(), galEl);
+    }
+
     uint64_t noiseBound(const Parameters &params) {
       return lattigo_noiseBound(params.getRawHandle());
     }

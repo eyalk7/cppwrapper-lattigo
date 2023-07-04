@@ -267,3 +267,9 @@ func lattigo_inverseGaloisElement(paramHandle Handle6, galEl uint64) uint64 {
 	params := getStoredParameters(paramHandle)
 	return params.InverseGaloisElement(galEl)
 }
+
+//export lattigo_rotationFromGaloisElement
+func lattigo_rotationFromGaloisElement(paramHandle Handle6, galEl uint64) uint64 {
+	params := getStoredParameters(paramHandle)
+	return params.RotationFromGaloisElement(galEl)
+}

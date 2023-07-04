@@ -80,6 +80,8 @@ namespace latticpp {
     std::vector<uint64_t> galoisElementsForRowInnerSum(const Parameters &params);
     
     uint64_t inverseGaloisElement(const Parameters &params, uint64_t galEl);
+
+    uint64_t rotationFromGaloisElement(const Parameters &params, uint64_t galEl);
     
     uint64_t noiseBound(const Parameters &params);
 }  // namespace latticpp
