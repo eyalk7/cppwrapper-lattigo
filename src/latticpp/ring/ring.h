@@ -10,11 +10,15 @@ namespace latticpp {
 
     Ring newRing(uint64_t n, std::vector<uint64_t> moduli);
 
+    Poly newPoly(const Ring &ring);
+
     PolyQP newPolyQP(const RingQP &ring);
 
-    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut);
+    void copy(Poly &dst, const Poly &src);
 
     void copy(PolyQP &pTarget, const PolyQP &pSrc);
+
+    PolyQP copyNew(const PolyQP &src);
 
     UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring);
 
@@ -24,7 +28,7 @@ namespace latticpp {
 
     void copyLvl(uint64_t level, const Poly &sourcePoly, Poly &targetPoly);
 
-    void copyPolyAtLevel(Poly &dstPoly, uint64_t dstIndex, const Poly &srcPoly, uint64_t srcIndex);
+    void copyLvlToOtherLvl(uint64_t srcLevel, uint64_t dstLevel, const Poly &srcPoly, Poly &dstPoly);
 
     BasisExtender newBasisExtender(const Ring &ringQ, const Ring &ringP);
 
@@ -46,10 +50,6 @@ namespace latticpp {
 
     void mFormLvl(const Ring &ring, uint64_t level, const Poly &pIn, Poly &pOut);
 
-    Poly newPoly(const Ring &ring);
-
-    void copyPoly(Poly &dst, const Poly &src);
-
     uint64_t degree(const Poly &p);
 
     uint64_t ringN(const Ring &ring);
@@ -59,6 +59,8 @@ namespace latticpp {
     void permuteNTTWithIndexLvl(const Ring &ring, uint64_t level, const Poly &polyIn, const std::vector<uint64_t> &index, Poly &polyOut);
 
     uint64_t log2OfInnerSum(uint64_t level, const Ring &ring, const Poly &poly);
+
+    void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut);
 
     void mulCoeffsMontgomeryAndAddLvl(const RingQP &ringQP, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &polyOut);
 

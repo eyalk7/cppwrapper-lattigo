@@ -79,6 +79,13 @@ func lattigo_newPolyQP(ringHandle Handle14) Handle14 {
 	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&poly))
 }
 
+//export lattigo_copyNewPolyQP
+func lattigo_copyNewPolyQP(polyHandle Handle14) Handle14 {
+	srcPoly := GetStoredPolyQP(polyHandle)
+	newPoly := srcPoly.CopyNew()
+	return marshal.CrossLangObjMap.Add(unsafe.Pointer(&newPoly))
+}
+
 //export lattigo_ringQPAddLvl
 func lattigo_ringQPAddLvl(ringHandle Handle14, levelQ, levelP uint64, poly1Handle, poly2Handle, poly3Handle Handle14) {
 	r := getStoredRingQP(ringHandle)
@@ -88,8 +95,8 @@ func lattigo_ringQPAddLvl(ringHandle Handle14, levelQ, levelP uint64, poly1Handl
 	r.AddLvl(int(levelQ), int(levelP), *p1, *p2, *p3)
 }
 
-//export lattigo_polyQPCopy
-func lattigo_polyQPCopy(polyTargetHandle, polySrcHandle Handle14) {
+//export lattigo_copyPolyQP
+func lattigo_copyPolyQP(polyTargetHandle, polySrcHandle Handle14) {
 	pTarget := GetStoredPolyQP(polyTargetHandle)
 	pSrc := GetStoredPolyQP(polySrcHandle)
 	pTarget.Copy(*pSrc)
@@ -202,13 +209,11 @@ func lattigo_copyLvl(level uint64, sourcePolyHandle, targetPolyHandle Handle14) 
 	ring.CopyLvl(int(level), sourcePoly, targetPoly)
 }
 
-//export lattigo_copyPolyAtLevel
-func lattigo_copyPolyAtLevel(dstPolyHandle Handle14, dstIndex uint64, srcPolyHandle Handle14, srcIndex uint64) {
+//export lattigo_copyLvlToOtherLvl
+func lattigo_copyLvlToOtherLvl(srcLevel, dstLevel uint64, srcPolyHandle, dstPolyHandle Handle14) {
 	src := getStoredPoly(srcPolyHandle)
 	dst := getStoredPoly(dstPolyHandle)
-	srcIdx := int(srcIndex)
-	dstIdx := int(dstIndex)
-	copy(dst.Coeffs[dstIdx], src.Coeffs[srcIdx])
+	copy(dst.Coeffs[int(dstLevel)], src.Coeffs[int(srcLevel)])
 }
 
 //export lattigo_newPoly

@@ -14,13 +14,17 @@ namespace latticpp {
         return PolyQP(lattigo_newPolyQP(ring.getRawHandle()));
     }
 
+    PolyQP copyNew(const PolyQP &src) {
+        return PolyQP(lattigo_copyNewPolyQP(src.getRawHandle()));
+    }
+
     void addLvl(const RingQP &ring, uint64_t levelQ, uint64_t levelP, const PolyQP &p1, const PolyQP &p2, PolyQP &pOut) {
         lattigo_ringQPAddLvl(ring.getRawHandle(), levelQ, levelP, p1.getRawHandle(), p2.getRawHandle(),
                         pOut.getRawHandle());
     }
 
     void copy(PolyQP &pTarget, const PolyQP &pSrc) {
-        lattigo_polyQPCopy(pTarget.getRawHandle(), pSrc.getRawHandle());
+        lattigo_copyPolyQP(pTarget.getRawHandle(), pSrc.getRawHandle());
     }
 
     UniformSampler newUniformSampler(const PRNG &prng, const Ring &ring) {
@@ -40,8 +44,8 @@ namespace latticpp {
         lattigo_copyLvl(level, sourcePoly.getRawHandle(), targetPoly.getRawHandle());
     }
 
-    void copyPolyAtLevel(Poly &dstPoly, uint64_t dstIndex, const Poly &srcPoly, uint64_t srcIndex) {
-        lattigo_copyPolyAtLevel(dstPoly.getRawHandle(), dstIndex, srcPoly.getRawHandle(), srcIndex);
+    void copyLvlToOtherLvl(uint64_t srcLevel, uint64_t dstLevel, const Poly &srcPoly, Poly &dstPoly) {
+        lattigo_copyLvlToOtherLvl(srcLevel, dstLevel, srcPoly.getRawHandle(), dstPoly.getRawHandle());
     }
 
     BasisExtender newBasisExtender(const Ring &ringQ, const Ring &ringP) {
@@ -88,7 +92,7 @@ namespace latticpp {
         return Poly(lattigo_newPoly(ring.getRawHandle()));
     }
 
-    void copyPoly(Poly &dst, const Poly &src){
+    void copy(Poly &dst, const Poly &src){
         lattigo_copyPoly(dst.getRawHandle(), src.getRawHandle());
     }
 

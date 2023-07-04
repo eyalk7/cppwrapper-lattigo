@@ -59,8 +59,8 @@ struct PartyRTG {
 
 Parameters generateParamsForTest() {
   BootstrappingParameters btpParams =
-      getBootstrappingParams(BootstrapParams_Set4);
-  Parameters params = genParams(BootstrapParams_Set4);
+      getBootstrappingParams(N15QP880H16384H32);
+  Parameters params = genParams(N15QP880H16384H32);
 
   cout << "CKKS parameters: logN = " << logN(params)
        << ", logSlots = " << logSlots(params)

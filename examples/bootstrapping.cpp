@@ -43,8 +43,8 @@ vector<double> printDebug(const Parameters &params, const Ciphertext &ciphertext
 }
 
 int main() {
-    BootstrappingParameters btpParams = getBootstrappingParams(BootstrapParams_Set4);
-    Parameters params = genParams(BootstrapParams_Set4);
+    BootstrappingParameters btpParams = getBootstrappingParams(N15QP880H16384H32);
+    Parameters params = genParams(N15QP880H16384H32);
 
     cout << "CKKS parameters: logN = " << logN(params) << ", logSlots = " << logSlots(params)
          << ", h = " << ephemeralSecretWeight(btpParams) << ", logQP = " << logQP(params)
