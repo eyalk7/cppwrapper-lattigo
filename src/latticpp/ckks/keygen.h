@@ -77,7 +77,7 @@ namespace latticpp {
 
     BootstrappingKey genBootstrappingKey(const KeyGenerator &keygen, const Parameters &params, const BootstrappingParameters &bootParams, const SecretKey &sk, const RelinearizationKey &relinKey, const RotationKeys &rotKeys);
 
-    Poly polyQP(const SecretKey &sk);
+    PolyQP polyQP(const SecretKey &sk);
 
     SwitchingKey newSwitchingKey(const Parameters &params, uint64_t levelQ, uint64_t levelP);
 
