@@ -23,11 +23,9 @@ func getStoredBootstrappingParameters(bootParamHandle Handle11) *bootstrapping.P
 }
 
 //export lattigo_getBootstrappingParams
-func lattigo_getBootstrappingParams(bootParamEnum uint8, sparseParameters bool) Handle11 {
+func lattigo_getBootstrappingParams(bootParamEnum uint8) Handle11 {
 	defaultParameters := bootstrapping.DefaultParametersDense
-	if sparseParameters {
-		defaultParameters = bootstrapping.DefaultParametersSparse
-	}
+
 	if int(bootParamEnum) >= len(defaultParameters) {
 		panic(errors.New("bootstrapping parameter enum index out of bounds"))
 	}
@@ -45,11 +43,9 @@ func lattigo_ephemeralSecretWeight(bootParamHandle Handle11) uint64 {
 }
 
 //export lattigo_params
-func lattigo_params(bootParamEnum uint8, sparseParameters bool) Handle11 {
+func lattigo_params(bootParamEnum uint8) Handle11 {
 	defaultParameters := bootstrapping.DefaultParametersDense
-	if sparseParameters {
-		defaultParameters = bootstrapping.DefaultParametersSparse
-	}
+
 	if int(bootParamEnum) >= len(defaultParameters) {
 		panic(errors.New("bootstrapping parameter enum index out of bounds"))
 	}

@@ -7,12 +7,12 @@ using namespace std;
 
 namespace latticpp {
 
-    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters) {
-        return BootstrappingParameters(lattigo_getBootstrappingParams(paramId, sparseParameters));
+    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId) {
+        return BootstrappingParameters(lattigo_getBootstrappingParams(paramId));
     }
 
-    Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters) {
-        return Parameters(lattigo_params(paramId, sparseParameters));
+    Parameters genParams(const NamedBootstrappingParams paramId) {
+        return Parameters(lattigo_params(paramId));
     }
 
     uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams) {

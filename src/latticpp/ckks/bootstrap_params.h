@@ -16,9 +16,9 @@ namespace latticpp {
         N15QP880H16384H32
     };
 
-    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
+    BootstrappingParameters getBootstrappingParams(const NamedBootstrappingParams paramId);
 
-    Parameters genParams(const NamedBootstrappingParams paramId, bool sparseParameters = false);
+    Parameters genParams(const NamedBootstrappingParams paramId);
 
     uint64_t ephemeralSecretWeight(const BootstrappingParameters &bootParams);
 }  // namespace latticpp
