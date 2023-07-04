@@ -81,4 +81,4 @@ namespace latticpp {
         vector<char> buffer(istreambuf_iterator<char>{stream}, {});
         return RotationKeys(lattigo_unmarshalBinaryRotationKeys(buffer.data(), buffer.size()));
     }
-}  // namespace latticpp
+}  // namespace latticpp 
